@@ -1,0 +1,210 @@
+<!--<div class="fullsize-fixe">-->
+<div class="cy-contour-white">
+    <div class="cy-contour">
+        <div class="cy-container">
+            <div ng-include="'/static/templates/general/navbar.html'"></div>
+            <div class="main-container">
+                <div hide-md hide-sm hide-xs layout layout-align="space-between start" style="min-height:700px;">
+                    <div layout="column"  flex="60" layout-align="space-between center" style="height:100%;padding: 0 20px; margin-top:130px;">
+                        <div hide-gt-md style="width :1px; margin-bottom:75px;"></div>
+                        <div class="form-group" for="question" style="width : 100%; margin-bottom:15px;">
+                            <div class="alert alert-success" ng-show="success" ng-bind="success"></div>
+                            <div class="alert alert-danger" ng-show="error" ng-bind="error"></div>
+                            <md-input-container id="question" style="min-width:100%;">
+                                <md-select class="form-control quicksand-lg"
+                                           validate-on="submit"
+                                           ng-required="1"
+                                           ng-model="selectedQuestion"
+                                           placeholder="Vous souhaitez ?"
+                                           ng-change="changeQuestion()"
+                                           style="background-color:#f8e4c8; border-radius: 0;">
+                                    <md-select-header>
+                                        <span class="quicksand-lg"> Vous souhaitez ? </span>
+                                    </md-select-header>
+                                    <md-option class="quicksand-md" ng-value="question" ng-repeat="question in questions">{{ question}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div layout flex layout-align="space-between start" style="min-width:100%;">
+                            <div layout="column" flex="40" layout-align="space-between start">
+                                <div class="form-group" style="width : 100%; margin-bottom:15px;">
+                                    <label class="quicksand-md" for="contact_nom">Nom</label>
+                                    <input style="font-size:20px;border-radius: 0; background-color:#f8e4c8;"
+                                           name="nom"
+                                           type="text"
+                                           class="form-control"
+                                           id="contact_nom"
+                                           ng-model="contact_nom"
+                                           ng-required="1"
+                                           validate-on="submit"
+                                           oninvalid="this.setCustomValidity('Champ obligatoire')"
+                                           oninput="setCustomValidity('')"
+                                           ng-change="changeForm()"/>
+                                </div>
+                                <div class="form-group" style="width : 100%; margin-bottom:15px;">
+                                    <label class="quicksand-md" for="contact_email">Email</label>
+                                    <input style="font-size:20px; border-radius: 0; background-color:#f8e4c8;"
+                                           name="email"
+                                           type="email"
+                                           class="form-control"
+                                           id="contact_email"
+                                           ng-model="contact_email"
+                                           ng-required="1"
+                                           oninvalid="this.setCustomValidity('Champ obligatoire')"
+                                           oninput="setCustomValidity('')"
+                                           ng-change="changeForm()"/>
+                                </div>
+                                <div class="form-group" style="border-radius: 0; margin-bottom:15px;">
+                                    <label class="quicksand-md" for="contact_tel">Téléphone (optionnel)</label>
+                                    <input style="font-size:20px; border-radius: 0; background-color:#f8e4c8;"
+                                           type="text"
+                                           class="form-control"
+                                           id="contact_tel"
+                                           ng-model="contact_tel"
+                                           ng-change="changeForm()"/>
+                                </div>
+
+                            </div>
+                            <div layout="column" flex="60" layout-align="start end">
+                                <div class="form-group" layout="column" flex layout-align="start end" style="width : 100%;borde: 1px solid black;">
+                                    <label class="quicksand-md" for="reservation_tel">Quel est votre message ?</label>
+                                    <textarea class="quicksand-md"
+                                              style="background-color:#f8e4c8; min-height:150px; width : 90%;"
+                                              ng-model="contact_comment"
+                                              placeholder="Message (optionnel)"
+                                              ng-change="changeForm()"/>
+                                </div>
+                                <div class="form-group">
+                                    <md-button type="submit" ng-click="sendMessage()"
+                                               class="md-primary md-raised cy-button"
+                                               ng-disabled="sendingMessage"
+                                               style="/*color:#5D3B0A;*/">
+                                        {{submit_button}}
+                                    </md-button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div layout="column"  flex="35"  layout-align="space-between start"
+                         style="padding-left: padding-right:5%; 50px;margin-top: 60px; height:100%;">
+                        <h2 class="quicksand-md" style="color:#97BA65;font-weight:700; font-size:120%;margin-bottom: 20px;">Café Yoga</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin-bottom: 0px;">37 avenue Victor Cresson</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin-bottom: 0px;">92130 Issy les Moulineaux</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin-bottom: 20px;">Téléphone : 01 02 03 04 05</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin-bottom: 0px;">Métro : Mairie d'Issy (ligne 12)</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin-bottom: 0px;">RER : Issy (ligne C)</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin-bottom: 0px;">Tram : Jacques-Henri Lartigue ou Les Moulineaux (ligne T2)</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin-bottom: 20px;">Bus : (Bourgain - Général Gallieni) ligne 123</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin-bottom: 0px;">Horaires d'ouverture :</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin-bottom: 0px;">Mardi - Vendredi : 11h -21h</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin-bottom: 0px;">Samedi : 11h - 20h</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin-bottom: 0px;">Dimanche : 11h - 18h</h2>
+                        <div class="map_div" id="map"></div>
+                    </div>
+                </div>
+
+                <div hide-gt-md layout="column" flex layout-align="space-between center" style="min-height:700px;margin-top:-50px;">
+                    <div layout="column"  flex="100" layout-align="space-between start"
+                         style="width:100%;padding-left: padding-right:5%; 50px;margin-top: 75px; height:100%;">
+                        <h2 class="quicksand-md text-centered" style="color:#97BA65;font-weight:700; font-size:150%;margin: 0 auto 20px auto;">Café Yoga</h2>
+                        <h2 class="quicksand-md" style="font-weight:100; font-size:120%;margin: 0 auto 0 auto;">107 boulevard Voltaire</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;font-size:120%;margin: 0 auto 0 auto;">75011 Paris</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;font-size:120%;margin: 0 auto 20px auto;">Téléphone : 01 02 03 04 05</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;font-size:120%;margin: 0 auto 0 auto;">Métro : Voltaire (ligne 9)</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;font-size:120%;margin: 0 auto 20px auto;">Bus : lignes 17, 54, 62</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin: 0 auto 0px auto;">Horaires d'ouverture :</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin: 0 auto 0px auto;">Du mardi au vendredi : 9h - 20h</h2>
+                        <h2 class="quicksand-md" style="font-weight:100;margin: 0 auto 20px auto;">Samedi : 10 - 22h</h2>
+                        <div class="map_div" id="map2" style="margin: 0 auto;"></div>
+                    </div>
+                    <div layout="column"  flex="100"  layout-align="space-between center" style="height:100%;padding: 0 20px;">
+                        <div hide-gt-md style="width :1px; margin-bottom:75px;"></div>
+                        <div class="form-group" for="question" style="width : 100%; margin-bottom:15px;">
+                            <md-input-container id="question" style="min-width:100%;">
+                                <md-select class="form-control quicksand-lg"
+                                           validate-on="submit"
+                                           ng-required="1"
+                                           ng-model="selectedQuestion"
+                                           placeholder="Vous souhaitez ?"
+                                           ng-change="changeQuestion()"
+                                           style="background-color:#f8e4c8; border-radius: 0;">
+                                    <md-select-header>
+                                        <span class="quicksand-lg"> Vous souhaitez ? </span>
+                                    </md-select-header>
+                                    <md-option class="quicksand-md" ng-value="question" ng-repeat="question in questions">{{ question}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+
+                        <div layout flex layout-align="space-between start" style="min-width:100%;">
+                            <div layout="column" flex="40" layout-align="space-between start">
+                                <div class="form-group" style="width : 100%; margin-bottom:15px;">
+                                    <label class="quicksand-md" for="reservation_nom">Nom</label>
+                                    <input style="font-size:20px;border-radius: 0; background-color:#f8e4c8;"
+                                           name="nom"
+                                           type="text"
+                                           class="form-control"
+                                           id="reservation_nom"
+                                           ng-model="reservation_nom"
+                                           ng-required="1"
+                                           validate-on="submit"
+                                           oninvalid="this.setCustomValidity('Champ obligatoire')"
+                                           oninput="setCustomValidity('')"
+                                           ng-change="changeForm()"/>
+                                </div>
+                                <div class="form-group" style="width : 100%; margin-bottom:15px;">
+                                    <label class="quicksand-md" for="reservation_email">Email</label>
+                                    <input style="font-size:20px; border-radius: 0; background-color:#f8e4c8;"
+                                           name="email"
+                                           type="email"
+                                           class="form-control"
+                                           id="reservation_email"
+                                           ng-model="reservation_email"
+                                           ng-required="1"
+                                           oninvalid="this.setCustomValidity('Champ obligatoire')"
+                                           oninput="setCustomValidity('')"
+                                           ng-change="changeForm()"/>
+                                </div>
+                                <div class="form-group" style="border-radius: 0; margin-bottom:15px;">
+                                    <label class="quicksand-md" for="reservation_tel">Téléphone (optionnel)</label>
+                                    <input style="font-size:20px; border-radius: 0; background-color:#f8e4c8;"
+                                           type="text"
+                                           class="form-control"
+                                           id="reservation_tel"
+                                           ng-model="reservation_tel"
+
+                                           ng-change="changeForm()"/>
+                                </div>
+
+                            </div>
+                            <div layout="column" flex="60" layout-align="start end">
+                                <div class="form-group" layout="column" flex layout-align="start end" style="width : 100%;borde: 1px solid black;">
+                                    <label class="quicksand-md" for="reservation_tel">Quel est votre message ?</label>
+                                    <textarea class="quicksand-md"
+                                              style="background-color:#f8e4c8; min-height:150px; width : 90%;"
+                                              ng-model="reservation_comment"
+                                              placeholder="Commentaire (optionnel)"
+                                              ng-change="changeForm()"/>
+                                </div>
+                                <div class="form-group">
+                                    <md-button type="submit" ng-click="goto(subkey)"
+                                               class="md-primary md-raised cy-button"
+                                               style="/*color:#5D3B0A;*/">
+                                        {{submit_button}}
+                                    </md-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div ng-include="'/static/templates/general/footer.html'"></div>
+    </div>
+</div>
+
+<!--</div>-->
+
+

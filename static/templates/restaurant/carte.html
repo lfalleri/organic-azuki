@@ -1,0 +1,144 @@
+<div class="cy-contour-white">
+    <div class="cy-contour">
+        <div class="cy-container">
+            <div ng-include="'/static/templates/general/navbar.html'"></div>
+            <div class="main-container">
+                <p class="text-centered" style="font-style:italic;margin: 55px auto 0px auto;">
+                    Midi : 11h30 - 14h
+                    <span style="margin-left:15px;">/</span>
+                    <span style="margin-left:15px;">Soir : 19h - 22h</span>
+                </p>
+
+                <div layout="column" style="height:700px;margin-top:37px;" >
+                    <section layout="row" flex style="font-size:28x;">
+                        <div ng-include="'/static/templates/general/sidenav.html'" style="min-width:300px;"></div>
+                        <div layout="column" layout-align="start start" flex-gt-md="55" flex="100">
+                            <md-content style="width:100%; padding:0 25px;background-color:#fffdfa;" class="">
+                                <div class="" id="carte">
+                                    <div style="padding-bottom: 2%; margin-bottom: 20px;" ng-repeat="(categorie, obj) in menu">
+                                        <div  class="restaurant-categorie">
+                                            <h2 style="background-color: #fffdfa">
+                                                {{categorie}}
+                                            </h2>
+                                        </div>
+
+                                        <div  ng-repeat="(type, rest) in obj">
+                                            <div class="restaurant-specificite">
+                                                {{type}}
+                                            </div>
+
+                                            <div ng-repeat="(desc, rest) in rest">
+                                                <div class="restaurant-plat">
+                                                    {{ rest[0] }} :
+                                                </div>
+                                                <div  class="restaurant-details-row">
+                                                    <div class="restaurant-plat-ingredients" style="background-color: #fffdfa">
+                                                        {{ rest[1] }}
+                                                    </div>
+                                                    <div class="restaurant-plat-prix right" style="background-color: #fffdfa">
+                                                        {{ rest[2] }}€
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="padding-bottom: 2%;" ng-repeat="(categorie, obj) in desserts">
+                                        <div  class="restaurant-categorie">
+                                            <h2 style="background-color: #fffdfa">
+                                                {{categorie}}:
+                                            </h2>
+                                        </div>
+
+                                        <div  ng-repeat="(type, rest) in obj">
+                                            <div class="restaurant-specificite">
+                                                {{type}}
+                                            </div>
+
+                                            <div ng-repeat="(desc, rest) in rest">
+                                                <div class="restaurant-plat">
+                                                    {{ rest[0] }} :
+                                                </div>
+                                                <div  class="restaurant-details-row">
+                                                    <div class="restaurant-plat-ingredients" style="background-color: #fffdfa">
+                                                        {{ rest[1] }}
+                                                    </div>
+                                                    <div class="restaurant-plat-prix" style="background-color: #fffdfa">
+                                                        {{ rest[2] }}€
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-if='brunchs'>
+                                        <div style="margin-top: 8%; " class="restaurant-categorie">
+                                            <h2 style="background-color: #fffdfa">Brunch</h2>
+                                        </div>
+
+                                        <div style="margin-bottom:3%;" ng-repeat="brunch in brunchs">
+                                            <div  class="brunch-flex-row">
+                                                <div class="restaurant-specificite">
+                                                    {{brunch["titre"]}}
+                                                </div>
+                                                <div class="restaurant-plat-prix">
+                                                    {{ brunch ["prix"]}} €
+                                                </div>
+                                            </div>
+                                            <div class="restaurant-plat-ingredients">
+                                                {{brunch["didascalie"]}}
+                                            </div>
+                                            <div ng-repeat="item in brunch['items']">
+                                                <div class="restaurant-plat">
+                                                    {{ item }}
+                                                </div>
+                                            </div>
+                                            <div class="brunch-options" ng-if="brunch['options'].length > 0">
+                                                <div class="brunch-options">Options :</div>
+                                                <div ng-repeat="option in brunch['options']">
+                                                    <div class="restaurant-plat">
+                                                        {{ option[0] }}  (+ {{ option[1] }} €)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div ng-if='boissons'>
+                                        <div style="margin-top: 8%; " class="restaurant-categorie">
+                                            <h2 style="background-color: #fffdfa">Boissons</h2>
+                                        </div>
+
+                                        <!--<div style="padding-bottom: 2%;" ng-repeat="(categorie, boissons_for_categorie) in boissons | orderBy:'categorie':boissonSortFunction">-->
+                                        <div style="padding-bottom: 0%;" ng-repeat="dict in boissons track by $index"><!-- | orderBy:'categorie':boissonSortFunction">-->
+                                            <div ng-if="!(dict | isEmpty)" ng-repeat="(categorie, boissons_for_categorie) in dict">
+                                                <div style="margin-top:15px;" class="restaurant-specificite">
+                                                    {{categorie}}
+                                                </div>
+                                                <div ng-repeat="boisson in boissons_for_categorie">
+                                                    <div class="boisson-row">
+                                                        <div class="boisson-nom">
+                                                            {{ boisson[0]}}
+                                                        </div>
+                                                        <div class="restaurant-plat-prix">
+                                                            {{ boisson[1]}}€
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </md-content>
+                        </div>
+                        <div layout="column" flex="25" hide-md hide-sm hide-xs style="margin-left:15px;">
+                            <img class="img-fluid" style="max-width:95%;margin-bottom:30px;"  src="/static/img/plat1.jpg" alt="Plat"/>
+                            <img class="img-fluid" style="max-width:95%;"  src="/static/img/plat-escargot.jpg" alt="Plat"/>
+                        </div>
+
+                    </section>
+                </div>
+            </div>
+        </div>
+        <div ng-include="'/static/templates/general/footer.html'"></div>
+    </div>
+</div>

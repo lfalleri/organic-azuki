@@ -1,0 +1,72 @@
+<div class="cy-contour-white">
+    <div class="cy-contour">
+        <div class="cy-container">
+            <div ng-include="'/static/templates/general/navbar.html'"></div>
+            <div class="main-container">
+                <div layout="column" hide-gt-sm>
+                    <md-button ng-click="selectNosProducteurs()" class="md-primary select-button">
+                        Nos producteurs
+                    </md-button>
+                    <md-button ng-click="selectNotreCharte()" class="md-primary select-button">
+                        Notre charte
+                    </md-button>
+                </div>
+
+
+                <div layout="column" class="conten-container" style="height:700px;margin-top:150px;" >
+                    <div layout="row" flex style="font-size:28px; width:100%;">
+                        <div ng-include="'/static/templates/general/sidenav.html'"></div>
+
+                        <md-content flex layout-padding style="background-color:#fffdfa;font-size:20px;">
+
+                            <div layout="column" flex="75" flex-offset="10" layout-align="top center">
+
+                                <div ng-if="showNosProducteurs" style="width: 90%;" layout-align="top center">
+                                    <h3 class="text-centered" style="margin-bottom:5%; color:#5D3B0A;"> Nos producteurs</h3>
+                                    <p style=" color:#5D3B0A;">
+                                        Lorem ipsum dolor sit amet, paulo fabulas perpetua no mel, alii corrumpit in vel.
+                                        <br><br>Eu per unum zril doctus, id sed dicant inimicus, iusto pertinax platonem mei at.
+                                        Ea sit scripta ancillae. Ut mea lorem augue. Pri in veri possit mollis.
+                                        Te ludus molestiae dignissim vis, quo salutatus reprehendunt te.
+
+                                        <br><br>Tempor persequeris sea eu, cu recusabo delicatissimi vis, id doctus volumus partiendo est.
+                                        Enim atomorum eam ex, eu altera prompta has, id voluptua singulis mnesarchum est.
+                                        At eam expetendis vituperata.
+                                        Sit iriure persecuti instructior eu, est mollis mediocritatem cu, sed harum suavitate no.
+
+                                        <br><br>Modo solet mei te. Quo graecis maiorum salutandi no, duo postea impedit et.
+                                        Mei eu esse dicunt maluisset, at illum persius omnesque sea.
+                                        Convenire maluisset ius an, et usu brute timeam antiopam, ei vix sumo copiosae.
+                                        Recteque interesset no eam. No est vide habemus consetetur.
+                                    </p>
+
+                                </div>
+                                <div ng-if="showNotreCharte" style="width: 90%;" layout-align="top center">
+                                    <h3 class="text-centered" style="margin-bottom:5%;color:#5D3B0A;"> Notre charte</h3>
+                                    <p style=" color:#5D3B0A;">
+                                        Alii corrumpit in vel.
+                                        <br><br>Eu per unum zril doctus, id sed dicant inimicus, iusto pertinax platonem mei at.
+                                        Ea sit scripta ancillae. Ut mea lorem augue. Pri in veri possit mollis.
+                                        Te ludus molestiae dignissim vis, quo salutatus reprehendunt te.
+
+                                        <br><br>Tempor persequeris sea eu, cu recusabo delicatissimi vis, id doctus volumus partiendo est.
+                                        Enim atomorum eam ex, eu altera prompta has, id voluptua singulis mnesarchum est.
+                                        At eam expetendis vituperata.
+                                        Sit iriure persecuti instructior eu, est mollis mediocritatem cu, sed harum suavitate no.
+
+                                        <br><br>Modo solet mei te. Quo graecis maiorum salutandi no, duo postea impedit et.
+                                        Mei eu esse dicunt maluisset, at illum persius omnesque sea.
+                                        Convenire maluisset ius an, et usu brute timeam antiopam, ei vix sumo copiosae.
+                                        Recteque interesset no eam. No est vide habemus consetetur.
+                                    </p>
+                                </div>
+                            </div>
+                            <div flex></div>
+                        </md-content>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-include="'/static/templates/general/footer.html'"></div>
+    </div>
+</div>

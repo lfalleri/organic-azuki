@@ -1,0 +1,1212 @@
+/* Smartphones (portrait) ----------- */
+@media only screen
+and (max-device-width : 320px) {
+  /* general.css */
+  .first-section{
+    margin-top : 25%;
+  }
+
+  .page-title{
+     font-size: 25px;
+  }
+
+  .cy-contour{
+    padding: 10px;
+  }
+
+  .cy-footer{
+  bottom:10px;
+  left:10px;
+  width: calc(100% - 20px);
+}
+
+  .cy-button{
+    padding:  0 5px;
+  }
+
+  .historic-table table,
+  .historic-table th ,
+  .historic-table td  {
+     padding: 0px;
+     font-size: 8px;
+  }
+
+  #calendar table,
+  #calendar th,
+  #calendar td {
+     font-size: 15px;
+  }
+
+  h1{
+    font-weight: 500;
+    font-size:35px;
+  }
+
+  h2{
+    font-weight: 500;
+    font-size:30px;
+  }
+
+  h3{
+    font-weight: 700;
+    font-size:20px;
+  }
+
+  p{
+    font-size:16px;
+  }
+
+  .page-title-sm{
+     font-size: 16px;
+  }
+
+  .page-subtitle-sm{
+     font-size: 14px;
+  }
+
+  .menu-burger-border{
+     height:32px;
+     width:32px;
+  }
+
+  .menu-burger{
+     font-size: 32px;
+     margin:10% auto;
+  }
+
+  .menu-burger-item{
+     font-size: 18px;
+  }
+
+  .menu-burger-subitem{
+     font-size: 11px;
+  }
+
+  .select-button{
+     font-size:14px;
+  }
+
+  /* settings.css */
+  .md-sidenav-left{
+     max-width : 25%;
+  }
+
+  .historic-table{
+    font-size:12px;
+    padding: 1px;
+  }
+
+  .fullsize-container{
+     padding: 20px 10x;
+  }
+
+  .landinpage-container-white{
+     margin: 2% 0;
+  }
+
+  .main-container{
+     margin-top: 20px;
+  }
+
+  .content-container{
+     margin-top: 20px;
+     margin-bottom: 20px;
+  }
+
+  .cy-container{
+     padding: 10px 5px;
+  }
+  .cy-contour-white{
+     padding: 5px;
+  }
+
+  .cy-footer-link-md{
+     font-size: 22px;
+     padding: 0 5px;
+  }
+
+  .cy-footer{
+     padding: 10px 2px;
+  }
+
+  .logo-sm{
+     max-width:50px;
+     max-height:50px;
+  }
+
+  .logo-landscape{
+      margin: 0 15%;
+      height:70%;
+      width:70%;
+  }
+
+  .restaurant-categorie  h2{
+     font-size: 20px;
+  }
+
+  .restaurant-specificite{
+     font-size: 16px;
+  }
+
+  .restaurant-plat{
+     font-size: 14px;
+  }
+
+  .restaurant-plat-ingredients, .restaurant-plat-prix{
+     font-size: 12px;
+  }
+
+  .landingpage-row-md{
+    min-height:18%;
+  }
+
+  .landingpage-item-md{
+     max-width:90%;
+     margin: 0 auto;
+  }
+
+  .landingpage-first-line{
+     min-height: 3%;
+  }
+
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (max-device-width : 320px)
+and (max-device-height : 480px)
+ {
+  .first-section{
+    margin-top : 25%;
+  }
+
+  .page-title{
+     font-size: 22px;
+  }
+
+  .page-subtitle-sm{
+     font-size: 16px;
+  }
+
+  .cy-contour{
+    padding: 10px;
+  }
+
+  .cy-footer{
+    bottom:10px;
+    left:10px;
+    width: calc(100% - 20px);
+  }
+
+  .cy-button{
+    padding:  0 5px;
+  }
+
+  .logo-landscape{
+      margin: 0 15%;
+      height:70%;
+      width:70%;
+  }
+
+  .select-button{
+     font-size:16px;
+  }
+
+  .historic-table table,
+  .historic-table th ,
+  .historic-table td  {
+     padding: 3px;
+     font-size: 15px;
+  }
+
+  #calendar table,
+  #calendar th,
+  #calendar td {
+     font-size: 16px;
+  }
+
+  h1{
+    font-weight: 500;
+    font-size:35px;
+  }
+
+  h2{
+    font-weight: 500;
+    font-size:30px;
+  }
+
+  h3{
+    font-weight: 700;
+    font-size:20px;
+  }
+
+  p{
+    font-size:16px;
+  }
+
+  .page-title-sm{
+     font-size: 25px;
+  }
+
+  .menu-burger-border{
+     height:36px;
+     width:36px;
+  }
+
+  .menu-burger{
+     font-size: 36px;
+     margin:18% auto;
+  }
+
+  .menu-burger-item{
+     font-size: 22px;
+  }
+
+  .menu-burger-subitem{
+     font-size: 14px;
+  }
+
+  /* settings.css */
+  .md-sidenav-left{
+     max-width : 25%;
+  }
+
+  .fullsize-container{
+     padding: 30px 0;
+  }
+
+  .main-container{
+     margin-top: 20px;
+  }
+
+  .content-container{
+     margin-top: 20px;
+     margin-bottom: 20px;
+  }
+
+  .cy-footer-link-md{
+     font-size: 22px;
+     padding: 0 5px;
+  }
+
+  .cy-footer{
+     padding: 10px 2px;
+  }
+
+  .logo-sm{
+     max-width:50px;
+     max-height:50px;
+  }
+
+  .restaurant-categorie  h2{
+     font-size: 20px;
+  }
+
+  .restaurant-specificite{
+     font-size: 16px;
+  }
+
+  .restaurant-plat{
+     font-size: 14px;
+  }
+
+  .restaurant-plat-ingredients, .restaurant-plat-prix{
+     font-size: 12px;
+  }
+
+  .landingpage-row-md{
+    min-height:18%;
+  }
+
+  .landingpage-item-md{
+     max-width:75%;
+     margin: 0 auto;
+  }
+
+  .landingpage-first-line{
+     min-height: 1.5%;
+  }
+}
+
+/* Portrait and Landscape */
+@media only screen
+  and (min-device-width: 320px)
+  and (max-device-height: 568px)
+{
+
+  .landingpage-first-line{
+     min-height: 5%;
+  }
+
+  .landingpage-item-md {
+    max-width: 80%;
+    margin: 0 auto;
+  }
+}
+
+/* Portrait and Landscape */
+@media only screen
+  and (min-device-width: 360px)
+  and (max-device-height: 640px) {
+
+  .landingpage-first-line{
+     min-height: 2%;
+  }
+
+  .landingpage-item-md{
+     max-width:75%;
+     margin: 0 auto;
+  }
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 480px)
+and (max-device-width : 768px) {
+  .first-section{
+    margin-top : 20%;
+  }
+
+  .page-title{
+     font-size: 25px;
+  }
+
+  .cy-contour{
+    padding: 10px;
+  }
+
+
+  .cy-button{
+    padding:  0 10px;
+  }
+
+  .select-button{
+     font-size:16px;
+  }
+
+  .historic-table table,
+  .historic-table th,
+  .historic-table td {
+     padding: 10px;
+     font-size: 15px;
+  }
+
+  #calendar table,
+  #calendar th,
+  #calendar td {
+     font-size: 15px;
+     font-weight: 100;
+  }
+
+  h1{
+    font-weight: 500;
+    font-size:35px;
+  }
+
+  h2{
+    font-weight: 700;
+    font-size: 30px;
+  }
+
+  h3{
+    font-weight: 700;
+    font-size:20px;
+  }
+
+  p{
+    font-size:16px;
+  }
+
+  .page-title-sm{
+     font-size: 25px;
+  }
+
+  .long-button{
+     min-width: 55%;
+  }
+
+  .menu-burger-border{
+     height:40px;width:40px;
+  }
+
+  .menu-burger{
+     font-size: 40px;
+     margin:18% auto;
+  }
+
+  .menu-burger-item{
+     font-size: 18px;
+  }
+
+  .menu-burger-subitem{
+     font-size: 14px;
+  }
+
+  /* settings.css */
+  .md-sidenav-left{
+     max-width : 25%;
+  }
+
+  .fullsize-container{
+     padding: 30px 0;
+  }
+
+  .landingpage-contour{
+     padding: 3% 6% 3% 6%;
+  }
+
+  .landingpage-item {
+     max-width:90%;
+  }
+
+  .landingpage-row-md{
+    min-height:18%;
+  }
+
+  .landingpage-item-md{
+     max-width:80%;
+     margin: 0 auto;
+  }
+
+  .landingpage-first-line{
+     min-height: 2%;
+  }
+
+  .main-container{
+     margin-top: 50px;
+     margin-bottom: 150px;
+  }
+
+  .content-container{
+     margin-top: 20px;
+     margin-bottom: 20px;
+  }
+
+  .cy-sidenav-title{
+    font-size: 18px;
+  }
+
+  .cy-sidenav-item a{
+    font-size: 16px;
+  }
+
+  .cy-sidenav-subitem a{
+    font-size: 16px;
+  }
+
+  .cy-footer-link-md{
+     font-size: 22px;
+     padding: 0 5px;
+  }
+
+  .cy-footer{
+     bottom:10px;
+     left:10px;
+     width: calc(100% - 20px);
+     padding: 10px 2px;
+  }
+
+  .logo-sm{
+     max-width:75px;
+     max-height:75px;
+  }
+
+  .restaurant-categorie  h2{
+     font-size: 20px;
+  }
+}
+
+/* iPads (portrait and landscape) ----------- */
+/* iPads (portrait and landscape) ----------- */
+
+
+@media  only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px) {
+  .first-section{
+    margin-top : 15%;
+  }
+
+  .page-title{
+     font-size: 35px;
+  }
+
+  .historic-table table,
+  .historic-table th,
+  .historic-table td  {
+     padding: 10px;
+     font-size: 15px;
+  }
+
+  .cy-button{
+    padding:  0 15px;
+  }
+
+  .long-button{
+     min-width: 45%;
+  }
+
+  #calendar table,
+  #calendar th,
+  #calendar td {
+     font-size: 15px;
+     font-weight: 100;
+  }
+
+  .fullsize-container{
+    padding: 3% 5% 3% 5%;
+  }
+
+  .landingpage-contour{
+     padding: 3% 7% 3% 7%;
+  }
+
+  .landingpage-item {
+     max-width:80%;
+  }
+
+  .landingpage-item-md{
+     max-width:70%;
+     margin: 0 auto;
+  }
+  .landingpage-row-md{
+    min-height:10%;
+  }
+  .main-container{
+     margin-top: 50px;
+     margin-bottom: 150px;
+  }
+
+  .menu-burger-border{
+     height:40px;
+     width:40px;
+  }
+
+  .menu-burger{
+     font-size: 40px;
+     margin:20% auto;
+  }
+
+  .content-container{
+     margin-top: 20px;
+     margin-bottom: 20px;
+  }
+
+  .cy-sidenav-title{
+    font-size: 18px;
+  }
+
+  .cy-sidenav-subitem a{
+    font-size: 16px;
+  }
+  .cy-sidenav-item a{
+    font-size: 16px;
+  }
+  md-sidenav,
+  md-sidenav.md-locked-open,
+  md-sidenav.md-closed.md-locked-open-add-active {
+    min-width: 220px !important;
+    width: 220px !important;
+    max-width: 200px !important;
+  }
+
+  .logo-sm{
+     max-width:75px;
+     max-height:75px;
+  }
+
+  .cy-footer-links{
+    margin:0;
+  }
+}
+
+/* Desktops and laptops ----------- */
+@media only screen
+and (min-device-width : 1024px)
+and (max-device-width : 1254px)  {
+  .first-section{
+    margin-top : 10%;
+  }
+
+  .page-title{
+     font-size: 35px;
+  }
+
+  .historic-table table,
+  .historic-table th,
+  .historic-table td  {
+     padding: 15px;
+     font-size: 15px;
+  }
+
+  .long-button{
+     min-width: 45%;
+  }
+
+  .cy-container{
+     min-height:630px;
+  }
+
+  .cy-button{
+    font-size:15px;
+    padding:  0 15px;
+    min-width: 150px;
+  }
+
+  #calendar table,
+  #calendar th,
+  #calendar td {
+     font-size: 15px;
+     font-weight: 100;
+  }
+/*
+  .landingpage-item {
+     max-width:75%;
+  }
+*/
+  .landingpage-contour{
+     /*padding: 3% 8% 3% 8%;*/
+  }
+
+  .fullsize-container{
+     padding: 30px 0;
+  }
+
+  .cy-sidenav-title{
+    font-size: 22px;
+  }
+
+  md-sidenav,
+  md-sidenav.md-locked-open,
+  md-sidenav.md-closed.md-locked-open-add-active {
+    min-width: 220px !important;
+    width: 220px !important;
+    max-width: 200px !important;
+  }
+
+  .main-container{
+     margin-top: 20px;
+     margin-bottom: 150px;
+  }
+
+  .content-container{
+     margin-top: 30px;
+     margin-bottom: 30px;
+  }
+
+  .cy-footer-links{
+    margin:0;
+  }
+}
+
+@media only screen
+and (min-device-width : 1254px)
+and (max-device-width : 1524px)  {
+  .first-section{
+    margin-top : 10%;
+  }
+
+  .page-title{
+     font-size: 35px;
+  }
+
+  .historic-table table,
+  .historic-table th,
+  .historic-table td  {
+     padding: 15px;
+     font-size: 15px;
+  }
+
+  .long-button{
+     min-width: 45%;
+  }
+
+  .cy-footer{
+      height: 100px;
+  }
+
+  .cy-container{
+     min-height:650px;
+  }
+
+  .cy-button{
+    font-size:16px;
+    padding:  0 10px;
+    min-width: 170px;
+  }
+
+  .cy-subbutton{
+    min-width: 170px;
+    font-size:12px;
+  }
+
+  #calendar table,
+  #calendar th,
+  #calendar td {
+     font-size: 15px;
+     font-weight: 100;
+  }
+
+ /* .landingpage-item {
+     width:100%;
+  }*/
+
+/*
+  .landingpage-contour{
+     padding: 3% 8% 3% 8%;
+  }
+*/
+  .fullsize-container{
+     padding: 30px 0;
+  }
+
+  .fullsize-container{
+     padding: 30px 0;
+  }
+
+  .main-container{
+     margin-top: 20px;
+     margin-bottom: 150px;
+  }
+
+  .cy-footer-links{
+    margin:0;
+  }
+}
+
+@media only screen
+and (min-width : 1524px)
+and (max-width : 1824px)  {
+  .first-section{
+    margin-top : 10%;
+  }
+
+  .page-title{
+     font-size: 35px;
+  }
+
+  .historic-table table,
+  .historic-table th,
+  .historic-table td  {
+     padding: 15px;
+     font-size: 15px;
+  }
+
+  .long-button{
+     min-width: 45%;
+  }
+  .cy-footer{
+      height: 100px;
+  }
+
+  .cy-container{
+     min-height:700px;
+  }
+
+  .cy-button{
+    padding:  0 30px;
+    min-width: 200px;
+    font-size:18px;
+  }
+
+  .cy-subbutton{
+    min-width: 200px;
+    font-size:14px;
+  }
+
+  #calendar table,
+  #calendar th,
+  #calendar td {
+     font-family: Montserrat;
+     font-size: 16px;
+     font-weight:100;
+        vertical-align: middle;
+  }
+
+  .fullsize-container{
+     padding: 30px 50px;
+  }
+
+  .cy-footer-links{
+    margin:0;
+  }
+
+  .main-container{
+     margin-top: 20px;
+     margin-bottom: 170px;
+  }
+}
+
+
+/* Large screens ----------- */
+@media only screen
+and (min-width : 1824px) {
+  .first-section{
+    margin-top : 7%;
+  }
+
+  .page-title{
+     font-size: 35px;
+  }
+  .cy-footer{
+      height: 110px;
+  }
+
+  .cy-container{
+     min-height:750px;
+  }
+
+  .cy-button{
+    font-size:20px;
+    padding:  0 50px;
+    min-width: 250px;
+  }
+
+  .cy-subbutton{
+    min-width: 250px;
+    font-size:15px;
+  }
+
+  .historic-table table,
+  .historic-table th,
+  .historic-table td  {
+     padding: 30px;
+     font-size: 20px;
+  }
+
+  #calendar table,
+  #calendar th,
+  #calendar td {
+     font-size: 20px;
+        vertical-align: middle;
+  }
+
+  .fullsize-container{
+     padding: 30px 50px;
+  }
+
+  .cy-footer-links{
+    margin:0;
+  }
+
+  .main-container{
+     margin-top: 20px;
+     margin-bottom: 170px;
+  }
+}
+
+
+
+
+
+
+/* iPad */
+@media  only screen
+and (min-device-width : 768px)
+and (max-device-height : 1024px) {
+
+  .landingpage-first-line{
+     min-height: 1%;
+  }
+
+  .landingpage-item-md{
+     max-width:70%;
+     margin: 0 auto;
+  }
+}
+
+/* Nexus10*/
+@media  only screen
+and (min-device-width : 800px)
+and (max-device-height : 1280px) {
+
+  .landingpage-first-line{
+     min-height: 1.8%;
+  }
+
+  .landingpage-item-md{
+     max-width:85%;
+     margin: 0 auto;
+  }
+
+  .landingpage-row-md {
+    min-height: 18%;
+  }
+}
+
+/*  */
+@media  only screen
+and (min-device-width : 375px)
+and (max-device-height : 736px) {
+
+  .landingpage-first-line{
+     min-height: 3%;
+  }
+
+  .landingpage-item-md{
+     max-width:80%;
+     margin: 0 auto;
+  }
+
+  .landingpage-row-md {
+    min-height: 18%;
+  }
+}
+
+/*  */
+@media  only screen
+and (min-device-width : 450px)
+and (max-device-height : 736px) {
+
+  .landingpage-first-line{
+     min-height: 1%;
+  }
+
+  .landingpage-item-md{
+     max-width:67%;
+     margin: 0 auto;
+  }
+
+  .landingpage-row-md {
+    min-height: 18%;
+  }
+}
+
+/* iPhone4 */
+@media only screen
+  and (device-width: 320px)
+  and (device-height: 480px){
+
+  .landingpage-first-line{
+     min-height: 2%;
+  }
+
+  .landingpage-item-md{
+     max-width:75%;
+     margin: 0 auto;
+  }
+
+  .landingpage-row-md {
+    min-height: 18%;
+  }
+}
+
+/* iPhone6+ */
+@media  only screen
+and (device-width : 360px)
+and (device-height : 640px) {
+
+  .landingpage-first-line{
+     min-height: 4.5%;
+  }
+
+  .landingpage-item-md{
+     max-width:75%;
+     margin: 0 auto;
+  }
+
+  .landingpage-row-md {
+    min-height: 18%;
+  }
+}
+
+/* iPhone6+ */
+@media only screen
+  and (device-width: 414px)
+  and (device-height: 736px){
+
+  .landingpage-first-line{
+     min-height: 3.5%;
+  }
+
+  .landingpage-item-md{
+     max-width:85%;
+     margin: 0 auto;
+  }
+
+  .landingpage-row-md {
+    min-height: 18%;
+  }
+}
+
+/* iPhone6 */
+@media  only screen
+and (device-width : 375px)
+and (device-height : 667px) {
+
+  .landingpage-first-line{
+     min-height: 3.5%;
+  }
+
+  .landingpage-item-md{
+     max-width:85%;
+     margin: 0 auto;
+  }
+
+  .landingpage-row-md {
+    min-height: 18%;
+  }
+}
+/* iPhone6+ */
+@media only screen
+  and (device-width: 414px)
+  and (device-height: 736px){
+
+  .landingpage-first-line{
+     min-height: 3.5%;
+  }
+
+  .landingpage-item-md{
+     max-width:85%;
+     margin: 0 auto;
+  }
+
+  .landingpage-row-md {
+    min-height: 18%;
+  }
+}
+
+
+/* iPhone6+ */
+@media  only screen
+and (min-device-width : 765px)
+and (max-device-height : 975px) {
+
+  .landingpage-first-line{
+     min-height: 2%;
+  }
+
+  .landingpage-item-md{
+     max-width:60%;
+     margin: 0 auto;
+  }
+
+  .landingpage-row-md {
+    min-height: 18%;
+  }
+}
+
+/* Nexus6P */
+@media only screen
+  and (device-width: 412px)
+  and (device-height: 732px){
+
+  .landingpage-first-line{
+     min-height: 3.5%;
+  }
+
+  .landingpage-item-md{
+     max-width:77%;
+     margin: 0 auto;
+  }
+
+  .landingpage-row-md {
+    min-height: 18%;
+  }
+}
+
+
+/* Aspect ration specific (landingpage)*/
+/* Ratio minimal */
+@media (min-aspect-ratio: 22/10)
+and (max-width : 320px)
+{
+  .fullsize-fixed{
+     height: 300px;
+  }
+}
+
+@media (min-aspect-ratio: 22/10)
+and (min-width : 320px)
+and (max-width : 480px)
+{
+  .fullsize-fixed{
+     height: 400px;
+  }
+}
+
+@media (min-aspect-ratio: 22/10)
+and (min-width : 480px)
+and (max-width : 768px)
+{
+  .fullsize-fixed{
+     height: 700px;
+  }
+}
+
+@media (min-aspect-ratio: 22/10)
+and (min-width : 768px)
+and (max-width : 1024px)
+{
+  .fullsize-fixed{
+     height: 700px;
+  }
+}
+
+@media (min-aspect-ratio: 22/10)
+and (min-width : 1027px)
+and (max-width : 1524px)
+{
+  .fullsize-fixed{
+     height: 700px;
+  }
+}
+
+@media (min-aspect-ratio: 22/10)
+and (min-width : 1524px)
+and (max-width : 1824px)
+{
+  .fullsize-fixed{
+     height: 900px;
+  }
+}
+
+@media (min-aspect-ratio: 22/10)
+and (min-width : 1824px)
+{
+  .fullsize-fixed{
+     height: 1000px;
+  }
+}
+
+@media (min-aspect-ratio: 22/10) {
+  .fullsize-fixed{
+     overflow:scroll;
+     position: static;
+    /* height: 800px;*/
+     width:100%;
+  }
+
+  .fullsize-contour-marron {
+    position: static;
+  }
+}
+
+
+
+@media (min-aspect-ratio: 2/1) {
+  .landingpage-item{
+     max-width:75%;
+  }
+}
+
+
+@media (min-aspect-ratio: 34/19) and (max-aspect-ratio: 2/1) {
+  .landingpage-item{
+     max-width:95%;
+  }
+}
+
+@media (min-aspect-ratio: 16/9) and (max-aspect-ratio: 34/19)
+ {
+  .landingpage-item{
+     max-width:100%;
+  }
+}
+
+@media (max-aspect-ratio: 16/9)
+ {
+  .landingpage-item{
+     max-width:100%;
+  }
+}

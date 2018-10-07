@@ -1,0 +1,41 @@
+<div class="cy-contour-white">
+    <div class="cy-contour">
+        <div class="cy-container">
+            <div ng-include="'/static/templates/general/navbar.html'"></div>
+            <div class="main-container">
+                <div layout style="margin-top:150px;">
+                    <div layout="column" hide-gt-sm>
+                        <md-button ng-click="selectNotreBoutique()" class="md-primary" style="font-size:20px;">
+                            Notre boutique
+                        </md-button>
+                        <md-button ng-click="selectNosExpositions()" class="md-primary" style="font-size:20px;">
+                            Nos expositions
+                        </md-button>
+                    </div>
+                    <div layout="row" flex style="font-size:28x; margin-top:0px;">
+                        <div ng-include="'/static/templates/general/sidenav.html'"></div>
+
+                        <md-content flex layout-padding style="background-color:#fffdfa;font-size:20px;">
+                            <div ng-if="(createurs | isEmptyArray)">
+                                <h1 class="text-centered">Rien en ce moment</h1>
+                            </div>
+                            <div class="cy-createur"
+                                 layout layout-align="space-between start"
+                                 ng-repeat="createur in createurs" style="padding: 0 15px;">
+                                <div layout="column" layout-align="start start" flex="60">
+                                    <h2>{{createur.nom}}</h2>
+                                    <p>{{createur.texte}}</p>
+                                </div>
+                                <div layout="column" flex="35">
+                                    <img src="{{ createur.image}}" alt="Creation" style="max-height:300px; height:auto; width:auto;"/>
+                                </div>
+                            </div>
+                        </md-content>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-include="'/static/templates/general/footer.html'"></div>
+    </div>
+</div>
+

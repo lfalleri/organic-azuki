@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html ng-app="organic_azuki" ng-controller="LandingPageController as vm">
+<meta charset="ISO-8859-1">
+<head>
+    <title>Organic Azuki</title>
+
+    <base href="/" />
+
+    {% include 'organic_azuki/stylesheets.html' %}
+</head>
+{% load static %}
+{% load staticfiles %}
+<body>
+
+   <div id="view" class="ng-view">
+
+   </div>
+{% include 'organic_azuki/javascripts.html' %}
+</body>
+</html>
+
+

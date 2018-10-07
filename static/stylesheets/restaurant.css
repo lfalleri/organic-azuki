@@ -1,0 +1,139 @@
+#carte{
+  font-size: 20px;
+}
+#carte *{
+   font-family: "Montserrat";
+   color: #5D3B0A;
+}
+
+.restaurant-categorie{
+  font-size: 20px;
+  font-weight: 500;
+  text-align : center;
+  position: relative;
+}
+.restaurant-categorie:before{
+    content: '';
+    width: 100%;
+    border-bottom: dotted 1px #5D3B0A;
+    position: absolute;
+    left: 0;
+    top: 40%;
+    z-index: 0;
+}
+
+.restaurant-categorie  h2{
+    /*background-color: #f2f2f2;*/
+    z-index: 3;
+    width: auto;
+    display: inline-block;
+    padding: 0 20px 0 20px;
+    position: relative;
+    text-align : center;
+    font-size: 25px;
+}
+
+.restaurant-specificite{
+  font-size: 80%;
+  font-weight: 700;
+}
+
+.restaurant-plat{
+  margin-left: 5%;
+  font-size: 100%;
+  font-weight: 100;
+}
+
+.restaurant-details-row{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 10%;
+  margin-right: 10%;
+  position: relative;
+}
+
+.restaurant-details-row:before{
+  content: '';
+  position: absolute;
+  bottom: .4rem;
+  width: 100%;
+  height: 0;
+  line-height: 0;
+  border-bottom: dotted 1px #5D3B0A;
+}
+
+.restaurant-plat-ingredients{
+  background-color: #fffdfa;
+  padding-right: 15px;
+  font-size: 90%;
+  font-style: italic;
+  position: relative;
+  z-index:2;
+}
+
+.restaurant-plat-prix{
+  background-color: #fffdfa;
+  padding-left: 15px;
+  float: right;
+  font-size: 90%;
+  font-style: italic;
+  z-index:2;
+}
+
+.brunch-flex-row{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 10%;
+}
+
+.brunch-options{
+   position: relative;
+   margin-top: 2%;
+}
+
+.brunch-options:before{
+  content: '';
+  position: absolute;
+  left: 10%;
+  top: 1%;
+  width: 70%;
+  height: 0;
+  line-height: 0;
+  border-bottom: 1px dashed #3f3f3f;
+}
+
+.boisson-nom{
+  font-size: 100%;
+  font-weight: 100;
+  z-index:2;
+  background-color: #fffdfa;
+  padding-right : 3%;
+}
+
+.boisson-row{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+  margin-left: 5%;
+  margin-right: 10%;
+}
+
+.boisson-row:before{
+  content: '';
+  position: absolute;
+  bottom: .4rem;
+  width: 100%;
+  height: 0;
+  line-height: 0;
+  border-bottom: 1px dotted #3f3f3f;
+}
+
+.reservation-input-landscape{
+   width: 50%;
+}
+.reservation-input-portrait{
+   width: 100%;
+}

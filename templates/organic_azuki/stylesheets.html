@@ -1,0 +1,34 @@
+{% load compress %}
+{% load staticfiles %}
+
+{% compress css %}
+<link rel="stylesheet" type="text/css" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.css' %}" />
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css">
+<!--<link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/ripples.min.css">-->
+<link rel="stylesheet" type="text/css" href="{% static 'stylesheets/vendor/bootstrap/css/bootstrap.css' %}" />
+<!--<link rel="stylesheet" type="text/css" href="{% static 'bower_components/bootstrap-material-design/dist/css/material.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'bower_components/bootstrap-material-design/dist/css/ripples.min.css' %}" />-->
+<link rel="stylesheet" type="text/css" href="{% static 'bower_components/ng-dialog/css/ngDialog.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'bower_components/ng-dialog/css/ngDialog-theme-default.css' %}" />
+<!--<link rel="stylesheet" type="text/css" href="{% static 'bower_components/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.min.css' %}"/>-->
+<link rel="stylesheet" type="text/css" href="{% static 'bower_components/fullcalendar/dist/fullcalendar.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'bower_components/angular-material/angular-material.min.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'bower_components/angular-material/layouts/angular-material.layouts.min.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'lib/snackbarjs/snackbar.min.css' %}" />
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Shadows+Into+Light">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+<link rel="stylesheet" href="{% static 'stylesheets/vendor/font-awesome/css/font-awesome.css' %}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<link rel="stylesheet" type="text/css" href="{% static 'stylesheets/general.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'stylesheets/landingpage.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'stylesheets/yoga.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'stylesheets/restaurant.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'stylesheets/settings.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'stylesheets/responsive.css' %}" />
+{% endcompress %}

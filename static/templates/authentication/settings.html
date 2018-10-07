@@ -1,0 +1,843 @@
+<div class="">
+  <div class="">
+    <div class="" layout="column">
+
+      <div ng-include="'/static/templates/general/banner.html'"></div>
+
+      <div layout layout-align="center center" style="margin: 0 auto; width:80%;">
+
+        <div layout="column" style="border:solid 1px black;margin-right:10%;">
+          <md-button style="height:200px; width:200px;" ng-click="selectUpdateProfile()">
+            <md-icon class="perm-icons" md-font-icon="material-icons"
+                     style="font-size:72px;"
+                     ng-click="selectUpdateProfile()">how_to_reg
+            </md-icon>
+            <h4 style="white-space: normal; margin-top:20px;">Mettre à jour mon profil</h4>
+          </md-button>
+        </div>
+
+        <div layout="column" style="border:solid 1px black;margin-right:10%;">
+          <md-button style="height:200px; width:200px;" ng-click="selectAddresses()">
+            <md-icon class="perm-icons" md-font-icon="material-icons"
+                     style="font-size:72px;"
+                     ng-click="selectAddresses()">where_to_vote
+            </md-icon>
+            <h4 style="white-space: normal; margin-top:20px;">Modifier mes adresses</h4>
+          </md-button>
+        </div>
+
+        <div layout="column" style="border:solid 1px black;">
+          <md-button style="height:200px; width:200px;" ng-click="selectCommandsHistoric()">
+            <md-icon class="perm-icons" md-font-icon="material-icons"
+                     style="font-size:72px;"
+                     ng-click="selectCommandsHistoric()">playlist_add_check
+            </md-icon>
+            <h4 style="white-space: normal; margin-top:20px;">Voir mes commandes</h4>
+          </md-button>
+        </div>
+      </div>
+
+
+      <div ng-if="state.showUpdateProfile" style="width: 30%;margin:50px auto;" layout="column" layout-align="top center" flex="50">
+        <h4 class="text-centered"> Votre profil :</h4>
+        <form  role="form" class="update-account-form" ng-submit="updateProfile()">
+          <div style="color:red;" class="alert alert-danger" ng-show="error" ng-bind="error"/>
+          <div class="alert alert-success" ng-show="success" ng-bind="success"/>
+
+          <div class="form-group">
+            <label class="quicksand-md" for="settings_nom">Nom</label>
+            <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+                   id="settings_nom"
+                   name="nom"
+                   type="text"
+                   class="form-control"
+                   ng-model="updateProfileFields.last_name"
+                   ng-required="1"
+                   oninvalid="this.setCustomValidity('Champ obligatoire')"
+                   oninput="setCustomValidity('')"
+                   ng-change="changeForm()"/>
+          </div>
+          <div class="form-group">
+            <label class="quicksand-md" for="settings_prenom">Prénom</label>
+            <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+                   id="settings_prenom"
+                   name="prenom"
+                   type="text"
+                   class="form-control"
+                   ng-model="updateProfileFields.first_name"
+                   ng-required="1"
+                   oninvalid="this.setCustomValidity('Champ obligatoire')"
+                   oninput="setCustomValidity('')"
+                   ng-change="changeForm()"/>
+          </div>
+          <div class="form-group">
+            <label class="quicksand-md" for="settings_email">Email</label>
+            <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+                   id="settings_email"
+                   name="email"
+                   type="email"
+                   class="form-control"
+                   ng-model="updateProfileFields.email"
+                   ng-required="1"
+                   oninvalid="this.setCustomValidity('Champ obligatoire')"
+                   oninput="setCustomValidity('')"
+                   ng-change="changeForm()"/>
+          </div>
+          <div class="form-group">
+            <label class="quicksand-md" for="settings_old_password">Ancien mot de passe</label>
+            <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+                   id="settings_old_password"
+                   name="pwd1"
+                   type="password"
+                   class="form-control"
+                   ng-model="updateProfileFields.old_password"
+                   ng-required="1"
+                   oninvalid="this.setCustomValidity('Champ obligatoire')"
+                   oninput="setCustomValidity('')"
+                   ng-change="changeForm()"/>
+          </div>
+          <div class="form-group">
+            <label class="quicksand-md" for="settings_password1">Nouveau mot de passe</label>
+            <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+                   id="settings_password1"
+                   name="pwd1"
+                   type="password"
+                   class="form-control"
+                   ng-model="updateProfileFields.password"
+                   ng-required="1"
+                   oninvalid="this.setCustomValidity('Champ obligatoire')"
+                   oninput="setCustomValidity('')"
+                   ng-change="changeForm()"/>
+          </div>
+          <div class="form-group">
+            <label class="quicksand-md" for="settings_password2">Confirmer votre mot de passe</label>
+            <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+                   id="settings_password2"
+                   name="pwd2"
+                   type="password"
+                   class="form-control"
+                   ng-model="updateProfileFields.confirmation_password"
+                   ng-required="1"
+                   oninvalid="this.setCustomValidity('Champ obligatoire')"
+                   oninput="setCustomValidity('')"
+                   ng-change="changeForm()"/>
+          </div>
+
+          <div class="form-group" layout="column"
+               layout-align="top center"
+               style="margin-top:15px;">
+            <md-button type="submit"
+                       class="button-type-submit md-raised md-primary">
+              Mettre à jour
+            </md-button>
+            <md-button ng-click="deleteAccount()"
+                       class="button-type-submit md-raised md-primary">
+              Supprimer mon compte
+            </md-button>
+          </div>
+        </form>
+      </div>
+
+      <div ng-if="state.showAddress" style="width: 90%;margin:50px 5%;" layout="column" layout-align="top center" flex="50">
+        <div style="color:red;" class="alert alert-danger" ng-show="error" ng-bind="error"/>
+        <div class="alert alert-success" ng-show="success" ng-bind="success"/>
+        <div ng-if="!(data.adresses|isEmpty)" layout="column" layout-align="space-between center" style="width:100%;">
+          <div layout="column" style="width:80%;margin:auto;">
+            <h3 style="margin:20px 0 20px 0;">Adresses par défaut</h3>
+            <div layout layout-align="start center" style="width:80%;">
+
+              <div layout="column" style="background-color:#fff7f7;
+                                               border: solid 1px black;
+                                               border-radius: 15px 0 0 15px;
+                                               border-right: solid 1px rgba(170, 164, 164, 0.3);
+                                               padding:15px;
+                                               margin:0;
+                                               min-width:50%;" >
+                <h4>Adresse de livraison</h4>
+                <h5 style="color:black;font-style:italic;">{{data.adresse_de_livraison.description}}</h5>
+                <h5 style="color:black;font-size:90%;">{{data.adresse_de_livraison.adresse}}</h5>
+                <h5 style="color:black;font-size:90%;">{{data.adresse_de_livraison.code_postal}}</h5>
+                <h5 style="color:black;font-size:90%;">{{data.adresse_de_livraison.ville}}</h5>
+              </div>
+
+              <div layout="column" style="background-color:#fff7f7;
+                                               border: solid 1px black;
+                                               border-radius: 0 15px 15px 0;
+                                               border-left: solid 2px rgba(170, 164, 164, 0.3);
+                                               padding:15px;
+                                               margin:0;
+                                               min-width:50%;">
+                <h4>Adresse de facturation</h4>
+                <h5 style="color:black;font-style:italic;">{{data.adresse_de_facturation.description}}</h5>
+                <h5 style="color:black;font-size:90%;">{{data.adresse_de_facturation.adresse}}</h5>
+                <h5 style="color:black;font-size:90%;">{{data.adresse_de_facturation.code_postal}}</h5>
+                <h5 style="color:black;font-size:90%;">{{data.adresse_de_facturation.ville}}</h5>
+              </div>
+            </div>
+          </div>
+          <div layout="column" style="width:80%;margin:50px auto 0 auto;">
+
+            <div layout layout-align="space-between center">
+              <h3 style="margin:0 0 20px 0;">Configurer mes adresses</h3>
+            </div>
+
+            <div layout layout-align="space-between"
+                 ng-repeat="adresse in data.adresses"
+                 style="background-color:#fff7f7; border: solid 1px black;border-radius:15px;margin-bottom:15px;">
+
+              <div layout="column"
+                   style="background-color:#fff7f7;
+                        margin:5px;
+                        min-width:50%;">
+                <div  ng-if="!adresse.enableModifyAdresse" layout="column" style="padding:15px;">
+                  <h5 style="color:black;font-style:italic;">{{adresse.description}}</h5>
+                  <h5 style="color:black;font-size:90%;">{{adresse.adresse}}</h5>
+                  <h5 style="color:black;font-size:90%;">{{adresse.code_postal}}</h5>
+                  <h5 style="color:black;font-size:90%;">{{adresse.ville}}</h5>
+                  <div layout ng-if="!adresse.enableDeleteAdresse">
+                    <md-button class="button-type-submit md-flat md-accent" ng-click="clickDeleteAdresse(adresse)">Supprimer</md-button>
+                    <md-button class="button-type-submit md-flat md-accent" ng-click="clickModifyAdresse(adresse)">Modifier</md-button>
+                  </div>
+                  <div layout="column" ng-if="adresse.enableDeleteAdresse">
+                    <p style="color:red;margin-top:15px;">Confimer la suppression de l'adresse ?</p>
+                    <div layout>
+                      <md-button class="button-type-submit md-flat md-accent" ng-click="confirmDeleteAdresse(adresse)">Confirmer</md-button>
+                      <md-button class="button-type-submit md-flat md-accent" ng-click="cancelDeleteAdresse(adresse)">Annuler</md-button>
+                    </div>
+                  </div>
+                </div>
+                <div  ng-if="adresse.enableModifyAdresse" layout="column" style="padding:15px;">
+                  <form  role="form" class="update-account-form" ng-submit="updateAdresseDeLivraison()">
+                    <div style="color:red;" class="alert alert-danger" ng-show="error" ng-bind="error"/>
+                    <div  class="alert alert-success" ng-show="success" ng-bind="success"/>
+                    <div class="form-group">
+                      <label class="quicksand-md" for="settings_adresse_description">Label*</label>
+                      <input style="font-size:20px; border-radius: 10px;"
+                             id="settings_adresse_description"
+                             name="description"
+                             type="text"
+                             class="form-control"
+                             ng-model="adresse.description"
+                             ng-required="1"
+                             oninvalid="this.setCustomValidity('Champ obligatoire')"
+                             oninput="setCustomValidity('')"
+                             ng-change="changeForm()"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="quicksand-md" for="settings_adresse_prenom">Prénom*</label>
+                      <input style="font-size:20px; border-radius: 10px;"
+                             id="settings_adresse_prenom"
+                             name="prenom"
+                             type="text"
+                             class="form-control"
+                             ng-model="adresse.prenom"
+                             ng-required="1"
+                             oninvalid="this.setCustomValidity('Champ obligatoire')"
+                             oninput="setCustomValidity('')"
+                             ng-change="changeForm()"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="quicksand-md" for="settings_adresse_livraison_nom">Nom*</label>
+                      <input style="font-size:20px; border-radius: 10px; "
+                             id="settings_adresse_nom"
+                             name="nom"
+                             type="text"
+                             class="form-control"
+                             ng-model="adresse.nom"
+                             ng-required="1"
+                             oninvalid="this.setCustomValidity('Champ obligatoire')"
+                             oninput="setCustomValidity('')"
+                             ng-change="changeForm()"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="quicksand-md" for="settings_adresse_adresse">Adresse*</label>
+                      <input style="font-size:20px; border-radius: 10px;"
+                             id="settings_adresse_adresse"
+                             name="adresse"
+                             type="text"
+                             class="form-control"
+                             ng-model="adresse.adresse"
+                             ng-required="1"
+                             oninvalid="this.setCustomValidity('Champ obligatoire')"
+                             oninput="setCustomValidity('')"
+                             ng-change="changeForm()"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="quicksand-md" for="settings_adresse_compl_adresse">Complément d'adresse</label>
+                      <input style="font-size:20px; border-radius: 10px"
+                             id="settings_adresse_compl_adresse"
+                             name="complement"
+                             type="text"
+                             class="form-control"
+                             ng-model="adresse.complement_adresse"
+                             ng-required="0"
+                             oninvalid="this.setCustomValidity('Champ obligatoire')"
+                             oninput="setCustomValidity('')"
+                             ng-change="changeForm()"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="quicksand-md" for="settings_adresse_code_postal">Code postal*</label>
+                      <input style="font-size:20px; border-radius: 10px;"
+                             id="settings_adresse_code_postal"
+                             name="postal_code"
+                             type="text"
+                             class="form-control"
+                             ng-model="adresse.code_postal"
+                             ng-required="1"
+                             oninvalid="this.setCustomValidity('Champ obligatoire')"
+                             oninput="setCustomValidity('')"
+                             ng-change="changeForm()"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="quicksand-md" for="settings_adresse_city">Ville*</label>
+                      <input style="font-size:20px; border-radius: 10px;"
+                             id="settings_adresse_city"
+                             name="city"
+                             type="text"
+                             class="form-control"
+                             ng-model="adresse.ville"
+                             ng-required="1"
+                             oninvalid="this.setCustomValidity('Champ obligatoire')"
+                             oninput="setCustomValidity('')"
+                             ng-change="changeForm()"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="quicksand-md" for="settings_adresse_country">Pays*</label>
+                      <input style="font-size:20px; border-radius: 10px;"
+                             id="settings_adresse_country"
+                             name="country"
+                             type="text"
+                             class="form-control"
+                             ng-model="adresse.pays"
+                             ng-required="1"
+                             oninvalid="this.setCustomValidity('Champ obligatoire')"
+                             oninput="setCustomValidity('')"
+                             ng-change="changeForm()"/>
+                    </div>
+                  </form>
+                  <md-button class="button-type-submit md-flat md-accent" ng-click="submitModifyAdresse(adresse)">Appliquer</md-button>
+                </div>
+              </div>
+
+              <div layout="column" layout-align="start start" style="margin:50px auto 0 auto;">
+                <p>Adresse de facturation</p>
+                <md-checkbox style="margin:0 auto;"
+                             ng-model="adresse.facturation"
+                             ng-change="changeAdresseFacturation(adresse)"
+                             aria-label="Facturation">
+                </md-checkbox>
+              </div>
+              <div layout="column" layout-align="start start" style="margin:50px auto 0 auto;">
+                <p>Adresse de livraison</p>
+                <md-checkbox style="margin:0 auto;"
+                             ng-model="adresse.livraison"
+                             ng-change="changeAdresseLivraison(adresse)"
+                             aria-label="Livraison">
+                </md-checkbox>
+              </div>
+            </div>
+          </div>
+          <div layout>
+            <md-button style="padding: 15px;margin-top:30px;"
+                       class="button-type-submit md-raised md-primary"
+                       ng-disabled="!state.somethingChanged"
+                       ng-click="clickSaveAdresses()">
+              <div layout>
+                <md-icon class="perm-icons" md-font-icon="material-icons"
+                         style="font-size:32px;"
+
+                         ng-click="selectCommandsHistoric()">playlist_play
+                </md-icon>
+                <h4 style="white-space: normal; margin-top:20px;color:white;margin:auto;">Sauvegarder</h4>
+              </div>
+            </md-button>
+            <md-button style="padding: 15px;margin-top:30px;"
+                       class="button-type-submit md-raised md-primary"
+                       ng-click="clickNewAdresse()">
+              <div layout>
+                <md-icon class="perm-icons" md-font-icon="material-icons"
+                         style="font-size:32px;"
+                         ng-click="selectCommandsHistoric()">playlist_add
+                </md-icon>
+                <h4 style="white-space: normal; margin-top:20px;color:white;margin:auto;">Ajouter une adresse</h4>
+              </div>
+            </md-button>
+          </div>
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+        <!--
+        <div layout="column" style="width:80%;margin:50px auto 0 auto;">
+          <div layout layout-align="space-between center">
+
+            <div layout>
+              <p style="margin:0 30px;" >Adresse de facturation</p>
+              <p>Adresse de livraison</p>
+            </div>
+
+          </div>
+
+          <div layout layout-align="space-between center" ng-repeat="adresse in data.adresses"
+               style="background-color:#fff7f7;
+                                        border: solid 1px black;
+                                        margin:0;
+                                        min-width:50%;height:200px;">
+            <div layout="column" style="padding:15px;height:200px;">
+              <h5 style="color:black;font-style:italic;">{{adresse.description}}</h5>
+              <h5 style="color:black;font-size:90%;">{{adresse.adresse}}</h5>
+              <h5 style="color:black;font-size:90%;">{{adresse.code_postal}}</h5>
+              <h5 style="color:black;font-size:90%;">{{adresse.ville}}</h5>
+              <div layout>
+                <md-button class="button-type-submit md-flat md-accent">Supprimer</md-button>
+                <md-button class="button-type-submit md-flat md-accent">Modifier</md-button>
+              </div>
+            </div>
+            <div layout layout-align="space-between start" style="border-left: solid 1px rgba(170, 164, 164, 0.6);height:200px;">
+              <div>
+                <md-checkbox style="margin:45% 70px;" ng-model="adresse.facturation" aria-label="Facturation">
+                </md-checkbox>
+              </div>
+              <div>
+                <md-checkbox style="margin:45% 60px;" ng-model="adresse.livraison" aria-label="Livraison">
+
+                </md-checkbox>
+              </div>
+
+
+            </div>
+
+          </div>
+
+        </div>-->
+
+
+      </div>
+      <div ng-if="!(data.adresses|isEmpty)" layout="column" layout-align="space-between center" style="width:100%;">
+
+
+
+
+      </div>
+    </div>
+
+    <div ng-if="state.showNewAddress" style="width: 80%;margin:50px 10%;" layout="column" layout-align="top center" flex="50">
+      <div layout="column" layout-align="space-between center" style="width:100%;">
+        <div layout="column" style="width:40%;">
+          <h4 class="text-centered"> Adresse de livraison :</h4>
+          <form  role="form" class="update-account-form" ng-submit="updateAdresseDeLivraison()">
+            <div style="color:red;" class="alert alert-danger" ng-show="error" ng-bind="error"/>
+            <div  class="alert alert-success" ng-show="success" ng-bind="success"/>
+
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_livraison_nom">Nom*</label>
+              <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+                     id="settings_adresse_livraison_nom"
+                     name="nom"
+                     type="text"
+                     class="form-control"
+                     ng-model="updateAddresseLivraisonFields.last_name"
+                     ng-required="1"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_livraison_prenom">Prénom*</label>
+              <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+                     id="settings_adresse_livraison_prenom"
+                     name="prenom"
+                     type="text"
+                     class="form-control"
+                     ng-model="updateAddresseLivraisonFields.first_name"
+                     ng-required="1"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_livraison_adresse">Adresse*</label>
+              <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+                     id="settings_adresse_livraison_adresse"
+                     name="adresse"
+                     type="text"
+                     class="form-control"
+                     ng-model="updateAddresseLivraisonFields.address"
+                     ng-required="1"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_livraison_compl_adresse">Complément d'adresse</label>
+              <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+                     id="settings_adresse_livraison_compl_adresse"
+                     name="complement"
+                     type="text"
+                     class="form-control"
+                     ng-model="updateAddresseLivraisonFields.address_complement"
+                     ng-required="0"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_livraison_code_postal">Code postal*</label>
+              <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+                     id="settings_adresse_livraison_code_postal"
+                     name="postal_code"
+                     type="text"
+                     class="form-control"
+                     ng-model="updateAddresseLivraisonFields.postal_code"
+                     ng-required="1"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_livraison_city">Ville*</label>
+              <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+                     id="settings_adresse_livraison_city"
+                     name="city"
+                     type="text"
+                     class="form-control"
+                     ng-model="updateAddresseLivraisonFields.city"
+                     ng-required="1"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_livraison_country">Pays*</label>
+              <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+                     id="settings_adresse_livraison_country"
+                     name="country"
+                     type="text"
+                     class="form-control"
+                     ng-model="updateAddresseLivraisonFields.country"
+                     ng-required="1"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+          </form>
+        </div>
+        <div layout="column" style="width:40%; margin-top:20px;">
+          <md-checkbox ng-model="differentAdresses"
+                       ng-change="changeDifferentAddresses()"
+                       aria-label="Adresse de facturation différentes?">
+            Adresse de facturation différente
+          </md-checkbox>
+          <h4 class="text-centered"> Adresse de facturation :</h4>
+          <form  role="form" class="update-account-form" ng-submit="updateAdresseDeFacturation()">
+            <div style="color:red;" class="alert alert-danger" ng-show="error" ng-bind="error"/>
+            <div  class="alert alert-success" ng-show="success" ng-bind="success"/>
+
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_facturation_nom">Nom*</label>
+              <input style=""
+                     id="settings_adresse_facturation_nom"
+                     name="nom"
+                     type="text"
+                     class="form-control input-custom"
+                     ng-model="updateAddresseFacturationFields.last_name"
+                     ng-required="1"
+                     ng-disabled="!differentAdresses"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_facturation_prenom">Prénom*</label>
+              <input style=""
+                     id="settings_adresse_facturation_prenom"
+                     name="prenom"
+                     type="text"
+                     class="form-control input-custom"
+                     ng-model="updateAddresseFacturationFields.first_name"
+                     ng-required="1"
+                     ng-disabled="!differentAdresses"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_facturation_adresse">Adresse*</label>
+              <input style=""
+                     id="settings_adresse_facturation_adresse"
+                     name="adresse"
+                     type="text"
+                     class="form-control input-custom"
+                     ng-model="updateAddresseFacturationFields.address"
+                     ng-required="1"
+                     ng-disabled="!differentAdresses"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_facturation_compl_adresse">Complément d'adresse</label>
+              <input style=""
+                     id="settings_adresse_facturation_compl_adresse"
+                     name="complement"
+                     type="text"
+                     class="form-control input-custom"
+                     ng-model="updateAddresseFacturationFields.address_complement"
+                     ng-required="0"
+                     ng-disabled="!differentAdresses"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_facturation_code_postal">Code postal*</label>
+              <input style=""
+                     id="settings_adresse_facturation_code_postal"
+                     name="postal_code"
+                     type="text"
+                     class="form-control input-custom"
+                     ng-model="updateAddresseFacturationFields.postal_code"
+                     ng-required="1"
+                     ng-disabled="!differentAdresses"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_facturation_city">Ville*</label>
+              <input style=""
+                     id="settings_adresse_facturation_city"
+                     name="city"
+                     type="text"
+                     class="form-control input-custom"
+                     ng-model="updateAddresseFacturationFields.city"
+                     ng-required="1"
+                     ng-disabled="!differentAdresses"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+              <label class="quicksand-md" for="settings_adresse_facturation_country">Pays*</label>
+              <input style=""
+                     id="settings_adresse_facturation_country"
+                     name="country"
+                     type="text"
+                     class="form-control input-custom"
+                     ng-model="updateAddresseFacturationFields.country"
+                     ng-required="1"
+                     ng-disabled="!differentAdresses"
+                     oninvalid="this.setCustomValidity('Champ obligatoire')"
+                     oninput="setCustomValidity('')"
+                     ng-change="changeForm()"/>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="form-group" layout="column"
+           layout-align="top center"
+           style="margin-top:15px;">
+        <md-button type="submit"
+                   class="button-type-submit md-raised md-primary"
+                   ng-click="updateAddresses()">
+          Mettre à jour
+        </md-button>
+      </div>
+
+    </div>
+
+    <div ng-include="'/static/templates/general/footer.html'"></div>
+  </div>
+
+</div>
+</div>
+<!--<div class="cy-contour-white">
+  <div class="cy-contour">
+    <div class="cy-container">
+      <div ng-include="'/static/templates/general/navbar.html'"></div>
+
+      <div class="main-container">
+        <h1 class="page-title">Bonjour {{account.first_name}}</h1>
+        <h4 class="page-title">Votre crédit est de {{account.credits}} points</h4>
+
+
+
+        <div layout="column" hide-gt-sm>
+          <md-button ng-click="selectUpdateProfile()" class="md-primary">
+            Mettre à jour mon profil
+          </md-button>
+          <md-button ng-click="selectLessonHistoric()" class="md-primary">
+            Voir mon historique de cours
+          </md-button>
+          <md-button ng-click="selectTransactionHistoric()" class="md-primary">
+            Voir mon historique de transaction
+          </md-button>
+        </div>
+        <div layout="column" style="height:700px; margin-top:45px;" ng-cloak>
+          <div layout="row" flex style="font-size:25px;">
+            <div ng-include="'/static/templates/general/sidenav.html'"></div>
+
+            <md-content flex layout-padding style="background-color:#fffdfa;">
+
+              <div layout="column" layout-align="top center">
+
+                <div ng-if="state.showUpdateProfile" style="width: 50%;" layout-align="top center">
+                  <h3 class="text-centered"> Votre profil :</h3>
+                  <form  role="form" class="update-account-form" ng-submit="updateProfile()">
+                    <div  id="updateprofile-alert-message"
+                          class="alert alert-danger"
+                          ng-show="error"
+                          ng-bind="error">
+                    </div>
+                    <div id="updateprofile-success-message"
+                         class="alert alert-danger"
+                         ng-show="success"
+                         ng-bind="success">
+                    </div>
+                    <div class="form-group settings-form">
+                      <label for="settings_nom">Nom *</label>
+                      <input name="nom"
+                             type="text"
+                             class="form-control"
+                             id="settings_nom"
+                             ng-model="updateProfileFields.first_name"
+                             ng-required="1"
+                             placeholder="Nom *"
+                             validate-on="submit"
+                             oninvalid="this.setCustomValidity('Champ obligatoire')"
+                             oninput="setCustomValidity('')"
+                             ng-change="changeForm()"/>
+
+                    </div>
+                    <div class="form-group settings-form">
+                      <label for="settings_prenom">Prénom *</label>
+                      <input name="prenom"
+                             type="text"
+                             class="form-control"
+                             id="settings_prenom"
+                             ng-model="updateProfileFields.last_name"
+                             ng-required="1"
+                             placeholder="Prénom *"
+                             validate-on="submit"
+                             oninvalid="this.setCustomValidity('Champ obligatoire')"
+                             oninput="setCustomValidity('')"
+                             ng-change="changeForm()"/>
+                    </div>
+                    <div class="form-group settings-form">
+                      <label for="settings_email">Email *</label>
+                      <input name="email"
+                             type="email"
+                             class="form-control"
+                             id="settings_email"
+                             ng-model="updateProfileFields.email"
+                             ng-required="1"
+                             placeholder="Email *"
+                             oninvalid="this.setCustomValidity('Champ obligatoire')"
+                             oninput="setCustomValidity('')"
+                             ng-change="changeForm()"/>
+                    </div>
+                    <div class="form-group settings-form">
+                      <label for="settings_password1">Mot de passe</label>
+                      <input name="pwd1"
+                             type="password"
+                             class="form-control"
+                             id="settings_password1"
+                             ng-model="updateProfileFields.password"
+                             ng-required="1"
+                             placeholder="Mot de passe *"
+                             oninvalid="this.setCustomValidity('Champ obligatoire')"
+                             oninput="setCustomValidity('')"
+                             ng-change="changeForm()"/>
+                    </div>
+                    <div class="form-group settings-form">
+                      <label for="settings_password2">Confirmer votre mot de passe</label>
+                      <input name="pwd2"
+                             type="password"
+                             class="form-control"
+                             id="settings_password2"
+                             ng-model="updateProfileFields.confirmation_password"
+                             ng-required="1"
+                             placeholder="Confirmer votre mot de passe *"
+                             oninvalid="this.setCustomValidity('Champ obligatoire')"
+                             oninput="setCustomValidity('')"
+                             ng-change="changeForm()"/>
+                    </div>
+                    <div class="form-group" layout="column"
+                         layout-align="top center"
+                         style="margin-top:15px;">
+                      <md-button type="submit"
+                                 class="button-type-submit md-raised md-primary">
+                        Mettre à jour
+                      </md-button>
+                    </div>
+                  </form>
+
+                </div>
+
+
+                <div ng-if="state.showLessonHistoric" layout-align="top center">
+                  <h3 class="text-centered"> Votre historique de cours : </h3>
+                  <div class="historic-table">
+                    <table style="margin-top: 3%; width:100%;">
+                      <td class="table-header"> Type </td>
+                      <td class="table-header" hide-xs hide-sm hide-md> Animateur </td>
+                      <td class="table-header"> Jour </td>
+                      <td class="table-header"> Heure </td>
+                      <td class="table-header" hide-sm hide-xs hide-md> Durée </td>
+                      <td class="table-header" hide-xs> Nb de personnes </td>
+                      <td class="table-header"> Annulation </td>
+                      <tr style="padding:5%" ng-class="{'lesson-finished': lesson.meta.finished}" ng-repeat="lesson in reservedLessonsForAccount">
+                        <td> {{ lesson.type }} {{ lesson.intensity }}</td>
+                        <td hide-xs hide-sm hide-md> {{ lesson.animator.prenom }} {{ lesson.animator.nom }} </td>
+                        <td> {{ lesson.meta.day }} </td>
+                        <td> {{ lesson.meta.start }} </td>
+                        <td hide-sm hide-xs hide-md> {{ lesson.duration }} min</td>
+                        <td hide-xs> {{ lesson.meta.nb_persons }} </td>
+                        <td>
+                          <a ng-if="!lesson.meta.finished">
+                            <md-icon md-font-icon="material-icons"
+                                     ng-click="cancelReservation(lesson, account)">
+                              delete
+                            </md-icon>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+                <div ng-if="state.showTransactionHistoric" layout-align="top center">
+                  <h3 class="text-centered"> Votre historique de transactions : </h3>
+                  <div class="historic-table">
+                    <table style="margin-top: 3%; width:100%;">
+                      <td class="table-header"> Id </td>
+                      <td class="table-header"> Date </td>
+                      <td class="table-header"> Montant </td>
+                      <tr style="padding:5%"  ng-repeat="transaction in transactions">
+                        <td> {{ transaction.id }} </td>
+                        <td> {{ transaction.meta.date }} </td>
+                        <td> {{ transaction.montant }} €</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div flex></div>
+            </md-content>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-include="'/static/templates/general/footer.html'"></div>
+  </div>
+</div>-->

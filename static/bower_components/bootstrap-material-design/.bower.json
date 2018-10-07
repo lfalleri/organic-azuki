@@ -1,0 +1,14 @@
+{
+  "name": "bootstrap-material-design",
+  "homepage": "https://github.com/FezVrasta/bootstrap-material-design",
+  "version": "4.1.1",
+  "_release": "4.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v4.1.1",
+    "commit": "c330a4deb407c65031e7395d4268bbe0b570f7ce"
+  },
+  "_source": "https://github.com/FezVrasta/bootstrap-material-design.git",
+  "_target": "4.1.1",
+  "_originalSource": "bootstrap-material-design"
+}

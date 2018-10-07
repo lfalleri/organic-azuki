@@ -1,0 +1,258 @@
+<div class="" ng-controller="ShopController as vm">
+    <div class="">
+        <div class="" layout="column">
+            <div ng-include="'/static/templates/general/banner.html'"></div>
+
+            <md-progress-circular
+                    ng-if="state.loading"
+                    md-mode="indeterminate"
+                    style="position: absolute; z-index:2; top:50%; left:50%;">
+            </md-progress-circular>
+
+            <div ng-if="!state.loading" layout>
+                <div layout="column" flex="20">
+                    <md-button class="button-type-submit md-flat md-accent"
+                               ng-click="selectAllCategories()">Tout
+                    </md-button>
+                    <md-button ng-repeat="categorie in data.categories"
+                               class="button-type-submit md-flat md-accent"
+                               ng-click="selectCategorie(categorie)">{{categorie.nom}}
+                    </md-button>
+                </div>
+                <div layout-wrap
+                     ng-if="!data.detailed_reference"
+                     style="flex:wrap;display: flex;width:80%;margin-top:-30px;">
+                    <div  ng-repeat="reference in data.references"
+                          flex="25" flex-md="50" layout-align="center center"
+                          style="margin: 30px 30px;">
+                        <div layout="column" layout-align="space-between start">
+
+                            <md-button ng-init="imgsrc=reference.primary_photo.main_image"
+                                       ng-mouseover="imgsrc=reference.secondary_photo.main_image"
+                                       ng-mouseout="imgsrc=reference.primary_photo.main_image"
+                                       style="margin: auto;width:100%;"
+                                       ng-click="clickSeeReferenceDetail(reference)">
+                                <img style="max-height: 500px; max-width:100%;height: auto; width: auto;"
+                                     ng-src="{{imgsrc}}"/>
+
+                                <p style="font-size:120%;margin :auto;">{{reference.nom}}</p>
+                                <p style="margin :auto;">{{reference.short_description}}</p>
+                                <p style="margin :auto;">{{reference.prix}} €</p>
+                            </md-button>
+                            <md-button class="button-type-submit md-raised md-primary"
+                                       style="margin: auto;"
+                                       ng-click="clickSeeReferenceDetail(reference)">
+                                Ajouter au panier
+                            </md-button>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-show="data.detailed_reference"
+                     layout layout-align="start start"
+                     style="width:80%;flex:wrap;display: flex;">
+                    <div layout="column" flex="30">
+                        <canvas style="width:auto;height:auto;max-width:400px;border: solid 1px rgba(135, 16, 43, 0.5)"
+                                id="canvas">Image</canvas>
+
+                        <div layout-wrap
+                             style="flex:wrap;display: flex;margin-top:30px;">
+                            <div  ng-repeat="image in data.detailed_reference.details_photo"
+                                  flex="25" flex-md="50" layout-align="center center"
+                                  style="margin: 15px 15px;">
+                                <img style="max-height: 500px; height: auto; width: auto;cursor:pointer;"
+                                     ng-click="changeDetailedImage(image)"
+                                     ng-src="{{image.main_image}}"/>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div layout="column" layout-align="space-between start" flex="30" flex-offset="10">
+
+                        <h3 style="margin:0 auto;"> {{data.detailed_reference.nom}}</h3>
+                        <p style="margin:5% auto;"> {{data.detailed_reference.description}}</p>
+                        <p style="margin:5% auto;"> {{data.detailed_reference.prix}} €</p>
+
+                        <div  style="margin:auto;" class="alert alert-success" ng-show="success" ng-bind="success"/>
+                        <div style="color:red;margin:auto;"  class="alert alert-danger" ng-show="error" ng-bind="error"/>
+
+                        <div layout layout-align="space-between center" style="width:70%;margin: auto;">
+                            <md-input-container>
+                                <div ng-messages="data.selected_taille.$error" ng-show="data.selected_taille.$invalid"/>
+                                <md-select ng-required="1"
+                                           style="font-size:20px;"
+                                           ng-model="data.selected_taille"
+                                           placeholder="Taille"
+                                           oninvalid="this.setCustomValidity('Veuillez sélectionner une taille')"
+                                           oninput="setCustomValidity('')"
+                                           ng-change="selectedTailleChanged()">
+                                    <md-select-header>
+                                        <span  style="font-size:20px;"> Taille </span>
+                                    </md-select-header>
+                                    <md-option ng-value="taille" ng-repeat="taille in data.tailles">{{ taille }}</md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <div layout layout-align="end center">
+
+                                <md-input-container>
+                                    <md-select ng-required="1"
+                                               style="font-size:20px;"
+                                               ng-model="data.selected_quantite"
+                                               placeholder="Quantité"
+                                               ng-change="selectedQuantiteChanged()">
+                                        <md-select-header>
+                                            <span  style="font-size:20px;"> Quantite </span>
+                                        </md-select-header>
+                                        <md-option ng-value="quantite" ng-repeat="quantite in data.quantites">{{ quantite }}</md-option>
+                                    </md-select>
+                                </md-input-container><span ng-if="data.selected_quantite > 0">article<span ng-if="data.selected_quantite > 1">s</span></span>
+                            </div>
+                        </div>
+
+                        <md-button class="button-type-submit md-raised md-primary"
+                                   style="margin:5% auto;"
+                                   ng-click="clickAddToPanier()">
+                            Ajouter au panier
+                        </md-button>
+                        <md-button class="button-type-submit md-raised md-primary"
+                                   style="margin:5% auto;"
+                                   ng-click="clickBackToCollection()">
+                            Retour
+                        </md-button>
+                    </div>
+
+                    <md-sidenav class="md-sidenav-right md-whiteframe-4dp side-chart"
+                                md-component-id="right"
+                                style="height: 100%;">
+
+                        <md-toolbar class="md-primary">
+                            <h1 class="md-toolbar-tools"
+                                style="color:white;">Mon panier</h1>
+                        </md-toolbar>
+                        <md-content layout-margin style="padding:0px;">
+
+
+                            <div>
+                                <div layout layout-align="space-between center"
+                                              class="md-3-line panier-item"
+                                              style="margin:30px auto;background-color: rgba(132, 10, 43, 0.2);padding:0;"
+                                              ng-repeat="article in data.articles"
+                                              ng-mouseenter="hoverArticleIn(article)"
+                                              ng-mouseleave="hoverArticleOut(article)">
+                                    <img style="max-width:75px;max-height:100px;  height:auto; width:auto;" src="{{article.image.main_image}}"/>
+                                    <div layout="column" layout-align="space-between center" style="margin:0 3%;">
+                                        <p style="margin:auto;text-transform:uppercase;"> {{article.reference.nom}}</p>
+                                        <p style="margin:auto;"> Quantité : {{article.quantite}} ({{article.taille}})</p>
+                                        <p style="margin:auto;"> {{article.reference.prix * article.quantite}}€</p>
+                                    </div>
+                                    <md-icon class="perm-icons" md-font-icon="material-icons"
+                                             style="font-size:22px;margin-right:15px;"
+                                             ng-click="clickRemoveFromPanier(article)"
+                                             ng-show="article.displayDeleteButton">delete
+                                    </md-icon>
+                                </div>
+                            </div>
+                            <p>
+                                Prix total : {{data.cout_total}} €
+                            </p>
+                            <md-button ng-click="closeSideNav()" class="md-accent">
+                                Fermer le panier
+                            </md-button>
+                        </md-content>
+
+                    </md-sidenav>
+
+                    <!--
+
+
+                                            <md-sidenav class="md-sidenav-right"
+                                                        md-component-id="right"
+                                                        md-disable-backdrop
+                                                        md-whiteframe="4">
+                                                <md-toolbar class="md-primary">
+                                                    <h1 class="md-toolbar-tools"
+                                                        style="color:white;">Mon panier</h1>
+                                                </md-toolbar>
+
+                                                <md-content layout-margin>
+                                                    <div layout ng-repeat="article in data.articles" layout-align="space-between center">
+                                                        <img style="max-width:75px;max-height:100px;  height:auto; width:auto;" src="{{article.image.main_image}}"/>
+                                                        <div layout="column" layout-align="space-between center" style="margin:0 3%;">
+                                                            <p style="margin:auto;"> {{article.reference.nom}}</p>
+                                                            <p style="margin:auto;"> {{article.taille}}</p>
+                                                            <p style="margin:auto;"> {{article.quantite}} article<span ng-if="article.quantite>1">s</span></p>
+                                                            <p style="margin:auto;"> {{article.reference.prix * article.quantite}}€</p>
+                                                        </div>
+                                                        <md-icon class="perm-icons" md-font-icon="material-icons"
+                                                                 style="font-size:48px;"
+                                                                 ng-click="deleteArticle(article)">delete_forever
+                                                        </md-icon>
+
+                                                    </div>
+                                                    <p>
+                                                        Prix total : {{data.cout_total}} €
+                                                    </p>
+                                                    <md-button ng-click="closeSideNav()" class="md-accent">
+                                                        Fermer le panier
+                                                    </md-button>
+                                                </md-content>
+
+                                            </md-sidenav>-->
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+
+
+                <!-- <div layout="column" flex="50">
+
+                     <div layout layout-align="space-around start"
+                          ng-repeat="reference in data.references"
+                          style="border: solid 1px black; border-radius:15px;margin:30px 0;">
+                         <img style="max-width:50%;max-height: 400px;height: auto; width: auto;"
+                              src="{{reference.main_photo.main_image}}"/>
+                         <div layout="column" layout-align="start start">
+                             <p style="font-size:120%;">{{reference.nom}}</p>
+                             <p>{{reference.short_description}}</p>
+                             <p>{{reference.prix}} €</p>
+                         </div>
+                     </div>
+                 </div>-->
+
+
+
+
+
+            </div>
+
+            <!--
+            <div ng-repeat="ref in references">
+
+                <h2>{{ref.nom}}</h2>
+                <h2>{{ref.description}}</h2>
+                <div ng-repeat="img in ref.images">
+                    {{img.main_image}}
+                    <img src="{{img.main_image}}"/>
+                </div>
+
+            </div>-->
+
+
+
+            <div ng-include="'/static/templates/general/footer.html'"></div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+
