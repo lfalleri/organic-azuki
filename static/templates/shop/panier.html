@@ -568,6 +568,7 @@
             </div>
         </div>
 
+        <!-- Informations de carte -->
         <div ng-if="!state.loading && state.stepPaiement"
              layout="column" flex-offset="10" layout-align="space-between center"
              style="width:80%;">
@@ -600,14 +601,14 @@
                     </div>
                     <div style="margin: auto; " layout layout-align="space-between center">
                         <md-input-container layout layout-align="space-between center">
-                            <label> Date d'expiration </label>
+                            <label> Date d'expiration (MM/AAAA)</label>
                             <md-icon class="perm-icons" md-font-icon="material-icons ">
                                 calendar_today
                             </md-icon>
                             <input class="input-form"
                                    style="margin-left:0px;"
                                    ng-model="expiry"
-                                   placeholder="Date d'expiration"
+                                   placeholder="Date d'expiration (MM/AAAA)"
                                    payments-format="expiry"
                                    payments-validate="expiry"
                                    ng-change="changeCardFrom()"/>
@@ -615,14 +616,14 @@
                     </div>
                     <div style="margin: auto; " layout layout-align="space-between center" >
                         <md-input-container layout layout-align="space-between center">
-                            <label> CVC </label>
+                            <label> Cryptogramme </label>
                             <md-icon class="perm-icons" md-font-icon="material-icons ">
                                 lock
                             </md-icon>
                             <input class="input-form"
                                    style="margin-left:0px;"
                                    ng-model="cvc"
-                                   placeholder="CVC"
+                                   placeholder="Cryptogramme"
                                    payments-format="cvc"
                                    payments-validate="cvc"
                                    ng-change="changeCardFrom()"/>
