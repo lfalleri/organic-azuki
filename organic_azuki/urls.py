@@ -25,24 +25,8 @@ from shop.views import ReferenceView, \
                        TransactionView, \
                        CommandeView
 
-from yoga.views import CalendarView, \
-                       LessonView, \
-                       ReservationView,\
-                       PendingReservationView,\
-                       ProfesseursView,\
-                       FormuleView
-
 from organic_azuki.views import IndexView,\
                            LandingPageView
-
-from restaurant.views import CarteView, \
-                             RestaurantConfigView,\
-                             RestaurantReservationView
-
-from boutique.views import CreateurView, \
-                           ExpositionView
-
-from evenements.views import EvenementView
 
 from messaging.views import AccountCreationEmailView, \
                             AccountDeletionToCustomerEmailView,\
