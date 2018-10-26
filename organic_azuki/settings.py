@@ -64,17 +64,17 @@ WSGI_APPLICATION = 'organic_azuki.wsgi.application'
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 DATABASES = {'default': dj_database_url.config()}
 
-if bool(os.environ.get('LOCAL_DEV', False)):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'organic_azuki_db',
-            'USER': 'organic_azuki_staff',
-            'PASSWORD': '0rg4NiC!',
-            'HOST': 'localhost',
-            'PORT': '',
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'organic_azuki_db',
+        'USER': 'organic_azuki_staff',
+        'PASSWORD': '0rg4NiC!',
+        'HOST': 'localhost',
+       'PORT': '',
     }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
