@@ -9,8 +9,7 @@
     ]);
 
   angular
-    .module('organic_azuki.authentication.controllers', [
-       'organic_azuki.yoga.services']);
+    .module('organic_azuki.authentication.controllers', []);
 
   angular
     .module('organic_azuki.authentication.services', ['ngCookies']);

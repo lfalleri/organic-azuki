@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'compressor',
+    #'pipeline',
     'authentication',
     'shop',
     'messaging',
@@ -67,7 +68,7 @@ if bool(os.environ.get('LOCAL_DEV', False)):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'organic_azuki',
+            'NAME': 'organic_azuki_db',
             'USER': 'organic_azuki_staff',
             'PASSWORD': '0rg4NiC!',
             'HOST': 'localhost',
@@ -115,7 +116,7 @@ STATICFILES_FINDERS = (
 
 
 
-COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', False)
+COMPRESS_ENABLED = False
 
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 
@@ -147,3 +148,4 @@ AUTH_PROFILE_MODULE = 'authentication.Account'
 
 MEDIA_URL = '/static/img/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'img')
+

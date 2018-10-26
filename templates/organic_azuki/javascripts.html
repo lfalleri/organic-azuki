@@ -1,6 +1,7 @@
 {% load compress %}
 {% load staticfiles %}
 
+
 {% compress js %}
 <script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.js' %}"></script>
 <script type="text/javascript" src="{% static 'bower_components/bootstrap/dist/js/bootstrap.js' %}"></script>
@@ -16,9 +17,12 @@
 <script src="{% static 'javascripts/vendor/agency.min.js' %}"></script>
 
 <!-- Plugin JavaScript -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA99kDd5naQZ1GrcShMtC3rS7uM54X9t9g"  async defer></script>
-<!--<script type="text/javascript" src="{% static 'javascripts/vendor/jquery-easing/jquery.easing.min.js' %}"></script>-->
+<script type="text/javascript" src="{% static 'javascripts/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+
 <script type="text/javascript" src="{% static 'bower_components/angular/angular.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'bower_components/angular-sanitize/angular-sanitize.js' %}"></script>
 <script type="text/javascript" src="{% static 'bower_components/angular-aria/angular-aria.js' %}"></script>
 <script type="text/javascript" src="{% static 'bower_components/angular-messages/angular-messages.js' %}"></script>
 <script type="text/javascript" src="{% static 'bower_components/angular-route/angular-route.js' %}"></script>
@@ -34,26 +38,24 @@
 <script type="text/javascript" src="{% static 'bower_components/fullcalendar/dist/gcal.js' %}"></script>
 <script type="text/javascript" src="{% static 'bower_components/ng-dialog/js/ngDialog.js' %}"></script>
 
+
 <!-- ReCaptcha -->
 <!--<script type="text/javascript" src='https://www.google.com/recaptcha/api.js?render=explicit&onload=vcRecaptchaApiLoaded' async defer></script>-->
 <script type="text/javascript" src="{% static 'bower_components/angular-recaptcha/release/angular-recaptcha.js' %}"></script>
 
-
 <!-- Plugin Stripe -->
-<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript" src="{% static 'bower_components/angular-payments/lib/angular-payments.js' %}"></script>
-
 
 <script type="text/javascript" src="{% static 'javascripts/organic_azuki.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/organic_azuki.config.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/organic_azuki.routes.js' %}"></script>
-
 
 <script type="text/javascript" src="{% static 'javascripts/authentication/authentication.module.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/authentication/services/authentication.service.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/authentication/controllers/register.controller.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/authentication/controllers/login.controller.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/authentication/controllers/settings.controller.js' %}"></script>
+<script type="text/javascript" src="{% static 'javascripts/authentication/controllers/recovery.controller.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'javascripts/shop/shop.module.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/shop/services/shop.service.js' %}"></script>
@@ -67,7 +69,7 @@
 <script type="text/javascript" src="{% static 'javascripts/layout/controllers/landingpage.controller.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/layout/controllers/contact.controller.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/layout/controllers/instagram.controller.js' %}"></script>
-
+<!--
 <script type="text/javascript" src="{% static 'javascripts/yoga/yoga.module.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/yoga/services/yoga.service.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/yoga/controllers/yoga.controller.js' %}"></script>
@@ -89,10 +91,12 @@
 <script type="text/javascript" src="{% static 'javascripts/restaurant/controllers/carte.controller.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/restaurant/controllers/restaurant.controller.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/restaurant/controllers/nosproduits.controller.js' %}"></script>
-
+-->
 <script type="text/javascript" src="{% static 'javascripts/utils/utils.module.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/utils/services/messaging.service.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/utils/services/config.service.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/utils/services/snackbar.service.js' %}"></script>
 
 {% endcompress %}
+
+<script type="text/javascript" src="https://js.stripe.com/v2/" defer></script>

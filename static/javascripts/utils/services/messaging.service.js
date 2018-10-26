@@ -27,6 +27,12 @@
        sendAccountDeletionToCustomerEmail:sendAccountDeletionToCustomerEmail,
        sendPasswordRecoveryEmail:sendPasswordRecoveryEmail,
 
+       /* Shop related messages */
+       sendCommandConfirmationToStaffEmail:sendCommandConfirmationToStaffEmail,
+       sendCommandConfirmationToCustomerEmail:sendCommandConfirmationToCustomerEmail,
+       sendCommandCancellationToCustomerEmail:sendCommandCancellationToCustomerEmail,
+       sendCommandCancellationToStaffEmail:sendCommandCancellationToStaffEmail,
+
        /* Yoga related messages */
        sendYogaConfirmationToStaffEmail:sendYogaConfirmationToStaffEmail,
        sendYogaConfirmationToCustomerEmail:sendYogaConfirmationToCustomerEmail,
@@ -80,6 +86,72 @@
            callback(false, ["Une erreur est survenue lors de la réservation"]);
        });
     }
+
+
+
+
+    /*-------------------------------------------------*
+     *               Commandes messages                *
+     *-------------------------------------------------*/
+    function sendCommandConfirmationToStaffEmail(account, commande, callback){
+        return $http.post('api/v1/messaging/command_confirmation_to_staff_email/', {
+             commande: commande,
+             account: account,
+        }).then(
+            function(data, status, headers, config){
+               callback(true, "OK");
+            },
+            function(data, status, headers, config){
+              callback(false, ["Une erreur est survenue lors de la réservation"]);
+            }
+        );
+    }
+
+    function sendCommandConfirmationToCustomerEmail(account, commande, callback){
+        return $http.post('api/v1/messaging/command_confirmation_to_customer_email/', {
+             commande: commande,
+             account: account,
+        }).then(
+            function(data, status, headers, config){
+               callback(true, "OK");
+            },
+            function(data, status, headers, config){
+               callback(false, ["Une erreur est survenue lors de la réservation"]);
+            }
+        );
+    }
+
+    function sendCommandCancellationToStaffEmail(account, commande, callback){
+        return $http.post('api/v1/messaging/command_cancellation_to_staff_email/', {
+             commande: commande,
+             account: account,
+        }).then(
+            function(data, status, headers, config){
+               callback(true, "OK");
+            },
+            function(data, status, headers, config){
+              callback(false, ["Une erreur est survenue lors de la réservation"]);
+            }
+        );
+    }
+
+    function sendCommandCancellationToCustomerEmail(account, commande, callback){
+        return $http.post('api/v1/messaging/command_cancellation_to_customer_email/', {
+             commande: commande,
+             account: account,
+        }).then(
+            function(data, status, headers, config){
+               callback(true, "OK");
+            },
+            function(data, status, headers, config){
+               callback(false, ["Une erreur est survenue lors de la réservation"]);
+            }
+        );
+    }
+
+
+
+
 
     function sendYogaConfirmationToCustomerEmail(lesson, account, nb_persons, reservation_id, callback) {
        return $http.post('api/v1/messaging/yoga_confirmation_to_customer_email/', {
@@ -163,11 +235,14 @@
        });
     }
 
-    function sendEmailFromContactPage(type, name, email, tel, message, callback) {
+    function sendEmailFromContactPage(type, prenom, nom, email, tel, sujet, message, callback) {
        return $http.post('api/v1/messaging/contact/', {
-         name: name,
+         question:type,
+         prenom:prenom,
+         nom: nom,
          email: email,
          tel: tel,
+         sujet:sujet,
          message: message,
        }).then(
          function(data, status, headers, config){

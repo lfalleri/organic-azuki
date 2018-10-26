@@ -31,12 +31,15 @@
       updateProfile : updateProfile,
       deleteProfile: deleteProfile,
       crediteProfile: crediteProfile,
+      saveRegistrationInfo:saveRegistrationInfo,
+      getRegistrationInfo:getRegistrationInfo,
       setAuthenticatedAccount: setAuthenticatedAccount,
       unauthenticate: unauthenticate,
       requestFullAccount: requestFullAccount,
       getFullAccount: getFullAccount,
       isStaff: isStaff,
       fullAccount : {},
+      registerInfo:{},
       getUsers: getUsers,
 
       checkAccountByEmail: checkAccountByEmail,
@@ -49,6 +52,7 @@
       deleteAddress:deleteAddress,
 
       gotoLoginAndBackTo : gotoLoginAndBackTo,
+      setBackToAfterLogin: setBackToAfterLogin,
       backTo: undefined,
 
       getSettingsDisplay: getSettingsDisplay,
@@ -88,7 +92,16 @@
         Authentication.login(email, password, false, function(success, message){
            if(success){
               MessagingService.sendAccountCreationEmail(email, function(){});
-              $location.url("/settings");
+              console.log("APres Send Mail");
+              if(Authentication.backTo !== undefined){
+                  console.log("BackTo : ", Authentication.backTo);
+                  var to = Authentication.backTo;
+                  //Authentication.backTo = undefined;
+                  console.log("Authentication.backTo : ",to);
+                  $location.url(to);
+              }else{
+                  $rootScope.back();
+              }
            }
         });
 
@@ -128,8 +141,9 @@
             Authentication.fullAccount = fullAccount;
         });
         if(Authentication.backTo !== undefined){
+           console.log("BackTo : ", Authentication.backTo);
            var to = Authentication.backTo;
-           Authentication.backTo = undefined;
+           //Authentication.backTo = undefined;
            $location.url(to);
         }else if(back){
             $rootScope.back();
@@ -340,11 +354,15 @@
        return $http.post('/api/v1/auth/fullaccount/', {
           email: email
        }).then(function(data, status, headers, config){
+          console.log("requestFullAccount SUCCESS : ", data.data)
           Authentication.fullAccount = data.data;
           window.localStorage.setItem('fullAccount', JSON.stringify(Authentication.fullAccount));
-          callback(data.data);
+          $cookies.authenticatedAccount = JSON.stringify(Authentication.fullAccount);
+          callback(true, data.data);
           return Authentication.fullAccount;
        }, function(data, status, headers, config) {
+          callback(false, data.data);
+          console.log("requestFullAccount FAILURE : ", data.data);
        });
     }
 
@@ -410,9 +428,21 @@
        });
     }
 
+    function saveRegistrationInfo(info){
+        Authentication.registerInfo = info;
+    }
+
+    function getRegistrationInfo(){return Authentication.registerInfo;}
+
     function gotoLoginAndBackTo(back){
+        console.log("gotoLoginAndBackTo : ", back);
         Authentication.backTo = back;
         $location.url('/monespace');
+    }
+
+    function setBackToAfterLogin(back){
+     console.log("setBackToAfterLogin : ", back);
+        Authentication.backTo = back;
     }
 
     function settingsDisplay(section){

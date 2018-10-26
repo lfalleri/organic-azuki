@@ -14,7 +14,7 @@
   function config($locationProvider, $httpProvider) {
     $locationProvider.html5Mode(true);
     $locationProvider.hashPrefix('!');
-    window.Stripe.setPublishableKey('pk_test_aMOG9eZFc1KMrvBtFdhNKeOf');
+
 
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];

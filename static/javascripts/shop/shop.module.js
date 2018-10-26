@@ -8,7 +8,7 @@
     ]);
 
   angular
-    .module('organic_azuki.shop.controllers', []);
+    .module('organic_azuki.shop.controllers', ['ngSanitize']);
 
   angular
     .module('organic_azuki.shop.services', ['ngCookies']);

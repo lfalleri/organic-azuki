@@ -35,11 +35,8 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         serializer = self.serializer_class(data=request.data)
-        print("create 1 : serializer=%s"%serializer.is_valid())
         if serializer.is_valid():
-            print("create 2")
             Account.objects.create_user(**serializer.validated_data)
-            print("create 3")
             return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
 
         return Response({
@@ -101,6 +98,32 @@ class FullAccountView(views.APIView):
 
 
 class AccountView(views.APIView):
+    def update_password(self, request, account, data):
+        old_password = data['old_password']
+        password = data['password']
+
+        if not account.check_password(old_password):
+            return Response({
+                'status': 'Unauthorized',
+                'message': 'Ancien mot de passe invalide'
+            }, status=status.HTTP_401_UNAUTHORIZED)
+
+        logout(request)
+        first_name = data['first_name']
+        last_name = data['last_name']
+        email = data['email']
+
+        account.first_name = first_name
+        account.last_name = last_name
+        account.email = AccountManager.normalize_email(email)
+
+        account.set_password(password)
+        account.save()
+        authentification = authenticate(email=email, password=password)
+        if authentification is not None:
+            if authentification.is_active:
+                login(request, authentification)
+        return Response(status.HTTP_200_OK)
 
     def post(self, request, format=None):
         data = json.loads(request.body)
@@ -120,28 +143,18 @@ class AccountView(views.APIView):
             return Response(status.HTTP_200_OK)
 
         old_password = data['old_password']
-        if not account.check_password(old_password):
-            return Response({
-                'status': 'Unauthorized',
-                'message': 'Ancien mot de passe invalide'
-            }, status=status.HTTP_401_UNAUTHORIZED)
+        password = data['password']
+        if old_password != '' or password != '':
+            return self.update_password(request, account, data)
 
-        logout(request)
         first_name = data['first_name']
         last_name = data['last_name']
         email = data['email']
-        password = data['password']
 
         account.first_name = first_name
         account.last_name = last_name
         account.email = AccountManager.normalize_email(email)
-        account.set_password(password)
         account.save()
-        authentification = authenticate(email=email, password=password)
-        if authentification is not None:
-            if authentification.is_active:
-                login(request, authentification)
-
         return Response(status.HTTP_200_OK)
 
     def get(self, request, format=None):
@@ -247,6 +260,7 @@ class CheckPasswordView(views.APIView):
 
         return Response({}, status=status.HTTP_200_OK)
 
+
 class PasswordRecoveryView(views.APIView):
 
     def get(self, request, format=None):
@@ -333,16 +347,16 @@ class AddressesView(views.APIView):
         print("new_address(data_adresse : %s)\n"%data_adresse)
         try:
             adresse = Adresse.objects.create_adresse(account,
-                                                 data_adresse['description'],
-                                                 data_adresse['prenom'],
-                                                 data_adresse['nom'],
-                                                 data_adresse['adresse'],
-                                                 data_adresse['complement_adresse'],
-                                                 data_adresse['code_postal'],
-                                                 data_adresse['ville'],
-                                                 data_adresse['pays'],
-                                                 data_adresse['livraison'],
-                                                 data_adresse['facturation'])
+                                                     data_adresse['description'],
+                                                     data_adresse['prenom'],
+                                                     data_adresse['nom'],
+                                                     data_adresse['adresse'],
+                                                     data_adresse['complement_adresse'],
+                                                     data_adresse['code_postal'],
+                                                     data_adresse['ville'],
+                                                     data_adresse['pays'],
+                                                     data_adresse['livraison'],
+                                                     data_adresse['facturation'])
         except Exception as e:
             print(e)
 
@@ -407,9 +421,13 @@ class AddressesView(views.APIView):
             return self.update_address(account, data)
 
     def delete(self, request, format=None):
-        adresse_id = request.query_params['adresse_id']
-        adresse = Adresse.objects.get(id=adresse_id)
-        adresse.delete()
+
+        try:
+            adresse_id = request.query_params['adresse_id']
+            adresse = Adresse.objects.get(id=adresse_id)
+            adresse.delete()
+        except Exception as e:
+            print(e)
 
         return Response(status=status.HTTP_200_OK)
 

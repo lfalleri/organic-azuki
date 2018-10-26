@@ -9,12 +9,12 @@
     .module('organic_azuki.shop.controllers')
     .controller('ShopController', ShopController);
 
-  ShopController.$inject = ['$scope', '$http', '$mdToast', '$interval','$document', '$mdSidenav', 'Shop'];
+  ShopController.$inject = ['$scope', '$http', '$location', '$mdMedia','$mdToast', '$interval','$document', '$mdSidenav', 'Shop'];
 
   /**
   * @namespace ShopController
   */
-  function ShopController($scope, $http, $mdToast, $interval, $document, $mdSidenav, Shop) {
+  function ShopController($scope, $http, $location, $mdMedia, $mdToast, $interval, $document, $mdSidenav, Shop) {
     var vm = this;
 
     $scope.data = {
@@ -32,7 +32,10 @@
 
     $scope.state = {
         loading:true,
+        allCategoriesSelected:true,
     }
+
+    $scope.$mdMedia = $mdMedia;
 
     var canvas, ctx, iw, ih, detailed_img;
 
@@ -68,6 +71,12 @@
     }
 
     $scope.selectCategorie = function(categorie){
+       $scope.state.allCategoriesSelected = false;
+       $scope.data.categories.forEach(function(categorie){
+           categorie.selected = false;
+       });
+       $scope.data.detailed_reference = undefined;
+       categorie.selected = true;
        $scope.state.loading = true;
        $scope.data.references = [];
 
@@ -86,6 +95,22 @@
            $scope.data.references.push(reference);
        });
        $scope.state.loading = false;
+       console.log("Categorie : ", categorie);
+    }
+
+    $scope.selectAllCategories = function(){
+        $scope.state.allCategoriesSelected = true;
+        $scope.data.detailed_reference = undefined;
+        $scope.state.loading = true;
+        $scope.data.references = [];
+
+        $scope.data.categories.forEach(function(categorie){
+           categorie.selected = false;
+           categorie.references.forEach(function(reference){
+               $scope.data.references.push(prepare_reference(reference));
+           });
+        });
+        $scope.state.loading = false;
     }
 
     function prepare_reference(reference){
@@ -111,18 +136,7 @@
        return article;
     }
 
-    $scope.selectAllCategories = function(){
-        $scope.state.loading = true;
-        $scope.data.references = [];
 
-        $scope.data.categories.forEach(function(categorie){
-
-           categorie.references.forEach(function(reference){
-               $scope.data.references.push(prepare_reference(reference));
-           });
-        });
-        $scope.state.loading = false;
-    }
 
     activate();
 
@@ -133,7 +147,7 @@
 
               $scope.data.categories = collection.categories;
               $scope.data.categories.forEach(function(categorie){
-
+                  categorie.selected = false;
                   categorie.references.forEach(function(reference){
                       $scope.data.references.push(prepare_reference(reference));
                   });
@@ -263,8 +277,6 @@
                     $scope.success = "";
                     $scope.error = "Une erreur est survenue";
                 }
-                //$scope.data.selected_quantite = "";
-                //$scope.data.selected_taille = "";
             }
         );
 
@@ -300,17 +312,18 @@
                        $scope.data.cout_total -= article.quantite * article.reference.prix;
                     }
                 }
-                //$scope.data.selected_quantite = "";
-                //$scope.data.selected_taille = "";
-
             }
         );
-
     }
 
     $scope.closeSideNav = function(){
         $mdSidenav('right').close();
     }
+
+    $scope.gotoChart = function() {
+        $location.url('/panier');
+    }
+
 
     $scope.hoverArticleIn = function(article){
        article.displayDeleteButton = true;

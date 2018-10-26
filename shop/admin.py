@@ -8,6 +8,11 @@ from .models \
            TypeDePhoto, \
            Panier,\
            Article,\
+           ModeDeLivraison,\
+           CodeReduction,\
+           StripeAPiKey,\
+           Transaction,\
+           Commande, \
            Createur, Exposition, ExpositionPhoto
 
 admin.site.register(Reference)
@@ -18,8 +23,11 @@ admin.site.register(Panier)
 admin.site.register(Categorie)
 admin.site.register(MotCle)
 admin.site.register(TypeDePhoto)
-
-
+admin.site.register(ModeDeLivraison)
+admin.site.register(CodeReduction)
+admin.site.register(StripeAPiKey)
+admin.site.register(Transaction)
+admin.site.register(Commande)
 
 admin.site.register(Createur)
 admin.site.register(Exposition)

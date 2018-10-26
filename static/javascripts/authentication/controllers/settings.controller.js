@@ -9,12 +9,28 @@
     .module('organic_azuki.authentication.controllers')
     .controller('SettingsController', SettingsController);
 
-  SettingsController.$inject = ['$location', '$scope', 'Authentication', 'YogaService', '$mdToast'];
+  SettingsController.$inject = ['$location',
+                                '$scope',
+                                '$http',
+                                'Authentication',
+                                'Shop',
+                                'MessagingService',
+                                '$mdMedia',
+                                '$mdToast',
+                                '$interval'];
 
   /**
   * @namespace LoginController
   */
-  function SettingsController($location, $scope, Authentication, YogaService, $mdToast) {
+  function SettingsController($location,
+                              $scope,
+                              $http,
+                              Authentication,
+                              Shop,
+                              MessagingService,
+                              $mdMedia,
+                              $mdToast,
+                              $interval) {
     var vm = this;
 
     $scope.account = Authentication.fullAccount;
@@ -25,37 +41,138 @@
                             confirmation_password:"",
                             password:""};
 
-    $scope.updateAddresseLivraisonFields =
-                           {first_name:"",
-                            last_name:"",
-                            address:"",
-                            address_complement:"",
-                            postal_code:"",
-                            city:"",
-                            country:""};
-
-    $scope.updateAddresseFacturationFields =
-                           {first_name:"",
-                            last_name:"",
-                            address:"",
-                            address_complement:"",
-                            postal_code:"",
-                            city:"",
-                            country:""};
-    $scope.differentAdresses = false;
     $scope.state = { showUpdateProfile : true,
                      showAddress : false,
                      showNewAddress : false,
                      showCommandsHistoric : false,
+                     showAdminPanel : false,
                      somethingChanged:false,
-
-                   };
+                    };
 
     $scope.data = {
                     adresse_de_livraison:undefined,
                     adresse_de_facturation:undefined,
                     adresses : [],
+                    commandes : [],
+                    detailed_commande:undefined,
     };
+
+    $scope.admin = {
+                    commandes: [],
+                    filtered_commandes:[],
+                    detailed_commande:undefined,
+                    selected_commande_status:"TOUTES",
+                    commande_all_status:["EN COURS","EXPEDIEE","TERMINEE","RETOURNEE","REMBOURSEE","ANNULEE"],
+                    commande_status:["TOUTES","EN COURS","EXPEDIEE","TERMINEE","RETOURNEE","REMBOURSEE","ANNULEE"],
+    }
+
+    $scope.$mdMedia = $mdMedia;
+    $scope.success = "";
+    $scope.error = "";
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+
+
+    String.prototype.capitalize = function() {
+        return this.charAt(0).toUpperCase() + this.slice(1);
+    }
+
+    function updateAdressesLivraisonFacturation(){
+        $scope.data.adresse_de_livraison = undefined;
+        $scope.data.adresse_de_facturation = undefined;
+        $scope.data.adresses = []
+        $scope.account.adresses.forEach(function(adresse){
+            console.log("updateAdressesLivraisonFacturation -> adresse : ", adresse);
+            if($scope.account.adresses.length == 1){
+                adresse.livraison = true;
+                adresse.facturation = true;
+            }
+            if( adresse.livraison ){
+                $scope.data.adresse_de_livraison = adresse;
+            }
+            if( adresse.facturation ){
+                $scope.data.adresse_de_facturation = adresse;
+            }
+            adresse.enableModifyAdresse = false;
+            adresse.enableDeleteAdresse = false;
+            adresse.newAdresse = false;
+            $scope.data.adresses.push(adresse);
+        });
+    }
+
+    function isCancellable(commande, diff){return ((commande.etat!=="ANNULEE") && (diff < 1));}
+
+    function prepare_commandes(commandes){
+        commandes.forEach(function(commande){
+            console.log("Commande : ", commande);
+            console.log("Panier de la commande : ", commande.panier);
+
+            // Time difference between commande date and now (in hours)
+            var date = new Date(commande.date);
+            date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
+
+            var now = new Date();
+            var diff = moment.duration(moment(now).diff(moment(date))).asHours();
+            commande.cancellable = isCancellable(commande, diff);
+            commande.clickCancel = false;
+            commande.date_fr = date.toLocaleDateString('fr-FR', options).capitalize();
+
+            var articles = commande.panier.articles;
+            articles.forEach(function(article){
+                var reference = article.reference;
+                reference.images.forEach(function(image){
+                    if(image.type_de_photo.type_de_photo == "Photo1"){
+                        article.image = image;
+                    }
+                });
+            });
+            $scope.data.commandes.push(commande);
+        });
+    }
+
+    function prepare_commandes_for_admin(commandes){
+        commandes.forEach(function(commande){
+            if(!$scope.admin.commande_status.includes(commande.etat)){
+                $scope.admin.commande_status.push(commande.etat);
+            }
+
+            console.log("Commande : ", commande);
+            console.log("Panier de la commande : ", commande.panier);
+
+            // Format Date
+            var date = new Date(commande.date);
+            commande.date_fr = date.toLocaleDateString('fr-FR', options).capitalize();
+
+            var articles = commande.panier.articles;
+            articles.forEach(function(article){
+                var reference = article.reference;
+                reference.images.forEach(function(image){
+                    if(image.type_de_photo.type_de_photo == "Photo1"){
+                        article.image = image;
+                    }
+                });
+            });
+            $scope.admin.commandes.push(commande);
+            $scope.admin.filtered_commandes.push(commande);
+        });
+    }
+
+    $scope.filterByCommandStatus = function(){
+        $scope.admin.filtered_commandes = [];
+        if($scope.admin.selected_commande_status==="TOUTES"){
+            $scope.admin.filtered_commandes = angular.copy($scope.admin.commandes);
+            return;
+        }
+        $scope.admin.commandes.forEach(function(_commande){
+           if(_commande.etat === $scope.admin.selected_commande_status){
+               $scope.admin.filtered_commandes.push(_commande);
+           }
+        });
+    }
+
+    $scope.changeCommandStatus = function(commande){
+        console.log("Commande : ", commande);
+        //commande.etat =
+    }
 
     activate();
     function activate() {
@@ -65,28 +182,20 @@
              /* Non loggé -> /monespace */
              $location.url('/monespace');
           }else{
-             console.log("account : ", $scope.account);
-             console.log("update : ", $scope.updateProfileFields);
              $scope.updateProfileFields.first_name = $scope.account.first_name;
              $scope.updateProfileFields.last_name = $scope.account.last_name;
              $scope.updateProfileFields.email = $scope.account.email;
 
+             updateAdressesLivraisonFacturation();
 
-             $scope.account.adresses.forEach(function(adresse){
-               if( adresse.livraison ){
-                  $scope.data.adresse_de_livraison = adresse;
-               }
-               if( adresse.facturation ){
-                  $scope.data.adresse_de_facturation = adresse;
-               }
-
-               adresse.enableModifyAdresse = false;
-               adresse.enableDeleteAdresse = false;
-               adresse.newAdresse = false;
-               $scope.data.adresses.push(adresse);
+             Shop.getCommandesByAccount($scope.account.id, function(success, commandes){
+                 if(!success) return;
+                 prepare_commandes(commandes);
              });
           }
        });
+       $scope.success = "";
+       $scope.error = "";
     }
 
     $scope.showToast = function() {
@@ -96,23 +205,6 @@
              .position("top right")
              .hideDelay(3000)
         );
-    }
-
-    $scope.changeDifferentAddresses = function(){
-        console.log("changeDifferentAddresses");
-        if($scope.differentAdresses){
-            $scope.updateAddresseFacturationFields =
-                {first_name:"",
-                 last_name:"",
-                 address:"",
-                 address_complement:"",
-                 postal_code:"",
-                 city:"",
-                 country:""};
-
-        }else{
-            $scope.updateAddresseFacturationFields = $scope.updateAddresseLivraisonFields;
-        }
     }
 
     $scope.updateProfile = function() {
@@ -143,16 +235,12 @@
              }
           }
        );
-    
-
-
-      //Authentication.register(vm.email, vm.password, vm.last_name, vm.first_name);
     }
 
     $scope.changeForm = function(){
        $scope.error = "";
+       $scope.success = "";
     }
-
 
     $scope.gotoCalendar = function(){
        YogaService.gotoCalendar();
@@ -185,64 +273,61 @@
        $scope.state.showCommandsHistoric = true;
     }
 
-    $scope.updateAddresses = function(){
-       Authentication.updateAddresses(
-          $scope.account.id,
-          $scope.updateAddresseLivraisonFields,
-          $scope.updateAddresseFacturationFields,
-          function(success, data){
-             if(success){
-                 $scope.success = "Vos adresses ont bien été mises à jour";
-                 $scope.error = "";
-             }else{
-                 $scope.success = "";
-                 $scope.error = "Une erreur s'est produite lors de la mise à jour";
-             }
+    $scope.selectAdminPanel = function(){
+       console.log("selectAdminPanel");
+       $scope.success = "";
+       $scope.error = "";
+       $scope.state.showUpdateProfile = false;
+       $scope.state.showAddress = false;
+       $scope.state.showNewAddress = false;
+       $scope.state.showCommandsHistoric = false;
+       $scope.state.showAdminPanel = true;
 
-          }
-       )
-
-
+       Shop.getAllCommandes($scope.account.id, function(success, commandes){
+            console.log("All commandes : ", commandes);
+            prepare_commandes_for_admin(commandes);
+       });
     }
 
     $scope.changeAdresseLivraison = function(adresse){
-        console.log("changeAdresseLivraison");
+        var adresseNotSaved = false;
         $scope.data.adresses.forEach(function(a){
             if( a.id != adresse.id ){
-                 console.log("changeAdresseLivraison to false :",a);
-                 if(a.livraison==true){
-                    $scope.state.somethingChanged = true;
-                 }
                 a.livraison = false;
             }else{
-                console.log("changeAdresseLivraison to true :",a);
                 a.livraison = true;
                 $scope.data.adresse_de_livraison = a;
-                if(a.livraison==false){
-                    $scope.state.somethingChanged = true;
-                }
+            }
+            if(a.newAdresse){
+                adresseNotSaved = true;
             }
         });
+        if(!adresseNotSaved){
+            saveAdresses();
+        }
     }
 
     $scope.changeAdresseFacturation = function(adresse){
+        var adresseNotSaved = false;
         $scope.data.adresses.forEach(function(a){
             if( a.id != adresse.id ){
-                if(a.facturation==true){
-                    $scope.state.somethingChanged = true;
-                }
                 a.facturation = false;
             }else{
-                if(a.facturation==false){
-                    $scope.state.somethingChanged = true;
-                }
                 a.facturation = true;
                 $scope.data.adresse_de_facturation = a;
             }
+            if(a.newAdresse){
+                adresseNotSaved = true;
+            }
         });
+        if(!adresseNotSaved){
+            saveAdresses();
+        }
     }
 
     $scope.clickModifyAdresse = function(adresse){
+        $scope.error = "";
+        $scope.success = "";
         $scope.data.adresses.forEach(function(a){
             if( a.id == adresse.id ){
                a.enableModifyAdresse = true;
@@ -250,35 +335,115 @@
         });
     }
 
-    $scope.clickNewAdresse = function(adresse){
-        $scope.data.adresses.push(
-        {
-           description:"",
-           prenom:"",
-           nom:"",
+    $scope.clickNewAdresse = function(){
+        var descriptions = ["Domicile", "Travail", "Adresse 3", "Adresse 4", "Adresse 5"];
+        var description = "";
+        var i = 0;
+
+        for(i=0;i<descriptions.length;i++){
+           var _found = false;
+           var _descr = descriptions[i];
+           for(var a=0; a<$scope.data.adresses.length;a++){
+               var _adresse = $scope.data.adresses[a].description;
+               if(_descr.toLowerCase()==_adresse.toLowerCase()){
+                  _found = true;
+                  break;
+               }
+           }
+           if(_found) continue;
+           description=_descr;
+           break;
+        }
+
+        $scope.error = "";
+        $scope.success = "";
+        var adresse = {
+           description:description,
+           prenom:$scope.account.first_name,
+           nom:$scope.account.last_name,
            adresse:"",
            complement_adresse:"",
            code_postal:"",
            ville:"",
            pays:"",
-           livraison:"",
-           facturation:"",
+           livraison:false,
+           facturation:false,
            newAdresse:true,
            enableModifyAdresse:true,
            enableDeleteAdresse:false,
-        });
+        };
+
+        if($scope.data.adresses.length == 0){
+           adresse.livraison = true;
+           adresse.facturation = true;
+        }
+
+        $scope.data.adresses.push(adresse);
     }
 
-    $scope.submitModifyAdresse = function(adresse){
-        $scope.data.adresses.forEach(function(a){
-            if( a.id == adresse.id ){
-               a.enableModifyAdresse = false;
+    $scope.clickCancelCommand = function(commande){
+        commande.clickCancel = true;
+    }
+
+
+    $scope.clickBackCommand = function(commande){
+        commande.clickCancel = false;
+    }
+
+    $scope.clickConfirmCancelCommand = function(commande){
+        Shop.deleteCommande(commande.id, $scope.account.id, function(success, data){
+            if(!success){
+                $scope.error = "Une erreur est survenue, veuillez contacter notre équipe";
+                $scope.success = "";
+            }else{
+                $scope.error = "";
+                $scope.success = "Votre commande a bien été annulée";
+
+                commande.etat = "ANNULEE"
+                commande.cancellable = false;
+                commande.clickCancel = false;
+                //var removeIndex = $scope.data.commandes.map(function(item) { return item.id; }).indexOf(commande.id);
+                // remove object
+                //$scope.data.commandes.splice(removeIndex, 1);
+                //MessagingService.sendCommandCancellationToCustomerEmail($scope.account, commande, function(success, message){});
+                //MessagingService.sendCommandCancellationToStaffEmail($scope.account, commande, function(success, message){});
             }
+            $interval(function(){$scope.success="";$scope.error="";}, 5000);
         });
-        $scope.state.somethingChanged = true;
     }
 
-    $scope.clickSaveAdresses = function(){
+    $scope.clickSeeCommandDetail = function(commande){
+        $scope.data.detailed_commande = commande;
+    }
+
+    $scope.clickSeeCommandDetailAdmin = function(commande){
+        $scope.admin.detailed_commande = commande;
+    }
+
+    $scope.clickExitCommandDetail = function(){
+        $scope.data.detailed_commande = undefined;
+    }
+
+    $scope.clickExitCommandDetailAdmin = function(){
+        $scope.admin.detailed_commande = undefined;
+    }
+
+    $scope.clickSaveCommandAdmin = function(commande){
+        Shop.updateCommandeStatus(commande, function(success, message){
+            if(success){
+                $scope.admin.error="";
+                $scope.admin.success = "Sauvegarde réussie";
+            } else{
+                $scope.admin.error="Erreur de sauvegarde";
+                $scope.admin.success = "";
+            }
+            $interval(function(){$scope.admin.success="";$scope.admin.error="";}, 5000);
+        });
+    }
+
+    function saveAdresses(){
+        $scope.error = "";
+        $scope.success = "";
         $scope.data.adresses.forEach(function(adresse){
             console.log("Sauvegarde de l'adresse : ", adresse);
             if(adresse.newAdresse){
@@ -292,6 +457,12 @@
                        adresse.newAdresse = false;
                        $scope.state.somethingChanged = false;
                    }
+                   Authentication.requestFullAccount($scope.account.email, function(success, data){
+                        $scope.account = data;
+                        console.log("clickSaveAdresse -> New account : ", $scope.account);
+                        updateAdressesLivraisonFacturation();
+                   });
+
             });
             }else{
                 Authentication.updateAddress($scope.account.id, adresse, function(success, data){
@@ -303,17 +474,40 @@
                         $scope.success = "Sauvegarde réussie";
                         $scope.state.somethingChanged = false;
                     }
+                    Authentication.requestFullAccount($scope.account.email, function(success, data){
+                        $scope.account = data;
+                        console.log("clickSaveAdresse -> New account : ", $scope.account);
+                        updateAdressesLivraisonFacturation();
+                    });
                 });
             }
+            $interval(function(){$scope.success="";$scope.error="";}, 5000);
         });
     }
 
+    $scope.submitModifyAdresse = function(adresse, invalid){
+        if(invalid) return;
+        console.log("submitModifyAdresse : ", adresse);
+        $scope.error = "";
+        $scope.success = "";
+        $scope.data.adresses.forEach(function(a){
+            if( a.id == adresse.id ){
+               a.enableModifyAdresse = false;
+            }
+        });
+        $scope.state.somethingChanged = true;
+        saveAdresses();
+    }
 
     $scope.clickDeleteAdresse = function(adresse){
+        $scope.error = "";
+        $scope.success = "";
         adresse.enableDeleteAdresse = true;
     }
 
     $scope.cancelDeleteAdresse = function(adresse){
+        $scope.error = "";
+        $scope.success = "";
         adresse.enableDeleteAdresse = false;
     }
 
@@ -327,21 +521,40 @@
                 if (index > -1) {
                     $scope.data.adresses.splice(index, 1);
                 }
-                console.log("Adresses apres deletion");
-                /*$scope.data.adresses.forEach(function(a){
-                    if(a.id == adresse.id){
-
-
-                    }
-
-                });*/
 
                 $scope.error = "";
-               $scope.success = "Sauvegarde réussie";
+                $scope.success = "Sauvegarde réussie";
+                Authentication.requestFullAccount($scope.account.email, function(success, data){
+                    $scope.account = data;
+                    updateAdressesLivraisonFacturation();
+                });
             }
+            $interval(function(){$scope.success="";$scope.error="";}, 5000);
         });
     }
 
-  }
+    $scope.codePostalChanged = function(adresse){
+       $scope.data.citiesSuggestion = {};
+       if(adresse.code_postal.length <= 1) return;
+       var url = 'https://vicopo.selfbuild.fr/cherche/' + adresse.code_postal;
 
+        $http.get(url).then(
+         function(data, status, headers, config){
+            console.log(data.status, typeof(data.status));
+           if(data.status=="200"){
+               var cities = data.data.cities;
+               cities.forEach(function(_city){
+                   $scope.data.citiesSuggestion[_city.code] = _city.city;
+               });
+           }
+         },function(data, status, headers, config){});
+    }
+
+    $scope.selectCity = function(adresse, code, city){
+       adresse.code_postal = code;
+       adresse.ville = city;
+       adresse.pays = "FRANCE";
+       $scope.data.citiesSuggestion = {};
+    }
+  }
 })();

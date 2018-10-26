@@ -51,11 +51,18 @@ md-toast.md-toast-theme {
 }
 
 .navbar-item{
-   font-family:Shadows Into Light;
-   font-size:36px;
+   font-family:Shadows Into Light Two;
+   font-size:26px;
    margin:0 45px;
 }
-.navbar-item:hover{
+
+.navbar-item-large{
+   font-family:Shadows Into Light Two;
+   font-size:32px;
+   margin:0 45px;
+}
+.navbar-item:hover,
+.navbar-item-large:hover{
    text-decoration:none;
    color:#87102b;
    cursor: pointer;
@@ -78,9 +85,9 @@ md-toast.md-toast-theme {
 .navbar-dropdown-content a{
     text-decoration: none;
     display: block;
-    font-family:Shadows Into Light;
+    font-family:Shadows Into Light Two;
     color: #3f3f3f;
-    font-size:28px;
+    font-size:22px;
     margin: 10px auto;
 }
 
@@ -106,14 +113,14 @@ md-toast.md-toast-theme {
 }
 
 .footer-link-title{
-   font-family:Shadows Into Light;
+   font-family:Shadows Into Light Two;
    color: #3f3f3f;
    font-size:30px;
    margin: auto;
 }
 
 .footer-link{
-   font-family:Shadows Into Light;
+   font-family:Shadows Into Light Two;
    color: #3f3f3f;
    font-size:26px;
    margin: 5px 10px;
@@ -124,3 +131,10 @@ md-toast.md-toast-theme {
    color:#87102b;
    cursor: pointer;
 }
+
+.banner{
+   height:100px;
+   margin-bottom:50px;
+   /*background-color: white;/*rgba(240,240,240,0.8);*/
+}
+

@@ -10,10 +10,10 @@
       'organic_azuki.routes',
       'organic_azuki.authentication',
       'organic_azuki.shop',
-      'organic_azuki.yoga',
+      /*'organic_azuki.yoga',
       'organic_azuki.restaurant',
       'organic_azuki.boutique',
-      'organic_azuki.evenements',
+      'organic_azuki.evenements',*/
       'organic_azuki.layout',
       'organic_azuki.utils',
     ]);
@@ -57,6 +57,22 @@
   app.filter('isEmptyArray', [function() {
     return function(object) {
        return angular.equals([], object);
+    }
+  }]);
+
+  app.filter('linebreaks', [function() {
+    return function(text) {
+       var rich_text = text.replace("\n","<br>");
+       return rich_text;
+    }
+  }]);
+
+  app.filter('format', [function() {
+    return function(text) {
+       var rich_text = str.match(/<b>(.*?)<\/b>/g).map(function(val){
+                      return val.replace(/<\/?b>/g,'');
+                      });
+       return rich_text;
     }
   }]);
 

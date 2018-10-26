@@ -1,0 +1,151 @@
+
+<div layout layout-align="start start" style="">
+    <div layout="column"  flex="30" flex-offset="10" layout-align="space-between center"
+         style="height:100%;padding: 0 20px;">
+        <h2 class="page-title"
+            style="margin-bottom:80px;"> Me connecter </h2>
+        <div hide-gt-md style="width :1px; margin-bottom:75px;"></div>
+        <form role="form" layout="column" layout-align="space-between center">
+            <div class="alert alert-danger" ng-show="login_error" ng-bind="login_error"></div>
+            <div class="form-group">
+                <label class="quicksand-md" for="login__email">Email</label>
+                <input style="font-size:20px; border-radius: 0; background-color:#f8e4c8;"
+                       id="login__email"
+                       name="email"
+                       type="email"
+                       class="form-control"
+                       ng-model="login.email"
+                       ng-required="1"
+                       oninvalid="this.setCustomValidity('Champ obligatoire')"
+                       oninput="setCustomValidity('')"
+                       ng-change="loginForm()"/>
+            </div>
+            <div class="form-group">
+                <label for="login__password">Password</label>
+                <input style="font-size:20px; border-radius: 0; background-color:#f8e4c8;"
+                       name="password"
+                       type="password"
+                       class="form-control"
+                       id="login__password"
+                       ng-model="login.password"
+                       ng-required="1"
+                       oninvalid="this.setCustomValidity('Champ obligatoire')"
+                       oninput="setCustomValidity('')"
+                       ng-change="loginForm()" />
+            </div>
+            <a style="font-size:80%; text-decoration:underline;" href="/password-forgotten">Mot de passe oublié ?</a>
+            <div class="form-group">
+                <md-button style="margin: 15px auto;"
+                           type="submit" ng-click="loginUser()"
+                           class="md-primary md-raised cy-button">
+                    Me connecter
+                </md-button>
+            </div>
+        </form>
+    </div>
+    <div layout="column"
+         flex-offset="10"
+         style="margin-top: 100px;width:5%; min-height: 500px; border-left: 1px solid #3f3f3f;">
+    </div>
+
+    <div layout="column"  flex="30" flex-offset="5" layout-align="space-between start"
+         style="height:100%;padding: 0 20px;">
+        <h2 class="page-title"
+            style="margin:0 auto 80px auto;"> M'enregistrer </h2>
+        <div hide-gt-md style="width :1px; margin-bottom:75px;"></div>
+        <form role="form" layout="column" layout-align="space-between center" style="margin:auto;">
+            <div class="alert alert-danger" ng-show="register_error" ng-bind="register_error"></div>
+            <div class="form-group">
+                <label class="quicksand-md" for="register__last_name">Nom</label>
+                <input style="font-size:20px;border-radius: 0; background-color:#f8e4c8;"
+                       name="nom"
+                       type="text"
+                       class="form-control"
+                       id="register__last_name"
+                       ng-model="register.last_name"
+                       ng-required="1"
+                       validate-on="submit"
+                       oninvalid="this.setCustomValidity('Champ obligatoire')"
+                       oninput="setCustomValidity('')"
+                       ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+                <label class="quicksand-md" for="register__first_name">Prénom</label>
+                <input style="font-size:20px;border-radius: 0; background-color:#f8e4c8;"
+                       name="nom"
+                       type="text"
+                       class="form-control"
+                       id="register__first_name"
+                       ng-model="register.first_name"
+                       ng-required="1"
+                       validate-on="submit"
+                       oninvalid="this.setCustomValidity('Champ obligatoire')"
+                       oninput="setCustomValidity('')"
+                       ng-change="changeForm()"/>
+            </div>
+            <div class="form-group">
+                <label class="quicksand-md" for="register__email">Email</label>
+                <input style="font-size:20px; border-radius: 0; background-color:#f8e4c8;"
+                       name="email"
+                       type="email"
+                       class="form-control"
+                       id="register__email"
+                       ng-model="register.email"
+                       ng-required="1"
+                       oninvalid="this.setCustomValidity('Champ obligatoire')"
+                       oninput="setCustomValidity('')"
+                       ng-change="loginForm()"/>
+
+            </div>
+            <div class="form-group">
+                <label class="quicksand-md" for="register__password">Mot de passe</label>
+                <input style="font-size:20px; border-radius: 0; background-color:#f8e4c8;"
+                       name="password"
+                       type="password"
+                       class="form-control"
+                       id="register__password"
+                       ng-model="register.password"
+                       ng-required="1"
+                       oninvalid="this.setCustomValidity('Champ obligatoire')"
+                       oninput="setCustomValidity('')"
+                       ng-change="loginForm()" />
+            </div>
+            <div class="form-group">
+                <label class="quicksand-md" for="register__confirm_password">Confirmer votre mot de passe</label>
+                <input style="font-size:20px; border-radius: 0; background-color:#f8e4c8;"
+                       name="password"
+                       type="password"
+                       class="form-control"
+                       id="register__confirm_password"
+                       ng-model="register.confirm_password"
+                       ng-required="1"
+                       oninvalid="this.setCustomValidity('Champ obligatoire')"
+                       oninput="setCustomValidity('')"
+                       ng-change="loginForm()" />
+            </div>
+            <md-checkbox ng-model="cguvChecked" aria-label="CGUVAccepted">
+                <a style="font-size:80%; text-decoration:underline;" href="/cguv" ng-click="saveRegistrationInfo()">
+                    J'ai pris connaissance des Conditions Générales d'Utilisation et de Vente
+                </a>
+            </md-checkbox>
+<!--
+            <div    ng-if="model.key!==undefined"
+                    vc-recaptcha
+                    theme="'light'"
+                    key="model.key"
+                    on-create="setWidgetId(widgetId)"
+                    on-success="setResponse(response)"
+                    on-expire="cbExpiration()">
+            </div>
+            -->
+            <div class="form-group">
+                <md-button style="margin: 15px; auto;" type="submit" ng-click="registerUser()"
+                           ng-disabled="!cguvChecked"
+                           class="md-primary md-raised cy-button">
+                    M'enregistrer
+                </md-button>
+            </div>
+        </form>
+    </div>
+</div>
+

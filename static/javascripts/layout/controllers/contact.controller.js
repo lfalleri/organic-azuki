@@ -17,37 +17,11 @@
   function ContactController($scope, Authentication, MessagingService) {
     var vm = this;
 
-    $scope.questions = ["Réserver une table", "Contacter notre équipe"];
-    $scope.button_text = ["Réserver", "Envoyer"];
-    $scope.submit_button = "Réserver";
+    $scope.questions = ["Ma commande", "La livraison de ma commande", "Un produit", "Le site", "Autre"];
+    $scope.submit_button = "Envoyer";
     $scope.sendingMessage = false;
     $scope.success = undefined;
     $scope.selectedQuestion = $scope.questions[0];
-
-    $scope.initialize = function() {
-       var loc = {lat: 48.822224, lng:2.266625};
-       var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 16,
-          center: loc
-       });
-       var marker = new google.maps.Marker({
-          position: loc,
-          map: map
-       });
-
-       var map2 = new google.maps.Map(document.getElementById('map2'), {
-          zoom: 16,
-          center: loc
-       });
-       var marker = new google.maps.Marker({
-          position: loc,
-          map: map2
-       });
-    }
-
-    $(document).ready( function () {
-        $scope.initialize();
-    });
 
     $scope.changeQuestion = function(){
        $scope.success = undefined;
@@ -62,7 +36,7 @@
        $scope.success = undefined;
     }
 
-    $scope.sendMessage = function(){
+    function sendMessage(){
 
        $scope.sendingMessage = true;
        $scope.success = undefined;
@@ -71,14 +45,14 @@
        if($scope.contact_tel === undefined){
           $scope.contact_tel = '';
        }
-
        console.log("Try to send mail from contact page");
-
        MessagingService.sendEmailFromContactPage(
           $scope.selectedQuestion,
+          $scope.contact_prenom,
           $scope.contact_nom,
           $scope.contact_email,
           $scope.contact_tel,
+          $scope.contact_sujet,
           $scope.contact_comment,
           function(success, message){
              if(success){
@@ -88,6 +62,12 @@
              }
              $scope.sendingMessage = false;
           });
+    }
+
+    $scope.submitContactForm = function(invalid){
+       if(invalid) return;
+
+       sendMessage();
     }
   }
 })();

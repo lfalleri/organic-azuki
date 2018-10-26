@@ -9,11 +9,15 @@ from .models \
            TypeDePhoto, \
            Article, \
            Panier, \
+           ModeDeLivraison,\
+           CodeReduction,\
+           Transaction,\
+           Commande,\
            Createur, \
            Exposition, \
            ExpositionPhoto
 
-from authentication.serializers import AccountSerializer
+from authentication.serializers import AccountSerializer, AdresseSerializer
 
 
 
@@ -87,11 +91,22 @@ class CollectionSerializer(serializers.ModelSerializer):
 
 class PanierSerializer(serializers.ModelSerializer):
     articles = ArticleSerializer(many=True)
-    account = AccountSerializer()
 
     class Meta:
         model = Panier
-        fields = ('id', 'uuid', 'expiration_date', 'account', 'articles')
+        fields = ('id', 'uuid', 'expiration_date', 'articles')
+
+
+class ModeDeLivraisonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ModeDeLivraison
+        fields = ('id', 'description', 'nom', 'prix', 'international')
+
+
+class CodeReductionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CodeReduction
+        fields = ('id', 'code', 'reduction')
 
 
 class CreateurSerializer(serializers.ModelSerializer):
@@ -112,3 +127,35 @@ class ExpositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exposition
         fields = ('id', 'titre', 'artiste', 'photo_artiste', 'texte', 'didascalie', 'photos', 'en_cours')
+
+
+class TransactionSerializer(serializers.ModelSerializer):
+    account = AccountSerializer(read_only=False, required=False)
+
+    class Meta:
+        model = Transaction
+        fields = ('id', 'account', 'montant', 'token', 'created')
+
+
+class CommandeSerializer(serializers.ModelSerializer):
+    account = AccountSerializer()
+    transaction = TransactionSerializer()
+    panier = PanierSerializer()
+    adresse_livraison = AdresseSerializer(required=False)
+    adresse_facturation = AdresseSerializer(required=False)
+    code_reduction = CodeReductionSerializer(required=False)
+    mode_de_livraison = ModeDeLivraisonSerializer(required=False)
+
+    class Meta:
+        model = Commande
+        fields = ('id',
+                  'account',
+                  'transaction',
+                  'panier',
+                  'date',
+                  'etat',
+                  'adresse_livraison',
+                  'adresse_facturation',
+                  'mode_de_livraison',
+                  'commentaire',
+                  'code_reduction')

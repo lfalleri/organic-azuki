@@ -17,6 +17,7 @@
   function InstagramController($scope, $http) {
     var vm = this;
     var access_token = '6086473486.1677ed0.c62f667af478418b910af0de793b2710';
+    $scope.state = {instagram_loading:true};
     $scope.pictures = [];
 
     activate();
@@ -34,6 +35,7 @@
 
               $scope.pictures.push({'url':json.data[i].images.low_resolution.url,'caption':caption});
            }
+           $scope.state.instagram_loading = false;
          },function(data, status, headers, config){
 
        });

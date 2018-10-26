@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from authentication.models import Account
+from authentication.models import Account, Adresse
 
 import uuid
 import datetime
+import stripe
+from django.dispatch import receiver
+from django.db.models.signals import pre_delete
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
 
@@ -28,9 +31,6 @@ class Categorie(models.Model):
 
     def __unicode__(self):
         return self.nom
-
-
-
 
 
 class MotCle(models.Model):
@@ -97,7 +97,7 @@ class TypeDePhoto(models.Model):
 
 class ReferencePhoto(models.Model):
     main_image = models.ImageField(upload_to='', null=True)
-    image = models.ForeignKey(Reference, related_name="images")
+    reference = models.ForeignKey(Reference, related_name="images")
     type_de_photo = models.ForeignKey(TypeDePhoto, related_name="images")
 
     def __str__(self):
@@ -108,19 +108,15 @@ class ReferencePhoto(models.Model):
 
 
 class PanierManager(models.Manager):
-    def create_panier(self, account_id):
+    def create_panier(self):
         token = uuid.uuid4().hex[:40]
         expiration_date = datetime.datetime.now() + datetime.timedelta(minutes=15)
-        account = None
-        if account_id != -1:
-           account = Account.objects.get(id=account_id)
 
-        print("create_panier ==> (account:%s, token:%s, expiration_date:%s)"%(account, token, expiration_date))
-        panier = Panier(uuid=token, expiration_date=expiration_date, account=account)
+        print("create_panier ==> (token:%s, expiration_date:%s)"%(token, expiration_date))
+        panier = Panier(uuid=token, expiration_date=expiration_date)
         print("create_panier ==> panier : %s"%panier)
         panier.save()
         print("create_panier ==> panier saved")
-
         return panier
 
     def add_article_to_panier(self, uuid, reference_id, quantite, taille):
@@ -161,10 +157,11 @@ class PanierManager(models.Manager):
             print(e)
         return reference
 
-    def remove_article_to_panier(self, uuid, article_id):
+    def remove_article_from_panier(self, uuid, article_id):
         panier = Panier.objects.filter(uuid=uuid)
         if not panier:
-             print("add_article_to_panier ==> paniers not found")
+            print("add_article_to_panier ==> paniers not found")
+            return None
 
         article = Article.objects.get(id=article_id)
         reference = article.reference
@@ -206,7 +203,8 @@ class PanierManager(models.Manager):
     def get_articles_count(self, uuid):
         panier = Panier.objects.filter(uuid=uuid)
         if not panier:
-             print("get_articles_count ==> paniersnot found")
+            print("get_articles_count ==> paniers not found")
+            return None
 
         panier = panier[0]
         total_count = 0
@@ -223,21 +221,30 @@ class PanierManager(models.Manager):
         panier = panier[0]
         return panier.articles.all()
 
+    def validate_panier(self, uuid):
+        panier = Panier.objects.filter(uuid=uuid)
+        if not panier:
+            print("get_articles_count ==> paniersnot found")
+            return None
 
+        panier = panier[0]
+        panier.validee = True
+        panier.save()
+        return panier
 
 
 class Panier(models.Model):
     uuid = models.CharField(max_length=40, unique=True)
     expiration_date = models.DateTimeField()
-    account = models.ForeignKey(Account, null=True, related_name="panier")
+    validee = models.BooleanField(default=False)
 
     objects = PanierManager()
 
     def __str__(self):
-        return ' | '.join([self.uuid, str(self.account)])
+        return ' | '.join([self.uuid])
 
     def __unicode__(self):
-        return ' | '.join([self.uuid, str(self.account)])
+        return ' | '.join([self.uuid])
 
 
 class Article(models.Model):
@@ -269,13 +276,130 @@ class Article(models.Model):
         return ' | '.join([str(self.reference), str(self.taille), str(self.quantite)])
 
 
+class ModeDeLivraison(models.Model):
+    description = models.CharField(max_length=64)
+    nom = models.CharField(max_length=16)
+    prix = models.IntegerField()
+    international = models.BooleanField(default=False)
+
+    def __str__(self):
+        return ' | '.join([self.nom, str(self.prix)])
+
+    def __unicode__(self):
+        return ' | '.join([self.nom, str(self.prix)])
 
 
+class CodeReduction(models.Model):
+    code = models.CharField(max_length=10)
+    reduction = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return ' '.join(["Code :", str(self.code), "- Réduction : ", str(self.reduction) + " €"])
+
+    def __str__(self):
+        return ' '.join(["Code :", str(self.code), "- Réduction : ", str(self.reduction) + " €"])
 
 
+class StripeAPiKey(models.Model):
+    key = models.CharField(max_length=64)
+
+    def __unicode__(self):
+        return ' '.join([self.key])
+
+    def __str__(self):
+        return ' '.join([self.key])
 
 
+class TransactionManager(models.Manager):
+    def create_transaction(self, account, charge_id, montant, token):
+        transaction = Transaction(account=account, charge_id=charge_id, montant=montant, token=token)
+        transaction.save(force_insert=True)
+        return transaction
 
+    def refund_transaction(self, commande):
+        stripe.api_key = str(StripeAPiKey.objects.all().first())
+
+        # "sk_test_ZgA3fIz8UXgmhZpwXg8Aej5V"
+        transaction = commande.transaction
+        charge = transaction.charge_id
+        montant = transaction.montant
+
+        try:
+           refund = stripe.Refund.create(
+               charge=charge,
+               amount=int(montant) * 100,
+           )
+        except Exception as inst:
+           print(inst)
+           raise ValueError('Error')
+
+        transaction.status = "Refund"
+        transaction.refund_id = refund.id
+        transaction.save()
+
+
+class Transaction(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    charge_id = models.CharField(max_length=64)
+    montant = models.FloatField(default=0.0)
+    token = models.CharField(max_length=64)
+    created = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=64, default="Charge")
+    refund_id = models.CharField(max_length=64, null=True)
+
+    objects = TransactionManager()
+
+    def __unicode__(self):
+        return ' '.join([str(self.account), str(self.montant) + " €", self.token])
+
+    def __str__(self):
+        return ' '.join([str(self.account), str(self.montant) + " €", self.token])
+
+
+class CommandeManager(models.Manager):
+    def create_commande(self, account, transaction, panier):
+        panier.validee = True
+        panier.save()
+        commande = Commande(account=account, transaction=transaction, panier=panier)
+        commande.save()
+        return commande
+
+
+class Commande(models.Model):
+    EN_COURS = 'EN COURS'
+    EXPEDIEE = 'EXPEDIEE'
+    TERMINEE = 'TERMINEE'
+    RETOURNEE = 'RETOURNEE'
+    REMBOURSEE = 'REMBOURSEE'
+    ANNULEE = 'ANNULEE'
+
+    ETAT_COMMANDE = (
+        (EN_COURS, 'EN COURS'),
+        (EXPEDIEE, 'EXPEDIEE'),
+        (TERMINEE, 'TERMINEE'),
+        (RETOURNEE, 'RETOURNEE'),
+        (REMBOURSEE, 'REMBOURSEE'),
+        (ANNULEE, 'ANNULEE'),
+    )
+
+    etat = models.CharField(max_length=30, choices=ETAT_COMMANDE, default=EN_COURS)
+    account = models.ForeignKey(Account, related_name='commandes')
+    adresse_livraison = models.ForeignKey(Adresse, blank=True, null=True, related_name="adresse_livraison")
+    adresse_facturation = models.ForeignKey(Adresse, blank=True, null=True, related_name="adresse_facturation")
+    panier = models.ForeignKey(Panier, on_delete=models.CASCADE, related_name='commande')
+    transaction = models.ForeignKey(Transaction, related_name='commande')
+    date = models.DateTimeField(auto_now_add=True)
+    mode_de_livraison = models.ForeignKey(ModeDeLivraison, blank=True, null=True, related_name="commandes")
+    commentaire = models.TextField(blank=True)
+    code_reduction = models.ForeignKey(CodeReduction, blank=True, null=True, related_name="commandes")
+
+    objects = CommandeManager()
+
+    def __unicode__(self):
+        return ' '.join([str(self.account), str(self.panier), str(self.date)])
+
+    def __str__(self):
+        return ' '.join([str(self.account), str(self.panier), str(self.date)])
 
 
 class Createur(models.Model):
@@ -318,5 +442,14 @@ class ExpositionPhoto(models.Model):
     def __unicode__(self):
         return ' '.join(["Photo de ", self.exposition.titre, self.legende])
 
+
+@receiver(pre_delete, sender=Panier)
+def unlock_reference_before_deleting_panier(sender, instance, **kwargs):
+
+    articles = Article.objects.filter(panier=instance)
+
+    for article in articles:
+        Panier.objects.remove_article_from_panier(uuid=instance.uuid,
+                                                  article_id=article.id)
 
 

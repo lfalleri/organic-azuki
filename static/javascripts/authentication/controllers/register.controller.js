@@ -21,6 +21,7 @@
     $scope.login = {};
     $scope.response = null;
     $scope.widgetId = null;
+    $scope.cguvChecked = false;
     $scope.model = {
        /*key: '6LcqC1MUAAAAANRMW5g0oN7tufDBTLUI2Lg9lCQ-'*/
     };
@@ -55,8 +56,14 @@
           }else{
              $scope.model.key = '6LcqC1MUAAAAANRMW5g0oN7tufDBTLUI2Lg9lCQ-';
           }
-          $scope.$apply();
+          //$scope.$apply();
        });
+
+       $scope.register = Authentication.getRegistrationInfo();
+    }
+
+    $scope.saveRegistrationInfo = function(){
+        Authentication.saveRegistrationInfo($scope.register);
     }
 
     /**

@@ -13,21 +13,24 @@ from authentication.views import AccountViewSet, \
                                  FullAccountView, \
                                  SettingsView, \
                                  LandingPageView, \
-                                 ConfigView
+                                 ConfigView, \
+                                 PasswordRecoveryView,\
+                                 UpdateNewPasswordView
 
 from shop.views import ReferenceView, \
                        CollectionView, \
-                       PanierView
+                       PanierView, \
+                       ModeDeLivraisonView,\
+                       CodeReductionView,\
+                       TransactionView, \
+                       CommandeView
 
 from yoga.views import CalendarView, \
                        LessonView, \
                        ReservationView,\
                        PendingReservationView,\
                        ProfesseursView,\
-                       TransactionView,\
-                       FormuleView,\
-                       CodeReductionView
-
+                       FormuleView
 
 from organic_azuki.views import IndexView,\
                            LandingPageView
@@ -41,9 +44,17 @@ from boutique.views import CreateurView, \
 
 from evenements.views import EvenementView
 
-from messaging.views import YogaConfirmationEmailView, \
-                            RestaurantReservationEmailView, \
-                            ContactEmailView
+from messaging.views import AccountCreationEmailView, \
+                            AccountDeletionToCustomerEmailView,\
+                            AccountDeletionToStaffEmailView, \
+                            CommandConfirmationToCustomerEmailView, \
+                            CommandConfirmationToStaffEmailView, \
+                            YogaCancellationToCustomerEmailView, \
+                            YogaCancellationToStaffEmailView,\
+                            RestaurantReservationToStaffEmailView, \
+                            RestaurantReservationToCustomerEmailView, \
+                            ContactEmailView,\
+                            PasswordRecoveryEmailView
 
 router = routers.SimpleRouter()
 router.register(r'accounts', AccountViewSet)
@@ -64,6 +75,8 @@ urlpatterns = patterns(
     url(r'^api/v1/auth/fullaccount/$', FullAccountView.as_view(), name='account'),
     url(r'^api/v1/auth/accounts/$', AccountView.as_view(), name='accounts'),
     url(r'^api/v1/auth/update-profile/$', AccountView.as_view(), name='update'),
+    url(r'^api/v1/auth/password-recovery/$', PasswordRecoveryView.as_view(), name='recovery'),
+    url(r'^api/v1/auth/update-password/$', UpdateNewPasswordView.as_view(), name='update-password'),
     url(r'^api/v1/auth/addresses/$', AddressesView.as_view(), name='addresses'),
 
     # Config view
@@ -74,33 +87,19 @@ urlpatterns = patterns(
     url(r'^api/v1/shop/reference/$', ReferenceView.as_view(), name='reference'),
     url(r'^api/v1/shop/collection/$', CollectionView.as_view(), name='collection'),
     url(r'^api/v1/shop/panier/$', PanierView.as_view(), name='panier'),
-
-    # Yoga Views
-    url(r'^api/v1/calendar/$', CalendarView.as_view(), name='calendar'),
-    url(r'^api/v1/yoga/lessons/$', LessonView.as_view(), name='lesson'),
-    url(r'^api/v1/yoga/reservation/$', ReservationView.as_view(), name='yoga_reservation'),
-    url(r'^api/v1/yoga/pendingreservation/$', PendingReservationView.as_view(), name='yoga_pending_reservation'),
-    url(r'^api/v1/yoga/animators/$', ProfesseursView.as_view(), name='yoga_animators'),
-    url(r'^api/v1/yoga/formule/$', FormuleView.as_view(), name='formule'),
-    url(r'^api/v1/yoga/transaction/$', TransactionView.as_view(), name='transaction'),
-    url(r'^api/v1/yoga/code-reduction/$', CodeReductionView.as_view(), name='code-reduction'),
-
-    # Restaurant Views
-    url(r'^api/v1/restaurant/menu/$', CarteView.as_view(), name='carte'),
-    url(r'^api/v1/restaurant/config/$', RestaurantConfigView.as_view(), name='restaurant_config'),
-    url(r'^api/v1/restaurant/reservation/$', RestaurantReservationView.as_view(), name='reservation'),
-
-    # Boutique Views
-    url(r'^api/v1/boutique/createurs/$', CreateurView.as_view(), name='createurs'),
-    url(r'^api/v1/boutique/expos/$', ExpositionView.as_view(), name='expos'),
-
-    # Evenements Views
-    url(r'^api/v1/evenements/$', EvenementView.as_view(), name='evenements'),
+    url(r'^api/v1/shop/modeDeLivraison/$', ModeDeLivraisonView.as_view(), name='modeDeLivraison'),
+    url(r'^api/v1/shop/codeReduction/$', CodeReductionView.as_view(), name='codeReduction'),
+    url(r'^api/v1/shop/transaction/$', TransactionView.as_view(), name='transaction'),
+    url(r'^api/v1/shop/commande/$', CommandeView.as_view(), name='commande'),
 
     # Messaging Views
-    url(r'^api/v1/messaging/yoga_confirmation_email/$', YogaConfirmationEmailView.as_view(), name='yoga_confirmation_email'),
-    url(r'^api/v1/messaging/restaurant_reservation_email/$', RestaurantReservationEmailView.as_view(), name='restaurant_reservation_email'),
-    url(r'^api/v1/messaging/contact/$', ContactEmailView.as_view(), name='contact'),
+    url(r'^api/v1/messaging/account_creation_email/$', AccountCreationEmailView.as_view(), name='creation_email'),
+    url(r'^api/v1/messaging/account_deletion_to_customer_email/$', AccountDeletionToCustomerEmailView.as_view(), name='deletion_to_customer_email'),
+    url(r'^api/v1/messaging/account_deletion_to_staff_email/$', AccountDeletionToStaffEmailView.as_view(), name='deletion_to_staff_email'),
+    url(r'^api/v1/messaging/command_confirmation_to_customer_email/$', CommandConfirmationToCustomerEmailView.as_view(), name='command_confirmation_to_customer_email'),
+    url(r'^api/v1/messaging/command_confirmation_to_staff_email/$', CommandConfirmationToStaffEmailView.as_view(), name='command_confirmation_to_staff_email'),
+    url(r'^api/v1/messaging/contact/$', ContactEmailView.as_view(), name='contact_email'),
+    url(r'^api/v1/messaging/recovery/$', PasswordRecoveryEmailView.as_view(), name='recovery_email'),
 
     # Admin Views
     url(r'^admin/', include(admin.site.urls)),

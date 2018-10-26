@@ -1,0 +1,656 @@
+<div layout layout-align="space-between center"
+     ng-class="{'row-md': $mdMedia('md'), 'row-gt-md': $mdMedia('gt-md')}">
+  <div layout="column" style="border:solid 1px black;margin-right:10%;">
+    <md-button style="height:200px; width:200px;" ng-click="selectUpdateProfile()">
+      <md-icon class="perm-icons" md-font-icon="material-icons"
+               style="font-size:72px;"
+               ng-click="selectUpdateProfile()">how_to_reg
+      </md-icon>
+      <h4 style="white-space: normal; margin-top:20px;">Mettre à jour mon profil</h4>
+    </md-button>
+  </div>
+  <div layout="column" style="border:solid 1px black;margin-right:10%;">
+    <md-button style="height:200px; width:200px;" ng-click="selectAddresses()">
+      <md-icon class="perm-icons" md-font-icon="material-icons"
+               style="font-size:72px;"
+               ng-click="selectAddresses()">where_to_vote
+      </md-icon>
+      <h4 style="white-space: normal; margin-top:20px;">Modifier mes adresses</h4>
+    </md-button>
+  </div>
+  <div layout="column" style="border:solid 1px black;">
+    <md-button style="height:200px; width:200px;" ng-click="selectCommandsHistoric()">
+      <md-icon class="perm-icons" md-font-icon="material-icons"
+               style="font-size:72px;"
+               ng-click="selectCommandsHistoric()">playlist_add_check
+      </md-icon>
+      <h4 style="white-space: normal; margin-top:20px;">Voir mes commandes</h4>
+    </md-button>
+  </div>
+  <div ng-if="account.is_staff" layout="column" style="border:solid 1px black;margin-left:10%;">
+    <md-button style="height:200px; width:200px;" ng-click="selectAdminPanel()">
+      <md-icon class="perm-icons" md-font-icon="material-icons"
+               style="font-size:72px;">lock_open
+      </md-icon>
+      <h4 style="white-space: normal; margin-top:20px;">Admin</h4>
+    </md-button>
+  </div>
+
+</div>
+<!-- Update Profile -->
+<div ng-if="state.showUpdateProfile" style="width: 30%;margin:50px auto;" layout="column" layout-align="start center" flex="60">
+  <h4 class="text-centered"> Votre profil :</h4>
+  <form  role="form" class="update-account-form" ng-submit="updateProfile()">
+    <div style="color:red;margin:auto;" class="alert alert-danger" ng-show="error" ng-bind="error"/>
+    <div style="margin:auto;" class="alert alert-success" ng-show="success" ng-bind="success"/>
+
+    <div class="form-group">
+      <label class="quicksand-md" for="settings_nom">Nom</label>
+      <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+             id="settings_nom"
+             name="nom"
+             type="text"
+             class="form-control"
+             ng-model="updateProfileFields.last_name"
+             ng-required="1"
+             oninvalid="this.setCustomValidity('Champ obligatoire')"
+             oninput="setCustomValidity('')"
+             ng-change="changeForm()"/>
+    </div>
+    <div class="form-group">
+      <label class="quicksand-md" for="settings_prenom">Prénom</label>
+      <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+             id="settings_prenom"
+             name="prenom"
+             type="text"
+             class="form-control"
+             ng-model="updateProfileFields.first_name"
+             ng-required="1"
+             oninvalid="this.setCustomValidity('Champ obligatoire')"
+             oninput="setCustomValidity('')"
+             ng-change="changeForm()"/>
+    </div>
+    <div class="form-group">
+      <label class="quicksand-md" for="settings_email">Email</label>
+      <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+             id="settings_email"
+             name="email"
+             type="email"
+             class="form-control"
+             ng-model="updateProfileFields.email"
+             ng-required="1"
+             oninvalid="this.setCustomValidity('Champ obligatoire')"
+             oninput="setCustomValidity('')"
+             ng-change="changeForm()"/>
+    </div>
+    <div class="form-group">
+      <label class="quicksand-md" for="settings_old_password">Ancien mot de passe</label>
+      <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+             id="settings_old_password"
+             name="pwd1"
+             type="password"
+             class="form-control"
+             ng-model="updateProfileFields.old_password"
+             ng-required="1"
+             oninvalid="this.setCustomValidity('Champ obligatoire')"
+             oninput="setCustomValidity('')"
+             ng-change="changeForm()"/>
+    </div>
+    <div class="form-group">
+      <label class="quicksand-md" for="settings_password1">Nouveau mot de passe</label>
+      <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+             id="settings_password1"
+             name="pwd1"
+             type="password"
+             class="form-control"
+             ng-model="updateProfileFields.password"
+             ng-required="1"
+             oninvalid="this.setCustomValidity('Champ obligatoire')"
+             oninput="setCustomValidity('')"
+             ng-change="changeForm()"/>
+    </div>
+    <div class="form-group">
+      <label class="quicksand-md" for="settings_password2">Confirmer votre mot de passe</label>
+      <input style="font-size:20px; border-radius: 10px; background-color:#fff7f7;"
+             id="settings_password2"
+             name="pwd2"
+             type="password"
+             class="form-control"
+             ng-model="updateProfileFields.confirmation_password"
+             ng-required="1"
+             oninvalid="this.setCustomValidity('Champ obligatoire')"
+             oninput="setCustomValidity('')"
+             ng-change="changeForm()"/>
+    </div>
+
+    <div class="form-group" layout="column"
+         layout-align="top center"
+         style="margin-top:15px;">
+      <md-button type="submit"
+                 class="button-type-submit md-raised md-primary">
+        Mettre à jour
+      </md-button>
+      <md-button ng-click="deleteAccount()"
+                 class="button-type-submit md-raised md-primary">
+        Supprimer mon compte
+      </md-button>
+    </div>
+  </form>
+</div>
+
+<!-- Update Adresses -->
+<div ng-if="state.showAddress"
+     ng-class="{'row-adresse-md': $mdMedia('md'), 'row-adresse-gt-md': $mdMedia('gt-md')}"
+     layout="column"
+     layout-align="start start">
+  <div style="color:red;margin:auto;" class="alert alert-danger" ng-show="error" ng-bind="error"/>
+  <div style="margin:auto;" class="alert alert-success" ng-show="success" ng-bind="success"/>
+  <div  layout="column" layout-align="space-between center" style="width:100%;">
+    <!-- Adresses actuelles -->
+    <div ng-if="data.adresse_de_livraison && data.adresse_de_facturation" layout="column" style="width:100%;margin:0;">
+      <h3 style="margin:20px 0 20px 0;">Adresses actuelles</h3>
+      <div layout layout-align="start center" style="width:100%;margin: 0;">
+
+        <div layout="column" style="background-color:#fff7f7;
+                                               border: solid 1px black;
+                                               border-radius: 15px 0 0 15px;
+                                               border-right: solid 1px rgba(170, 164, 164, 0.3);
+                                               padding:15px;
+                                               margin:0;
+                                               min-width:50%;" >
+          <h4>Adresse de livraison</h4>
+          <h5 style="color:black;font-style:italic;">{{data.adresse_de_livraison.description}}</h5>
+          <h5 style="color:black;font-size:90%;">{{data.adresse_de_livraison.adresse}}</h5>
+          <h5 style="color:black;font-size:90%;">{{data.adresse_de_livraison.code_postal}} {{data.adresse_de_livraison.ville}}</h5>
+          <h5 style="color:black;font-size:90%;">{{data.adresse_de_livraison.pays}}</h5>
+        </div>
+
+        <div layout="column" style="background-color:#fff7f7;
+                                               border: solid 1px black;
+                                               border-radius: 0 15px 15px 0;
+                                               border-left: solid 2px rgba(170, 164, 164, 0.3);
+                                               padding:15px;
+                                               margin:0;
+                                               min-width:50%;">
+          <h4>Adresse de facturation</h4>
+          <h5 style="color:black;font-style:italic;">{{data.adresse_de_facturation.description}}</h5>
+          <h5 style="color:black;font-size:90%;">{{data.adresse_de_facturation.adresse}}</h5>
+          <h5 style="color:black;font-size:90%;">{{data.adresse_de_facturation.code_postal}} {{data.adresse_de_facturation.ville}}</h5>
+          <h5 style="color:black;font-size:90%;">{{data.adresse_de_facturation.pays}}</h5>
+        </div>
+      </div>
+    </div>
+
+    <!-- Configurer mes adresses -->
+    <div layout="column" style="width:100%;margin:50px auto 0 auto;">
+      <div layout layout-align="space-between center">
+        <h3 ng-if="data.adresse_de_livraison && data.adresse_de_facturation" style="margin:0 0 20px 0;">Configurer mes adresses</h3>
+      </div>
+
+      <div layout layout-align="space-between"  ng-repeat="adresse in data.adresses" style="background-color:#fff7f7; border: solid 1px black;border-radius:15px;margin-bottom:15px;">
+        <div layout="column" style="background-color:#fff7f7;
+                        margin:5px;
+                        min-width:50%;">
+          <!-- Résumé de l'adresse -->
+          <div  ng-if="!adresse.enableModifyAdresse" layout="column" style="padding:15px;">
+            <h5 style="color:black;font-style:italic;">{{adresse.description}}</h5>
+            <h5 style="color:black;font-size:90%;">{{adresse.adresse}}</h5>
+            <h5 style="color:black;font-size:90%;">{{adresse.code_postal}} {{adresse.ville}}</h5>
+            <h5 style="color:black;font-size:90%;">{{adresse.pays}}</h5>
+            <div layout ng-if="!adresse.enableDeleteAdresse">
+              <md-button class="button-type-submit md-flat md-accent" ng-click="clickDeleteAdresse(adresse)">Supprimer</md-button>
+              <md-button class="button-type-submit md-flat md-accent" ng-click="clickModifyAdresse(adresse)">Modifier</md-button>
+            </div>
+            <div layout="column" ng-if="adresse.enableDeleteAdresse">
+              <p style="color:red;margin-top:15px;">Confimer la suppression de l'adresse ?</p>
+              <div layout>
+                <md-button class="button-type-submit md-flat md-accent" ng-click="confirmDeleteAdresse(adresse)">Confirmer</md-button>
+                <md-button class="button-type-submit md-flat md-accent" ng-click="cancelDeleteAdresse(adresse)">Annuler</md-button>
+              </div>
+            </div>
+          </div>
+          <div  ng-if="adresse.enableModifyAdresse" layout="column" style="padding:15px;">
+            <form  layout="column" layout-align="space-between center"
+                   role="form"
+                   name="form"
+                   novalidate
+                   class="update-account-form"
+                   ng-submit="submitModifyAdresse(adresse,form.$invalid)"
+                   style="width:100%;">
+              <div style="color:red;margin:auto;" class="alert alert-danger" ng-show="error" ng-bind="error"/>
+              <div style="margin:auto;" class="alert alert-success" ng-show="success" ng-bind="success"/>
+              <div class="form-group" ng-class="{'invalid-input' : submitted && form.description.$error.required}"
+                   style="width:90%;">
+                <label class="quicksand-md" for="settings_adresse_description">
+                  Donnez un libellé à cette adresse*
+                </label>
+                <input style="font-size:20px; border-radius: 10px;"
+                       id="settings_adresse_description"
+                       name="description"
+                       type="text"
+                       class="form-control"
+                       ng-model="adresse.description"
+                       required/>
+                <span class="help-inline" ng-show="submitted && form.description.$invalid">Champ obligatoire</span>
+              </div>
+              <div class="form-group"
+                   ng-class="{'invalid-input' : submitted && form.prenom.$error.required}"
+                   style="width:90%;">
+                <label class="quicksand-md" for="settings_adresse_prenom">Prénom*</label>
+                <input style="font-size:20px; border-radius: 10px;"
+                       id="settings_adresse_prenom"
+                       name="prenom"
+                       type="text"
+                       class="form-control"
+                       ng-model="adresse.prenom"
+                       required/>
+                <span class="help-inline" ng-show="submitted && form.prenom.$invalid">Champ obligatoire</span>
+              </div>
+              <div class="form-group"
+                   ng-class="{'invalid-input' : submitted && form.nom.$error.required}"
+                   style="width:90%;" >
+                <label class="quicksand-md" for="settings_adresse_nom">Nom*</label>
+                <input style="font-size:20px; border-radius: 10px; "
+                       id="settings_adresse_nom"
+                       name="nom"
+                       type="text"
+                       class="form-control"
+                       ng-model="adresse.nom"
+                       required/>
+                <span class="help-inline" ng-show="submitted && form.nom.$invalid">Champ obligatoire</span>
+              </div>
+              <div class="form-group"
+                   ng-class="{'invalid-input' : submitted && form.adresse.$error.required}"
+                   style="width:90%;">
+                <label class="quicksand-md" for="settings_adresse_adresse">Adresse*</label>
+                <input style="font-size:20px; border-radius: 10px;"
+                       id="settings_adresse_adresse"
+                       name="adresse"
+                       type="text"
+                       class="form-control"
+                       ng-model="adresse.adresse"
+                       required/>
+                <span class="help-inline" ng-show="submitted && form.adresse.$invalid">Champ obligatoire</span>
+              </div>
+              <div class="form-group" style="width:90%;">
+                <label class="quicksand-md" for="settings_adresse_compl_adresse">Complément d'adresse</label>
+                <input style="font-size:20px; border-radius: 10px"
+                       id="settings_adresse_compl_adresse"
+                       name="complement"
+                       type="text"
+                       class="form-control"
+                       ng-model="adresse.complement_adresse"/>
+              </div>
+              <div class="form-group"
+                   ng-class="{'invalid-input' : submitted && form.postal_code.$error.required}"
+                   style="width:90%;">
+                <label class="quicksand-md" for="settings_adresse_code_postal">Code postal*</label>
+                <input style="font-size:20px; border-radius: 10px;"
+                       id="settings_adresse_code_postal"
+                       name="postal_code"
+                       type="text"
+                       class="form-control"
+                       ng-model="adresse.code_postal"
+                       ng-pattern='/^(\d{5}(-\d{4})?|[A-Z]\d[A-Z] *\d[A-Z]\d)$/'
+                       ng-model-options="{allowInvalid: true}"
+                       required
+                       ng-change="codePostalChanged(adresse)"/>
+                <span class="help-inline" ng-show="submitted && form.postal_code.$error.required">Champ obligatoire</span>
+                <span class="help-inline" ng-show="submitted && !form.postal_code.$error.required && form.postal_code.$invalid">Champ invalide</span>
+
+                <div style="background-color:white;cursor:pointer;">
+                  <div ng-repeat="(code, city) in data.citiesSuggestion">
+                    <div ng-click="selectCity(adresse, code, city)">
+                      <span>{{code}}</span>
+                      <span>{{city}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group"
+                   ng-class="{'invalid-input' : submitted && form.city.$error.required}"
+                   style="width:90%;">
+                <label class="quicksand-md" for="settings_adresse_city">Ville*</label>
+                <input style="font-size:20px; border-radius: 10px;"
+                       id="settings_adresse_city"
+                       name="city"
+                       type="text"
+                       class="form-control"
+                       ng-model="adresse.ville"
+                       required/>
+                <span class="help-inline" ng-show="submitted && form.city.$invalid">Champ obligatoire</span>
+              </div>
+              <div class="form-group"
+                   ng-class="{'invalid-input' : submitted && form.country.$error.required}"
+                   style="width:90%;">
+                <label class="quicksand-md" for="settings_adresse_country">Pays*</label>
+                <input style="font-size:20px; border-radius: 10px;"
+                       id="settings_adresse_country"
+                       name="country"
+                       type="text"
+                       class="form-control"
+                       ng-model="adresse.pays"
+                       required/>
+                <span class="help-inline" ng-show="submitted && form.country.$invalid">Champ obligatoire</span>
+              </div>
+              <md-button type="submit"
+                         class="button-type-submit md-flat md-accent"
+                         ng-click="submitted = true;"
+                         style="margin:auto;">
+                Appliquer
+              </md-button>
+            </form>
+
+          </div>
+        </div>
+
+        <div layout="column" layout-align="start start" style="margin:50px auto 0 auto;">
+          <p>Adresse de facturation</p>
+          <md-checkbox style="margin:0 auto;"
+                       ng-model="adresse.facturation"
+                       ng-change="changeAdresseFacturation(adresse)"
+                       aria-label="Facturation">
+          </md-checkbox>
+        </div>
+        <div layout="column" layout-align="start start" style="margin:50px auto 0 auto;">
+          <p>Adresse de livraison</p>
+          <md-checkbox style="margin:0 auto;"
+                       ng-model="adresse.livraison"
+                       ng-change="changeAdresseLivraison(adresse)"
+                       aria-label="Livraison">
+          </md-checkbox>
+        </div>
+      </div>
+    </div>
+    <div layout>
+      <md-button style="padding: 8px;margin-top:30px;"
+                 class="button-type-submit md-raised md-primary"
+                 ng-click="clickNewAdresse()">
+        <div layout>
+          <md-icon class="perm-icons" md-font-icon="material-icons"
+                   style="font-size:22px;"
+                   ng-click="selectCommandsHistoric()">playlist_add
+          </md-icon>
+          <h4 style="white-space: normal; margin-top:20px;color:white;margin:auto;">Ajouter une adresse</h4>
+        </div>
+      </md-button>
+    </div>
+  </div>
+</div>
+
+<!-- Commande Historic Adresses -->
+<div ng-if="state.showCommandsHistoric"
+     ng-class="{'row-adresse-md': $mdMedia('md'), 'row-adresse-gt-md': $mdMedia('gt-md')}"
+     layout="column" layout-align="space-between center">
+  <div ng-if="(data.commandes|isEmptyArray)">
+    <h4 class="text-centered"> Vous n'avez jamais passé commande sur Organic Azuki</h4>
+  </div>
+
+  <div ng-if="!(data.commandes|isEmptyArray)" style="width:100%;">
+    <div ng-if="!data.detailed_commande"  style="width:100%;">
+      <h4 class="text-centered"> Historique de vos commandes</h4>
+      <div layout layout-align="space-between center"
+           ng-repeat="commande in data.commandes"
+           class="panier-item"
+           style="width:100%;margin: 60px auto;padding:15px 15px 0 15px;"
+           ng-class="{'panier-item-first': $first, 'panier-item-last': $last}">
+        <div layout="column" layout-align="space-between start">
+          <h4 style="margin-bottom:5%;"> Référence de commande : {{commande.panier.uuid | limitTo:8}}</h4>
+          <p> Montant : {{commande.transaction.montant}} €</p>
+          <p> Passée le : {{commande.date_fr}}</p>
+        </div>
+
+        <div layout="column" layout-align="space-between end">
+          <div layout layout-align="end end" style="width:100%;">
+            <p style="color: red;margin-right:15%;" ng-if="commande.cancellable && commande.clickCancel">Confirmer l'annulation de la commande ?</p>
+            <p> Etat : {{commande.etat}}</p>
+          </div>
+          <div layout layout-align="space-between center">
+            <md-button ng-if="commande.cancellable && !commande.clickCancel"
+                       layout
+                       layout-align="space-between center"
+                       class="md-raised md-primary"
+                       ng-click="clickCancelCommand(commande)">
+              <md-icon class="perm-icons md-primary" md-font-icon="material-icons"
+                       style="font-size:150%;margin:5px 6px 5px auto;">
+                cancel
+              </md-icon>
+              Annuler la commande
+            </md-button>
+            <div layout="column" layout-align="space-between center"  ng-if="commande.cancellable && commande.clickCancel">
+              <div layout layout-align="space-between start">
+                <md-button
+                        layout
+                        layout-align="space-between center"
+                        class="md-raised md-primary"
+                        ng-click="clickConfirmCancelCommand(commande)">
+                  <md-icon class="perm-icons md-primary" md-font-icon="material-icons"
+                           style="font-size:150%;margin:5px 6px 5px auto;">
+                    cancel
+                  </md-icon>
+                  Annuler la commande
+                </md-button>
+                <md-button
+                        layout
+                        layout-align="space-between center"
+                        class="md-raised md-primary"
+                        ng-click="clickBackCommand(commande)">
+                  <md-icon class="perm-icons md-primary" md-font-icon="material-icons"
+                           style="font-size:150%;margin:5px 6px 5px auto;">
+                    undo
+                  </md-icon>
+                  Retour
+                </md-button>
+              </div>
+            </div>
+            <md-button layout
+                       layout-align="space-between center"
+                       class="md-raised md-primary"
+                       ng-click="clickSeeCommandDetail(commande)">
+              <md-icon class="perm-icons md-primary" md-font-icon="material-icons"
+                       style="font-size:150%;margin:5px 6px 5px auto;">
+                fullscreen
+              </md-icon>
+              Voir le détail
+            </md-button>
+          </div>
+
+
+        </div>
+      </div>
+      <div style="color:red;margin:auto;" class="alert alert-danger" ng-show="error" ng-bind="error"/>
+      <div style="margin:auto;" class="alert alert-success" ng-show="success" ng-bind="success"/>
+    </div>
+    <div ng-if="data.detailed_commande" layout="column" flex  style="width:100%;">
+      <h4 class="text-centered">Référence de commande : {{data.detailed_commande.panier.uuid | limitTo:8}}</h4>
+      <p class="text-centered">Montant total : {{data.detailed_commande.transaction.montant}} €</p>
+      <p class="text-centered">Passée le : {{data.detailed_commande.date_fr}}</p>
+      <h4 class="text-centered">Etat : {{data.detailed_commande.etat}}</h4>
+      <div layout layout-align="start center" ng-if="data.detailed_commande.panier.articles.length>0"
+           style="margin:30px 0 0 0;padding:0px;">
+        <h3 style="margin:0;font-weight:100;color:#3f3f3f;width:50%;text-align:left;">
+          Panier ({{data.detailed_commande.panier.articles.length}} article<span ng-if="data.detailed_commande.panier.articles.length>1">s</span>)
+        </h3>
+        <p style="margin:0;font-weight:100;color:#3f3f3f;width:15%;text-align:center;">  Prix </p>
+        <p style="margin:0;font-weight:100;color:#3f3f3f;width:15%;text-align:center;">  Quantité</p>
+        <p style="margin:0;font-weight:100;color:#3f3f3f;width:15%;text-align:center;">  Total </p>
+      </div>
+      <div layout layout-align="start center"
+           class="panier-item"
+           style="width:100%; margin:30px auto 30px auto;background-color: rgba(249, 224, 224, 0.5);padding:0px;"
+           ng-repeat="article in data.detailed_commande.panier.articles"
+           ng-mouseenter="hoverArticleIn(article)"
+           ng-mouseleave="hoverArticleOut(article)"
+           ng-class="{'panier-item-first': $first, 'panier-item-last': $last}">
+        <div layout layout-align="start center" style="margin:0;width:50%;">
+          <img style="max-width:150px;max-height:200px;  height:auto; width:auto;" src="{{article.image.main_image}}"/>
+          <div layout="column"
+               layout-align="space-between start"
+               style="margin:auto 10%;width:100%;">
+            <p style="margin:0;text-transform:uppercase;"> {{article.reference.nom}}</p>
+            <p style="margin:0;font-weight:100;color:#3f3f3f;"> Taille : {{article.taille}}</p>
+          </div>
+        </div>
+        <p style="margin:0;font-weight:100;color:#3f3f3f;width:15%;text-align:center;">  {{article.reference.prix}} €</p>
+        <p style="margin:0;font-weight:100;color:#3f3f3f;width:15%;text-align:center;">  {{article.quantite}}</p>
+        <p style="margin:0;font-weight:100;color:#3f3f3f;width:15%;text-align:center;">  {{article.quantite * article.reference.prix}} € </p>
+      </div>
+      <div layout layout-align="end end" style="margin-top:15px;">
+        <md-button layout
+                   layout-align="space-between center"
+                   class="md-raised md-primary"
+                   ng-click="clickExitCommandDetail()">
+          <md-icon class="perm-icons md-primary" md-font-icon="material-icons"
+                   style="font-size:150%;margin:5% 6px 5% auto;">
+            fullscreen_exit
+          </md-icon>
+          Retour
+        </md-button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Panel -->
+<div ng-if="state.showAdminPanel" style="width: 60%;margin:50px auto;" layout="column" layout-align="space-between center" flex="60">
+  <div ng-if="(admin.commandes|isEmpty)">
+    <h4 class="text-centered"> Il n'y a aucune commandes</h4>
+  </div>
+
+  <div ng-if="!(admin.commandes|isEmpty)" style="width:100%;">
+    <div ng-if="!admin.detailed_commande"  layout="column" layout-align="space-between center" style="width:100%;">
+      <h4 class="text-centered"> Historique des commandes</h4>
+
+      <md-input-container style="margin: 0 auto 0 auto;">
+        <md-label style="min-width:200px;margin:auto;" class="text-centered">Filtrer par état de la commande</md-label>
+        <md-select ng-model="admin.selected_commande_status"
+                   placeholder="Filtrer par type de Yoga"
+                   ng-change="filterByCommandStatus()">
+          <md-option ng-repeat="status in admin.commande_status" value="{{status}}">{{status}}</md-option>
+        </md-select>
+      </md-input-container>
+
+      <div layout layout-align="space-between center"
+           ng-repeat="commande in admin.filtered_commandes"
+           class="panier-item"
+           style="width:100%;margin: 30px auto;padding:15px;"
+           ng-class="{'panier-item-first': $first, 'panier-item-last': $last}">
+        <div layout="column" layout-align="space-between start">
+          <h4 style="margin-bottom:5%;"> Référence de commande : {{commande.panier.uuid | limitTo:8}}</h4>
+          <p> Client : {{commande.account.first_name}} {{commande.account.last_name}}</p>
+          <p> Montant : {{commande.transaction.montant}} €</p>
+          <p> Passée le : {{commande.date_fr}}</p>
+        </div>
+
+        <div layout="column" layout-align="space-between end">
+          <p> Etat : {{commande.etat}}</p>
+
+          <md-button layout
+                     layout-align="space-between center"
+                     class="md-raised md-primary"
+                     ng-click="clickSeeCommandDetailAdmin(commande)">
+            <md-icon class="perm-icons md-primary" md-font-icon="material-icons"
+                     style="font-size:150%;margin:5% 6px 5% auto;">
+              fullscreen
+            </md-icon>
+            Voir le détail
+          </md-button>
+        </div>
+      </div>
+    </div>
+    <div ng-if="admin.detailed_commande" layout="column" flex  style="width:100%;">
+      <h4 class="text-centered">Référence de commande : {{admin.detailed_commande.panier.uuid | limitTo:8}}</h4>
+      <p class="text-centered">Montant total : {{admin.detailed_commande.transaction.montant}} €</p>
+      <p class="text-centered">Passée le : {{admin.detailed_commande.date_fr}}</p>
+      <p class="text-centered">Mode de livraison: {{admin.detailed_commande.mode_de_livraison.nom}} | {{admin.detailed_commande.mode_de_livraison.prix}} €</p>
+
+      <p class="text-centered" ng-if="admin.detailed_commande.commentaire">Commentaire : {{admin.detailed_commande.commentaire}}</p>
+      <p class="text-centered" ng-if="!admin.detailed_commande.commentaire">Pas de commentaire</p>
+
+      <div layout layout-align="space-between start">
+        <div layout="column" layout-align="space-between start">
+          <h4 class="text-centered">Adresse de livraison</h4>
+          <p class="text-centered">{{admin.detailed_commande.adresse_livraison.prenom}}{{admin.detailed_commande.adresse_livraison.nom}}</p>
+          <p class="text-centered">{{admin.detailed_commande.adresse_livraison.adresse}}</p>
+          <p class="text-centered" ng-if="admin.detailed_commande.adresse_livraison.complement_adresse">{{admin.detailed_commande.adresse_livraison.complement_adresse}}</p>
+          <p class="text-centered">{{admin.detailed_commande.adresse_livraison.code_postal}} {{admin.detailed_commande.adresse_livraison.ville}}</p>
+          <p class="text-centered">{{admin.detailed_commande.adresse_livraison.pays}}</p>
+        </div>
+
+        <div layout="column" layout-align="space-between start">
+          <h4 class="text-centered">Adresse de facturation</h4>
+          <p class="text-centered">{{admin.detailed_commande.adresse_facturation.prenom}}{{admin.detailed_commande.adresse_facturation.nom}}</p>
+          <p class="text-centered">{{admin.detailed_commande.adresse_facturation.adresse}}</p>
+          <p class="text-centered" ng-if="admin.detailed_commande.adresse_facturation.complement_adresse">{{admin.detailed_commande.adresse_facturation.complement_adresse}}</p>
+          <p class="text-centered">{{admin.detailed_commande.adresse_facturation.code_postal}} {{admin.detailed_commande.adresse_facturation.ville}}</p>
+          <p class="text-centered">{{admin.detailed_commande.adresse_facturation.pays}}</p>
+        </div>
+      </div>
+
+      <md-input-container style="margin: 0 auto 0 auto;">
+        <md-label style="min-width:200px;margin:auto;" class="text-centered">Etat de la commande</md-label>
+        <md-select ng-model="admin.detailed_commande.etat"
+                   placeholder="Changer le statut"
+                   ng-change="changeCommandStatus(admin.detailed_commande)">
+          <md-option ng-repeat="status in admin.commande_all_status" value="{{status}}">{{status}}</md-option>
+        </md-select>
+      </md-input-container>
+
+      <div layout layout-align="start center"
+           style="margin:30px 0 0 0;padding:0px;">
+        <h3 style="margin:0;font-weight:100;color:#3f3f3f;width:50%;text-align:left;">
+          Panier ({{admin.detailed_commande.panier.articles.length}} article<span ng-if="data.detailed_commande.panier.articles.length>1">s</span>)
+        </h3>
+        <p style="margin:0;font-weight:100;color:#3f3f3f;width:15%;text-align:center;">  Prix </p>
+        <p style="margin:0;font-weight:100;color:#3f3f3f;width:15%;text-align:center;">  Quantité</p>
+        <p style="margin:0;font-weight:100;color:#3f3f3f;width:15%;text-align:center;">  Total </p>
+      </div>
+      <div layout layout-align="start center"
+           class="panier-item"
+           style="width:100%; margin:30px auto 30px auto;background-color: rgba(249, 224, 224, 0.5);padding:0px;"
+           ng-repeat="article in admin.detailed_commande.panier.articles"
+           ng-mouseenter="hoverArticleIn(article)"
+           ng-mouseleave="hoverArticleOut(article)"
+           ng-class="{'panier-item-first': $first, 'panier-item-last': $last}">
+        <div layout layout-align="start center" style="margin:0;width:50%;">
+          <img style="max-width:150px;max-height:200px;  height:auto; width:auto;" src="{{article.image.main_image}}"/>
+          <div layout="column"
+               layout-align="space-between start"
+               style="margin:auto 10%;width:100%;">
+            <p style="margin:0;text-transform:uppercase;"> {{article.reference.nom}}</p>
+            <p style="margin:0;font-weight:100;color:#3f3f3f;"> Taille : {{article.taille}}</p>
+          </div>
+        </div>
+        <p style="margin:0;font-weight:100;color:#3f3f3f;width:15%;text-align:center;">  {{article.reference.prix}} €</p>
+        <p style="margin:0;font-weight:100;color:#3f3f3f;width:15%;text-align:center;">  {{article.quantite}}</p>
+        <p style="margin:0;font-weight:100;color:#3f3f3f;width:15%;text-align:center;">  {{article.quantite * article.reference.prix}} € </p>
+      </div>
+      <div layout layout-align="end end" style="margin-top:15px;">
+        <div style="color:red;margin:auto;" class="alert alert-danger" ng-show="admin.error" ng-bind="admin.error"/>
+        <div style="margin:auto;" class="alert alert-success" ng-show="admin.success" ng-bind="admin.success"/>
+        <md-button layout
+                   layout-align="space-between center"
+                   class="md-raised md-primary"
+                   ng-click="clickSaveCommandAdmin(admin.detailed_commande)">
+          <md-icon class="perm-icons md-primary" md-font-icon="material-icons"
+                   style="font-size:150%;margin:5% 6px 5% auto;">
+            save_alt
+          </md-icon>
+          Sauvegarder
+        </md-button>
+        <md-button layout
+                   layout-align="space-between center"
+                   class="md-raised md-primary"
+                   ng-click="clickExitCommandDetailAdmin()">
+          <md-icon class="perm-icons md-primary" md-font-icon="material-icons"
+                   style="font-size:150%;margin:5% 6px 5% auto;">
+            fullscreen_exit
+          </md-icon>
+          Retour
+        </md-button>
+
+
+      </div>
+    </div>
+  </div>
+</div>

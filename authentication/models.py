@@ -103,26 +103,24 @@ class Account(AbstractBaseUser):
 
 
 class PasswordRecoveryManager(models.Manager):
-    def create_password_recovery(self, email, password, token, expiration_date):
-        pwd_recovery = PasswordRecovery(email=email, tmp_pwd=password, token=token, expiration_date=expiration_date)
+    def create_password_recovery(self, email, token, expiration_date):
+        pwd_recovery = PasswordRecovery(email=email, token=token, expiration_date=expiration_date)
         pwd_recovery.save(force_insert=True)
         return pwd_recovery
 
 
 class PasswordRecovery(models.Model):
-
     email = models.EmailField(unique=True)
-    tmp_pwd = models.CharField(max_length=40)
     token = models.CharField(max_length=40, unique=True)
     expiration_date = models.DateTimeField()
 
     objects = PasswordRecoveryManager()
 
     def __unicode__(self):
-        return ' '.join([self.email, '|', self.token, '| Expire à ', self.expiration_date])
+        return ' '.join([self.email, '|', self.token, '| Expire à ', str(self.expiration_date)])
 
     def __str__(self):
-        return ' '.join([self.email, '|', self.token, '| Expire à ', self.expiration_date])
+        return ' '.join([self.email, '|', self.token, '| Expire à ', str(self.expiration_date)])
 
     def check_expiration_date(self, now):
         if self.expiration_date > now:
@@ -166,8 +164,8 @@ class AdresseManager(models.Manager):
                           code_postal=code,
                           ville=ville,
                           pays=pays,
-                              livraison=livraison,
-                              facturation=facturation)
+                          livraison=livraison,
+                          facturation=facturation)
 
         print("adresse : %s"%new_adresse)
 

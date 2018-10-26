@@ -9,16 +9,15 @@
     .module('organic_azuki.layout.controllers')
     .controller('LandingPageController', LandingPageController);
 
-  LandingPageController.$inject = ['$scope', 'Authentication', 'Layout', '$mdMedia', '$mdToast'];
+  LandingPageController.$inject = ['$scope', '$http', 'Authentication', 'Layout', '$mdMedia', '$mdToast'];
 
   /**
   * @namespace NavbarController
   */
-  function LandingPageController($scope, Authentication, Layout, $mdMedia, $mdToast) {
+  function LandingPageController($scope, $http, Authentication, Layout, $mdMedia, $mdToast) {
     var vm = this;
 
     vm.logout = logout;
-
 
     /**
     * @name logout
@@ -31,6 +30,7 @@
 
     $scope.portrait = $mdMedia('portrait');
     $scope.landscape = $mdMedia('landscape');
+    $scope.$mdMedia = $mdMedia;
 
     this.$doCheck = function(){
        $scope.portrait = Layout.detectScreenOrientation();
@@ -73,6 +73,11 @@
              }
           });
        }
+       var access_token = '6086473486.1677ed0.c62f667af478418b910af0de793b2710';
+       Authentication.getFullAccount(function(success, account){});
+       $http.get('https://api.instagram.com/v1/users/self/media/recent/?access_token='+access_token).then(
+           function(data, status, headers, config){ },function(data, status, headers, config){ }
+       );
 
     }
   }
