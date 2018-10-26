@@ -68,8 +68,8 @@ DATABASES = {'default': dj_database_url.config()}
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'organic_azuki_db',
-        'USER': 'organic_azuki_staff',
+        'NAME': 'organic-azuki_db',
+        'USER': 'organic-azuki_staff',
         'PASSWORD': '0rg4NiC!',
         'HOST': 'postgresql-organic-azuki.alwaysdata.net',
         'PORT': '5432',
@@ -113,8 +113,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
-
-
 
 COMPRESS_ENABLED = True
 

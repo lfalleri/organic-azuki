@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import json
 from rest_framework import views, status
 from rest_framework.response import Response
@@ -41,14 +42,8 @@ import datetime
 
 class CollectionView(views.APIView):
     def get(self, request, format=None):
-        print("CollectionView  ")
         collection = Collection.objects.all()
-        print("CollectionView  collection = %s", collection[0])
-        try:
-           serialized_collection = CollectionSerializer(collection[0])
-        except Exception as e:
-            print(e)
-        print("CollectionView  serialized_collection = %s", serialized_collection.data)
+        serialized_collection = CollectionSerializer(collection[0])
         return Response(serialized_collection.data)
 
 
@@ -65,12 +60,7 @@ class PanierView(views.APIView):
         panier_serialized = PanierSerializer(panier)
         return Response(panier_serialized.data)
 
-
-    def associate_panier_and_account(self, data):
-        print("associate_panier_and_account : %s"%data)
-
     def add_to_panier(self, data):
-        print("add_to_panier : %s"%data)
         token = data['uuid']
         reference_id = data['reference']['id']
         quantite = data['quantite']
@@ -83,12 +73,10 @@ class PanierView(views.APIView):
         return Response(reference_serialized.data)
 
     def remove_from_panier(self, data):
-        print("remove_from_panier : %s"%data)
         token = data['uuid']
         article_id = data['article']['id']
         reference = Panier.objects.remove_article_from_panier(uuid=token,
                                                             article_id=article_id)
-        print("remove_from_panier : reference = %s"%reference)
         reference_serialized = ReferenceSerializer(reference)
         return Response(reference_serialized.data)
 
@@ -104,8 +92,6 @@ class PanierView(views.APIView):
         command = data['command']
         if command == 'create':
             return self.create_panier()
-        elif command == 'associate':
-            return self.associate_panier_and_account(data)
         elif command == 'add':
             return self.add_to_panier(data)
         elif command == 'remove':
@@ -114,19 +100,13 @@ class PanierView(views.APIView):
             return self.validate_panier(data)
 
     def get_panier(self, token):
-        print("get_panier : %s" %Panier.objects.filter(expiration_date__lte=datetime.datetime.now(), validee=False))
-
         paniers = Panier.objects.filter(expiration_date__lte=datetime.datetime.now(),
                                         validee=False)
         for p in paniers:
-            print("p : %s"%p)
             p.delete()
-            print("p : delete")
 
-        print('Panier  : token=%s'%token)
         panier = Panier.objects.filter(uuid=token)
         if not panier:
-            print('Panier doesnt exist : create a new one')
             return self.create_panier()
 
         panier = panier[0]
@@ -161,7 +141,6 @@ class ModeDeLivraisonView(views.APIView):
 
 class CodeReductionView(views.APIView):
     def get(self, request, format=None):
-        print("CodeReductionView : %s"%request.query_params)
         code = request.query_params['code']
         codes = CodeReduction.objects.filter(code=code)
         if codes:
@@ -280,7 +259,6 @@ class CommandeView(views.APIView):
 
         if 'mode_livraison_id' in data.keys():
             mode_livraison_id = data['mode_livraison_id']
-            print("CommandeView 3")
             if mode_livraison_id != -1:
                 mode = ModeDeLivraison.objects.get(id=mode_livraison_id)
                 commande.mode_de_livraison = mode
@@ -370,19 +348,12 @@ class CommandeView(views.APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         commande.etat = "ANNULEE"
-        try:
-            panier = commande.panier
-            articles = Article.objects.filter(panier=panier)
-            for article in articles:
-                Panier.objects.remove_article_from_panier(uuid=panier.uuid,
+        panier = commande.panier
+        articles = Article.objects.filter(panier=panier)
+        for article in articles:
+            Panier.objects.remove_article_from_panier(uuid=panier.uuid,
                                                           article_id=article.id)
-        except Exception as e:
-            print(" 1 : %s"%e)
 
-        try:
-            commande.save()
-        except Exception as e:
-            print(" 2 : %s"%e)
-
+        commande.save()
         return Response(status=status.HTTP_200_OK)
 

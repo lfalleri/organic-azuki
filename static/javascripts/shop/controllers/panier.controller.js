@@ -178,6 +178,7 @@
     }
 
     $scope.enterCodeReduction = function(){
+        console.log("Code Réduction")
         Shop.getCodeReduction($scope.data.codeReduction, function(success, code){
             if(!success){
                 $scope.error = "Code de réduction non valide";

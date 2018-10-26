@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from django.db import models
 from authentication.models import Account, Adresse
 
@@ -9,8 +10,6 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_delete
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
-from __future__ import unicode_literals
-
 
 
 class Collection(models.Model):
@@ -63,7 +62,7 @@ class Reference(models.Model):
 
     def __str__(self):
         return ' | '.join([self.nom,
-                           str(self.prix) + "euros",
+                           str(self.prix) + "€",
                            str(self.xxs_restants) + "XXS",
                            str(self.xs_restants) + "XS",
                            str(self.s_restants) + "S",
@@ -75,7 +74,7 @@ class Reference(models.Model):
 
     def __unicode__(self):
         return ' | '.join([self.nom,
-                           str(self.prix) + "euros",
+                           str(self.prix) + "€",
                            str(self.xxs_restants) + "XXS",
                            str(self.xs_restants) + "XS",
                            str(self.s_restants) + "S",
