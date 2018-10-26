@@ -71,8 +71,8 @@ DATABASES = {
         'NAME': 'organic_azuki_db',
         'USER': 'organic_azuki_staff',
         'PASSWORD': '0rg4NiC!',
-        'HOST': 'localhost',
-       'PORT': '',
+        'HOST': 'postgresql-organic-azuki.alwaysdata.net',
+        'PORT': '5432',
     }
 }
 
