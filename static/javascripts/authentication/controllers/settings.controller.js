@@ -452,8 +452,9 @@
                        $scope.error = "Une erreur s'est produite";
                        return;
                    }else{
-                       $scope.error = "";
-                       $scope.success = "Sauvegarde réussie";
+                       if($scope.error===""){
+                           $scope.success = "Sauvegarde réussie";
+                       }
                        adresse.newAdresse = false;
                        $scope.state.somethingChanged = false;
                    }
@@ -470,8 +471,9 @@
                         $scope.error = "Une erreur s'est produite";
                         return;
                     }else{
-                        $scope.error = "";
-                        $scope.success = "Sauvegarde réussie";
+                        if($scope.error===""){
+                           $scope.success = "Sauvegarde réussie";
+                        }
                         $scope.state.somethingChanged = false;
                     }
                     Authentication.requestFullAccount($scope.account.email, function(success, data){

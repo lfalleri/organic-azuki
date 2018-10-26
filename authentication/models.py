@@ -7,19 +7,17 @@ from django.contrib.auth.models import PermissionsMixin
 
 class AccountManager(BaseUserManager):
     def create_user(self, email, password=None, **kwargs):
-        print("create_user")
         if not email:
             raise ValueError('Users must have a valid email address.')
 
         if not kwargs.get('last_name') and not kwargs.get('first_name'):
             raise ValueError('Users must have a valid last_name.')
-        print("create_user 2 ")
         account = self.model(
             email=self.normalize_email(email),
             first_name=kwargs.get('first_name'),
             last_name=kwargs.get('last_name'),
         )
-        print("create_user 3")
+
         account.set_password(password)
         account.save()
         return account
@@ -66,9 +64,6 @@ class Account(AbstractBaseUser):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    #adresse_de_livraison = models.ForeignKey(Adresse, blank=True, null=True, on_delete=models.CASCADE, related_name="adresse_de_livraison")
-    #adresse_de_facturation = models.ForeignKey(Adresse, blank=True,null=True,on_delete=models.CASCADE, related_name="adresse_de_facturation")
 
     objects = AccountManager()
 
@@ -145,16 +140,6 @@ class AdresseManager(models.Manager):
                        pays,
                        livraison,
                        facturation):
-        print("AdresseManager")
-        print("create_adresse : %s  %s %s %s %s %s %s %s %s"%(description,
-                                                              account,
-                                                              prenom,
-                                                              nom,
-                                                              adresse,
-                                                              complement_adresse,
-                                                              code,
-                                                              ville,
-                                                              pays))
 
         new_adresse = Adresse(description=description,
                           account=account,
@@ -168,10 +153,8 @@ class AdresseManager(models.Manager):
                           livraison=livraison,
                           facturation=facturation)
 
-        print("adresse : %s"%new_adresse)
 
         new_adresse.save(force_insert=True)
-        print("APRES SAVE ")
         return adresse
 
     def set_livraison_and_facturation(self, adresse, livraison, facturation):
