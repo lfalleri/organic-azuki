@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import json
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
