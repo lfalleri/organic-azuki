@@ -749,6 +749,11 @@ canvas{
    font-size:100%;
 }
 
+.city-suggestion:hover{
+    background-color:rgba(249, 224, 224, 0.5);
+    border:solid 1px #3f3f3f;
+}
+
 .md{
    width:90%;
    margin-left:5%;

@@ -178,7 +178,6 @@
     }
 
     $scope.enterCodeReduction = function(){
-        console.log("Code Réduction")
         Shop.getCodeReduction($scope.data.codeReduction, function(success, code){
             if(!success){
                 $scope.error = "Code de réduction non valide";
@@ -382,7 +381,6 @@
     // Stripe Response Handler
     $scope.stripeCallback = function (code, result) {
         if (result.error) {
-
             $scope.error = "Une erreur est survenue lors de la transaction. Votre compte n'a pas été débité.";
         } else {
             $scope.token = result.id;
@@ -402,8 +400,6 @@
                      $scope.state.stepPaiementSuccess = false;
                      return;
                 }
-
-                console.log("Panier : ", panier);
 
                 Shop.proceedTransaction(
                    $scope.account.id,
@@ -428,7 +424,6 @@
                               var adresse_livraison_id = undefined;
                               var adresse_facturation_id = undefined;
                               $scope.account.adresses.forEach(function(_adresse){
-                                  console.log("_adresse : ",_adresse);
                                   if(_adresse.livraison) adresse_livraison_id=_adresse.id;
                                   if(_adresse.facturation) adresse_facturation_id=_adresse.id;
                               });
@@ -448,6 +443,20 @@
         }
     };
 
+    $scope.citySuggestionsFocused = function(){
+       $scope.state.suggestionsFocused = true;
+    }
+
+    $scope.citySuggestionsUnfocused = function(){
+       $scope.state.suggestionsFocused = false;
+    }
+
+    $scope.zipCodeUnfocus = function(){
+        if( !$scope.state.suggestionsFocused ){
+           $scope.data.citiesSuggestion = {};
+           return;
+        }
+    }
 
     $scope.codePostalChanged = function(){
        $scope.data.citiesSuggestion = {};
@@ -500,9 +509,7 @@
 
 
     $scope.$watch(function() { return Authentication.fullAccount; }, function (newValue) {
-        console.log("WATCH FULL ACCOUNT: ", newValue);
         $scope.account = newValue;
-       // updateAdresses();
     }, true);
 
   }

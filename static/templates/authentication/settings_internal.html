@@ -291,15 +291,16 @@
                        type="text"
                        class="form-control"
                        ng-model="adresse.code_postal"
-                       ng-pattern='/^(\d{5}(-\d{4})?|[A-Z]\d[A-Z] *\d[A-Z]\d)$/'
+                       ng-pattern='/^(\d{4,5}(-\d{4})?|[A-Z]\d[A-Z] *\d[A-Z]\d)$/'
                        ng-model-options="{allowInvalid: true}"
                        required
-                       ng-change="codePostalChanged(adresse)"/>
+                       ng-change="codePostalChanged(adresse)"
+                       ng-blur="zipCodeUnfocus();"/>
                 <span class="help-inline" ng-show="submitted && form.postal_code.$error.required">Champ obligatoire</span>
                 <span class="help-inline" ng-show="submitted && !form.postal_code.$error.required && form.postal_code.$invalid">Champ invalide</span>
 
-                <div style="background-color:white;cursor:pointer;">
-                  <div ng-repeat="(code, city) in data.citiesSuggestion">
+                <div ng-mouseover="citySuggestionsFocused();" ng-mouseleave="citySuggestionsUnfocused();" style="background-color:white;cursor:pointer;">
+                  <div class="city-suggestion" ng-repeat="(code, city) in data.citiesSuggestion">
                     <div ng-click="selectCity(adresse, code, city)">
                       <span>{{code}}</span>
                       <span>{{city}}</span>

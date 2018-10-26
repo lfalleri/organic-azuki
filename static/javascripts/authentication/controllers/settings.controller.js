@@ -47,6 +47,7 @@
                      showCommandsHistoric : false,
                      showAdminPanel : false,
                      somethingChanged:false,
+                     suggestionsFocused:false,
                     };
 
     $scope.data = {
@@ -508,6 +509,21 @@
         $scope.error = "";
         $scope.success = "";
         adresse.enableDeleteAdresse = false;
+    }
+
+    $scope.citySuggestionsFocused = function(){
+       $scope.state.suggestionsFocused = true;
+    }
+
+    $scope.citySuggestionsUnfocused = function(){
+       $scope.state.suggestionsFocused = false;
+    }
+
+    $scope.zipCodeUnfocus = function(){
+        if( !$scope.state.suggestionsFocused ){
+           $scope.data.citiesSuggestion = {};
+           return;
+        }
     }
 
     $scope.confirmDeleteAdresse = function(adresse){
