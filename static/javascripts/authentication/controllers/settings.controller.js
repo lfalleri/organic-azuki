@@ -438,20 +438,20 @@
     }
 
     function saveAdresses(){
-        $scope.error = "";
-        $scope.success = "";
+        //$scope.error = "";
+        //$scope.success = "";
         $scope.data.adresses.forEach(function(adresse){
             console.log("Sauvegarde de l'adresse : ", adresse);
             if(adresse.newAdresse){
                 Authentication.createAddress($scope.account.id, adresse, function(success, data){
                    if(!success){
-                       $scope.error = "Une erreur s'est produite";
-                       $scope.success = "";
+                      // $scope.error = "Une erreur s'est produite";
+                      // $scope.success = "";
                        return;
                    }else{
-                       if($scope.error===""){
+                      /* if($scope.error===""){
                            $scope.success = "Sauvegarde réussie";
-                       }
+                       }*/
                        adresse.newAdresse = false;
                        $scope.state.somethingChanged = false;
                    }
@@ -465,18 +465,17 @@
             }else{
                 Authentication.updateAddress($scope.account.id, adresse, function(success, data){
                     if(!success){
-                        $scope.error = "Une erreur s'est produite";
+                        //$scope.error = "Une erreur s'est produite";
                         $scope.success = "";
                         return;
                     }else{
-                        if($scope.error===""){
+                        /*if($scope.error===""){
                            $scope.success = "Sauvegarde réussie";
-                        }
+                        }*/
                         $scope.state.somethingChanged = false;
                     }
                     Authentication.requestFullAccount($scope.account.email, function(success, data){
                         $scope.account = data;
-                        console.log("clickSaveAdresse -> New account : ", $scope.account);
                         updateAdressesLivraisonFacturation();
                     });
                 });
