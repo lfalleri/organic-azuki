@@ -9,6 +9,7 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_delete
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
+from __future__ import unicode_literals
 
 
 
@@ -62,7 +63,7 @@ class Reference(models.Model):
 
     def __str__(self):
         return ' | '.join([self.nom,
-                           str(self.prix) + "€",
+                           str(self.prix) + "euros",
                            str(self.xxs_restants) + "XXS",
                            str(self.xs_restants) + "XS",
                            str(self.s_restants) + "S",
@@ -74,7 +75,7 @@ class Reference(models.Model):
 
     def __unicode__(self):
         return ' | '.join([self.nom,
-                           str(self.prix) + "€",
+                           str(self.prix) + "euros",
                            str(self.xxs_restants) + "XXS",
                            str(self.xs_restants) + "XS",
                            str(self.s_restants) + "S",
@@ -111,26 +112,18 @@ class PanierManager(models.Manager):
     def create_panier(self):
         token = uuid.uuid4().hex[:40]
         expiration_date = datetime.datetime.now() + datetime.timedelta(minutes=15)
-
-        print("create_panier ==> (token:%s, expiration_date:%s)"%(token, expiration_date))
         panier = Panier(uuid=token, expiration_date=expiration_date)
-        print("create_panier ==> panier : %s"%panier)
         panier.save()
-        print("create_panier ==> panier saved")
         return panier
 
     def add_article_to_panier(self, uuid, reference_id, quantite, taille):
         panier = Panier.objects.filter(uuid=uuid)
         if not panier:
-             print("add_article_to_panier ==> paniers not found")
+             return None
 
         reference = Reference.objects.get(id=reference_id)
 
         panier = panier[0]
-        print("add_article_to_panier ==> panier : %s" % panier)
-        print("add_article_to_panier ==> reference : %s" % reference)
-        print("add_article_to_panier ==> taille : %s" % taille)
-        print("add_article_to_panier ==> quantite : %s" % quantite)
 
         panier.articles.create(reference=reference, taille=taille, quantite=quantite)
 
@@ -150,17 +143,11 @@ class PanierManager(models.Manager):
             reference.xxl_restants -= quantite
         reference.save()
 
-        print("add_article_to_panier ==> article saved")
-        try:
-            print("add_article_to_panier ==> articles du panier : %s"% panier.articles.all())
-        except Exception as e:
-            print(e)
         return reference
 
     def remove_article_from_panier(self, uuid, article_id):
         panier = Panier.objects.filter(uuid=uuid)
         if not panier:
-            print("add_article_to_panier ==> paniers not found")
             return None
 
         article = Article.objects.get(id=article_id)
@@ -169,11 +156,6 @@ class PanierManager(models.Manager):
         quantite = article.quantite
 
         panier = panier[0]
-        print("remove_article_to_panier ==> panier : %s" % panier)
-        print("remove_article_to_panier ==> article : %s" % article)
-        print("remove_article_to_panier ==> reference : %s" % reference)
-        print("remove_article_to_panier ==> taille : %s" % str(taille))
-        print("remove_article_to_panier ==> quantite : %s" % str(quantite))
 
         if taille == 'XXS':
             reference.xxs_restants += quantite
@@ -190,20 +172,13 @@ class PanierManager(models.Manager):
         if taille == 'XXL':
             reference.xxl_restants += quantite
         reference.save()
-        print("remove_article_to_panier ==> reference apres update: %s" % reference)
         article.delete()
 
-        print("remove_article_to_panier ==> article deleted")
-        try:
-            print("remove_article_to_panier ==> articles du panier : %s"% panier.articles.all())
-        except Exception as e:
-            print(e)
         return reference
 
     def get_articles_count(self, uuid):
         panier = Panier.objects.filter(uuid=uuid)
         if not panier:
-            print("get_articles_count ==> paniers not found")
             return None
 
         panier = panier[0]
@@ -216,7 +191,7 @@ class PanierManager(models.Manager):
     def get_articles(self, uuid):
         panier = Panier.objects.filter(uuid=uuid)
         if not panier:
-             print("add_article_to_panier ==> paniers not found")
+            return []
 
         panier = panier[0]
         return panier.articles.all()
@@ -224,7 +199,6 @@ class PanierManager(models.Manager):
     def validate_panier(self, uuid):
         panier = Panier.objects.filter(uuid=uuid)
         if not panier:
-            print("get_articles_count ==> paniersnot found")
             return None
 
         panier = panier[0]
@@ -270,10 +244,10 @@ class Article(models.Model):
     quantite = models.IntegerField(default=1)
 
     def __str__(self):
-        return ' | '.join([str(self.reference), str(self.taille), str(self.quantite)])
+        return ' | '.join([unicode(self.reference), str(self.taille), str(self.quantite)])
 
     def __unicode__(self):
-        return ' | '.join([str(self.reference), str(self.taille), str(self.quantite)])
+        return ' | '.join([unicode(self.reference), str(self.taille), str(self.quantite)])
 
 
 class ModeDeLivraison(models.Model):
@@ -294,10 +268,10 @@ class CodeReduction(models.Model):
     reduction = models.IntegerField(default=0)
 
     def __unicode__(self):
-        return ' '.join(["Code :", str(self.code), "- Réduction : ", str(self.reduction) + " €"])
+        return ' '.join(["Code :", str(self.code), u"- Réduction : ", str(self.reduction) + " euros"])
 
     def __str__(self):
-        return ' '.join(["Code :", str(self.code), "- Réduction : ", str(self.reduction) + " €"])
+        return ' '.join(["Code :", str(self.code), u"- Réduction : ", str(self.reduction) + " euros"])
 
 
 class StripeAPiKey(models.Model):
@@ -330,7 +304,6 @@ class TransactionManager(models.Manager):
                amount=int(montant) * 100,
            )
         except Exception as inst:
-           print(inst)
            raise ValueError('Error')
 
         transaction.status = "Refund"
