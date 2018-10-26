@@ -825,7 +825,7 @@ cursor:pointer;
 }
 
 .colonne-texte-gt-md{
-   margin: 0 auto 0 10%;
+   margin: 0 auto 0 auto;
 }
 
 .row-md{
