@@ -402,11 +402,6 @@
                 commande.etat = "ANNULEE"
                 commande.cancellable = false;
                 commande.clickCancel = false;
-                //var removeIndex = $scope.data.commandes.map(function(item) { return item.id; }).indexOf(commande.id);
-                // remove object
-                //$scope.data.commandes.splice(removeIndex, 1);
-                //MessagingService.sendCommandCancellationToCustomerEmail($scope.account, commande, function(success, message){});
-                //MessagingService.sendCommandCancellationToStaffEmail($scope.account, commande, function(success, message){});
             }
             $interval(function(){$scope.success="";$scope.error="";}, 5000);
         });
@@ -450,6 +445,7 @@
                 Authentication.createAddress($scope.account.id, adresse, function(success, data){
                    if(!success){
                        $scope.error = "Une erreur s'est produite";
+                       $scope.success = "";
                        return;
                    }else{
                        if($scope.error===""){
@@ -469,6 +465,7 @@
                 Authentication.updateAddress($scope.account.id, adresse, function(success, data){
                     if(!success){
                         $scope.error = "Une erreur s'est produite";
+                        $scope.success = "";
                         return;
                     }else{
                         if($scope.error===""){
