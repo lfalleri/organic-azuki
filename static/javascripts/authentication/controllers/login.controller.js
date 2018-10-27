@@ -9,15 +9,16 @@
     .module('organic_azuki.authentication.controllers')
     .controller('LoginController', LoginController);
 
-  LoginController.$inject = ['$location', '$scope', '$rootScope', 'Authentication'];
+  LoginController.$inject = ['$location', '$scope', '$rootScope', '$mdMedia', 'Authentication'];
 
   /**
   * @namespace LoginController
   */
-  function LoginController($location, $scope, $rootScope, Authentication) {
+  function LoginController($location, $scope, $rootScope, $mdMedia, Authentication) {
     var vm = this;
 
     vm.login = login;
+    $scope.$mdMedia = $mdMedia;
 
     activate();
 

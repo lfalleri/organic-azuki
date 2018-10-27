@@ -9,16 +9,16 @@
     .module('organic_azuki.authentication.controllers')
     .controller('RecoveryController', RecoveryController);
 
-  RecoveryController.$inject = ['$location','$http', '$scope', '$routeParams', 'Authentication', 'MessagingService'];
+  RecoveryController.$inject = ['$location','$http', '$scope', '$routeParams', '$mdMedia', 'Authentication', 'MessagingService'];
 
   /**
   * @namespace RegisterController
   */
-  function RecoveryController($location, $http, $scope, $routeParams, Authentication, MessagingService) {
+  function RecoveryController($location, $http, $scope, $routeParams, $mdMedia, Authentication, MessagingService) {
     var vm = this;
 
     activate();
-
+    $scope.$mdMedia = $mdMedia;
     $scope.login = {};
     $scope.disableButton = false;
     $scope.account = undefined;

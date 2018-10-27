@@ -880,7 +880,15 @@ cursor:pointer;
   position: relative;
 }
 
-.central-logo-gt-md:before,
+.central-logo-gt-md:before{
+    content: '';
+    width: 130%;
+    border-bottom: solid 1px #5D3B0A;
+    position: absolute;
+    left: -15%;
+    top:  -50px;
+}
+
 .central-logo-md:before
 {
     content: '';
@@ -891,7 +899,15 @@ cursor:pointer;
     top:  -50px;
 }
 
-.central-logo-gt-md:after,
+.central-logo-gt-md:after{
+    content: '';
+    width: 130%;
+    border-bottom: solid 1px #5D3B0A;
+    position: absolute;
+    left: -15%;
+    bottom: -50px;
+}
+
 .central-logo-md::after
 {
     content: '';
