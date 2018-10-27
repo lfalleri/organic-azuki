@@ -21,12 +21,28 @@
     </a>
 </div>
 
+<div ng-if="$mdMedia('gt-md')"
+     style="margin:45px auto;max-width:40%;"
+     class="central-logo"
+     layout="row"
+     layout-align="center center">
+     <a href="/"><img src="/static/img/logos/banner.png" style="max-width:100%;"/></a>
+</div>
 
+<div ng-if="$mdMedia('md')"
+     style="margin:45px auto;max-width:50%;"
+     class="central-logo"
+     layout="row"
+     layout-align="center center">
+     <a href="/"><img src="/static/img/logos/banner.png" style="max-width:100%;"/></a>
+</div>
+
+<!--
 <div ng-class="{'central-logo-md': $mdMedia('md'), 'central-logo-gt-md': $mdMedia('gt-md')}"
      layout="row"
      layout-align="center center">
     <a href="/"><img src="/static/img/logos/banner.png" style="max-width:100%;"/></a>
-</div>
+</div>-->
 
 <div ng-class="{'navbar-row-md': $mdMedia('md'), 'navbar-row-gt-md': $mdMedia('gt-md')}"
      layout="row" layout-align="space-around center">
