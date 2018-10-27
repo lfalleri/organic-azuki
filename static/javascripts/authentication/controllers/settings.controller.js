@@ -486,7 +486,6 @@
 
     $scope.submitModifyAdresse = function(adresse, invalid){
         if(invalid) return;
-        console.log("submitModifyAdresse : ", adresse);
         $scope.error = "";
         $scope.success = "";
         $scope.data.adresses.forEach(function(a){

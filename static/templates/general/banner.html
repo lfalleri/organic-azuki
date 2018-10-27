@@ -22,12 +22,14 @@
 </div>
 
 
-<div style="margin:45px auto; max-width:40%;" class="central-logo" layout="row" layout-align="center center">
+<div ng-class="{'central-logo-md': $mdMedia('md'), 'central-logo-gt-md': $mdMedia('gt-md')}"
+     layout="row"
+     layout-align="center center">
     <a href="/"><img src="/static/img/logos/banner.png" style="max-width:100%;"/></a>
-
 </div>
 
-<div style="margin:60px auto 90px auto;width:60%;" class="navbar-row" layout="row" layout-align="space-around center">
+<div ng-class="{'navbar-row-md': $mdMedia('md'), 'navbar-row-gt-md': $mdMedia('gt-md')}"
+     layout="row" layout-align="space-around center">
     <a class="navbar-item" href="/">Accueil</a>
 
     <div class="navbar-dropdown">

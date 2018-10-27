@@ -872,3 +872,50 @@ cursor:pointer;
 .panier-button-gt-md{
    margin: 5% auto;
 }
+
+
+.central-logo-gt-md,
+.central-logo-md
+{
+  position: relative;
+}
+
+.central-logo-gt-md:before,
+.central-logo-md:before
+{
+    content: '';
+    width: 130%;
+    border-bottom: solid 1px #5D3B0A;
+    position: absolute;
+    left: -15%;
+    top:  -50px;
+}
+
+.central-logo-gt-md:after,
+.central-logo-md::after
+{
+    content: '';
+    width: 130%;
+    border-bottom: solid 1px #5D3B0A;
+    position: absolute;
+    left: -15%;
+    bottom: -50px;
+}
+
+.central-logo-gt-md{
+   margin:45px auto;
+   max-width:40%;
+}
+.central-logo-md{
+   margin:45px auto;
+   max-width:50%;
+}
+
+.navbar-row-gt-md{
+   margin:60px auto 90px auto;
+   width:60%;
+}
+.navbar-row-md{
+   margin:60px auto 90px auto;
+   width:70%;
+}
