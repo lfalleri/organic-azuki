@@ -56,6 +56,18 @@
       controller: 'LandingPageController',
       controllerAs: 'vm',
       templateUrl: '/static/templates/general/cguv.html'
+    }).when('/mentions',{
+      controller: 'LandingPageController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/general/mentions.html'
+    }).when('/remerciements',{
+      controller: 'LandingPageController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/general/remerciements.html'
+    }).when('/livraisons',{
+      controller: 'LandingPageController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/general/livraisons.html'
     }).when('/',{
       controller: 'LandingPageController',
       controllerAs: 'vm',
