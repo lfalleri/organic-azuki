@@ -123,10 +123,14 @@
                        oninput="setCustomValidity('')"
                        ng-change="loginForm()" />
             </div>
-            <md-checkbox ng-model="cguvChecked" aria-label="CGUVAccepted">
+            <div layout>
+                <md-checkbox ng-model="cguvChecked" aria-label="CGUVAccepted"></md-checkbox>
                 <a style="font-size:80%; text-decoration:underline;" href="/cguv" ng-click="saveRegistrationInfo()">
                     J'ai pris connaissance des Conditions Générales d'Utilisation et de Vente
                 </a>
+            </div>
+
+
             </md-checkbox>
 
             <div    ng-if="model.key!==undefined"
