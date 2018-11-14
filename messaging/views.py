@@ -196,7 +196,7 @@ class CommandConfirmationToCustomerEmailView(views.APIView):
 
         staff_email = getEmails()
 
-        subject = "Yoga - Votre réservation n°%s" % reservation_id
+        subject = "Confirmation de commande"
         message_content = """
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
             <html>
@@ -209,6 +209,15 @@ class CommandConfirmationToCustomerEmailView(views.APIView):
             </style>
             </head>
             <div style="font-family : Montserrat;font-size:120%%;color:#3f3f3f;">
+                Votre commande CYYYYDDMM-XX a bien été prise en compte, merci pour votre confiance !
+
+Vous trouverez ci-dessous un récapitulatif de vos achats.
+
+Si toutefois vous changez d’avis, vous avez 1h pour annuler votre commande. Pour cela, il suffit de vous rendre sur votre espace Mon Compte sur le site.
+
+Vous serez tenu(e) au courant de l’expédition de votre commande.
+
+
                Bonjour %s,<br>
 
                Nous avons le plaisir de vous confirmer votre inscription pour %s personne%s au cours suivant :<br>

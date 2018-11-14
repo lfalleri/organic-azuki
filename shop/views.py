@@ -17,8 +17,8 @@ from .models \
            CodeReduction,\
            StripeAPiKey,\
            Transaction,\
-           Commande,\
-           Createur, Exposition, ExpositionPhoto
+           Commande
+
 
 from .serializers \
     import \
@@ -33,8 +33,8 @@ from .serializers \
     ModeDeLivraisonSerializer,\
     CodeReductionSerializer,\
     TransactionSerializer,\
-    CommandeSerializer,\
-    CreateurSerializer, ExpositionPhotoSerializer, ExpositionSerializer
+    CommandeSerializer
+
 
 import stripe
 import datetime
@@ -149,24 +149,6 @@ class CodeReductionView(views.APIView):
             return Response(serialized_data.data)
 
         return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-class CreateurView(views.APIView):
-    serializer_class = CreateurSerializer
-
-    def get(self, request, format=None):
-        createurs = Createur.objects.all()
-        serialized_createur = CreateurSerializer(createurs, many=True)
-        return Response(serialized_createur.data)
-
-
-class ExpositionView(views.APIView):
-    #serializer_class = ExpositionSerializer
-
-    def get(self, request, format=None):
-        expo = Exposition.objects.all()
-        serialized_expo = ExpositionSerializer(expo, many=True)
-        return Response(serialized_expo.data)
 
 
 class TransactionView(views.APIView):

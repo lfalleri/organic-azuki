@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models \
-    import Reference, \
+    import ReferenceAdulte, \
+           ReferenceEnfant, \
+           ReferenceTailleUnique, \
            ReferencePhoto, \
            Collection, \
            Categorie, \
@@ -12,10 +14,11 @@ from .models \
            CodeReduction,\
            StripeAPiKey,\
            Transaction,\
-           Commande, \
-           Createur, Exposition, ExpositionPhoto
+           Commande
 
-admin.site.register(Reference)
+admin.site.register(ReferenceAdulte)
+admin.site.register(ReferenceEnfant)
+admin.site.register(ReferenceTailleUnique)
 admin.site.register(Article)
 admin.site.register(ReferencePhoto)
 admin.site.register(Collection)
@@ -29,6 +32,3 @@ admin.site.register(StripeAPiKey)
 admin.site.register(Transaction)
 admin.site.register(Commande)
 
-admin.site.register(Createur)
-admin.site.register(Exposition)
-admin.site.register(ExpositionPhoto)

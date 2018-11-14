@@ -49,6 +49,65 @@ class Reference(models.Model):
     short_description = models.CharField(max_length=128)
     prix = models.FloatField()
     color = models.CharField(max_length=32)
+
+    categorie = models.ForeignKey(Categorie, related_name="references")
+    mot_cles = models.ManyToManyField(MotCle)
+
+    def __str__(self):
+        return ' | '.join([self.nom,
+                           str(self.prix) + "€",
+                           ])
+
+    def __unicode__(self):
+        return ' | '.join([self.nom,
+                           str(self.prix) + "€",
+                           ])
+
+
+#class Reference(models.Model):
+    # nom = models.CharField(max_length=40)
+    # description = models.TextField(default="")
+    # short_description = models.CharField(max_length=128)
+    # prix = models.FloatField()
+    # color = models.CharField(max_length=32)
+    # xxs_restants = models.IntegerField(default=0)
+    # xs_restants = models.IntegerField(default=0)
+    # s_restants = models.IntegerField(default=0)
+    # m_restants = models.IntegerField(default=0)
+    # l_restants = models.IntegerField(default=0)
+    # xl_restants = models.IntegerField(default=0)
+    # xxl_restants = models.IntegerField(default=0)
+    #
+    # categorie = models.ForeignKey(Categorie, related_name="references")
+    # mot_cles = models.ManyToManyField(MotCle)
+    #
+    # def __str__(self):
+    #     return ' | '.join([self.nom,
+    #                        str(self.prix) + "€",
+    #                        str(self.xxs_restants) + "XXS",
+    #                        str(self.xs_restants) + "XS",
+    #                        str(self.s_restants) + "S",
+    #                        str(self.m_restants) + "M",
+    #                        str(self.l_restants) + "L",
+    #                        str(self.xl_restants) + "XL",
+    #                        str(self.xxl_restants) + "XXL",
+    #                        ])
+    #
+    # def __unicode__(self):
+    #     return ' | '.join([self.nom,
+    #                        str(self.prix) + "€",
+    #                        str(self.xxs_restants) + "XXS",
+    #                        str(self.xs_restants) + "XS",
+    #                        str(self.s_restants) + "S",
+    #                        str(self.m_restants) + "M",
+    #                        str(self.l_restants) + "L",
+    #                        str(self.xl_restants) + "XL",
+    #                        str(self.xxl_restants) + "XXL",
+    #                        ])
+
+
+class ReferenceAdulte(Reference):
+
     xxs_restants = models.IntegerField(default=0)
     xs_restants = models.IntegerField(default=0)
     s_restants = models.IntegerField(default=0)
@@ -56,9 +115,6 @@ class Reference(models.Model):
     l_restants = models.IntegerField(default=0)
     xl_restants = models.IntegerField(default=0)
     xxl_restants = models.IntegerField(default=0)
-
-    categorie = models.ForeignKey(Categorie, related_name="references")
-    mot_cles = models.ManyToManyField(MotCle)
 
     def __str__(self):
         return ' | '.join([self.nom,
@@ -83,6 +139,54 @@ class Reference(models.Model):
                            str(self.xl_restants) + "XL",
                            str(self.xxl_restants) + "XXL",
                            ])
+
+class ReferenceEnfant(Reference):
+    _1an_restants = models.IntegerField(default=0)
+    _2ans_restants = models.IntegerField(default=0)
+    _3ans_restants = models.IntegerField(default=0)
+    _4ans_restants = models.IntegerField(default=0)
+    _5_6ans_restants = models.IntegerField(default=0)
+    _7_8ans_restants = models.IntegerField(default=0)
+
+    def __str__(self):
+        return ' | '.join([self.nom,
+                           str(self.prix) + "€",
+                           str(self._12mois_restants) + " 12 mois",
+                           str(self._12mois_restants) + " 24 mois",
+                           str(self._12mois_restants) + " 3 ans",
+                           str(self._12mois_restants) + " 4 ans",
+                           str(self._12mois_restants) + " 5-6 ans",
+                           str(self._12mois_restants) + " 7-8 ans",
+                           ])
+
+    def __unicode__(self):
+        return ' | '.join([self.nom,
+                           str(self.prix) + "€",
+                           str(self._12mois_restants) + " 12 mois",
+                           str(self._12mois_restants) + " 24 mois",
+                           str(self._12mois_restants) + " 3 ans",
+                           str(self._12mois_restants) + " 4 ans",
+                           str(self._12mois_restants) + " 5 ans",
+                           str(self._12mois_restants) + " 6 ans",
+                           ])
+
+
+class ReferenceTailleUnique(Reference):
+
+    restants = models.IntegerField(default=0)
+    def __str__(self):
+        return ' | '.join([self.nom,
+                           str(self.prix) + "€",
+                           str(self.restants) + " pièces",
+                           ])
+
+    def __unicode__(self):
+        return ' | '.join([self.nom,
+                           str(self.prix) + "€",
+                           str(self.restants) + " pièces",
+                           ])
+
+
 
 
 class TypeDePhoto(models.Model):
@@ -332,7 +436,8 @@ class CommandeManager(models.Manager):
     def create_commande(self, account, transaction, panier):
         panier.validee = True
         panier.save()
-        commande = Commande(account=account, transaction=transaction, panier=panier)
+        unique_id = datetime.datetime.today().strftime('%Y%m%d') + '-' + uuid.uuid4().hex[:5]
+        commande = Commande(unique_id=unique_id, account=account, transaction=transaction, panier=panier)
         commande.save()
         return commande
 
@@ -354,6 +459,7 @@ class Commande(models.Model):
         (ANNULEE, 'ANNULEE'),
     )
 
+    unique_id = models.CharField(max_length=14)
     etat = models.CharField(max_length=30, choices=ETAT_COMMANDE, default=EN_COURS)
     account = models.ForeignKey(Account, related_name='commandes')
     adresse_livraison = models.ForeignKey(Adresse, blank=True, null=True, related_name="adresse_livraison")
@@ -372,47 +478,6 @@ class Commande(models.Model):
 
     def __str__(self):
         return ' '.join([str(self.account), str(self.panier), str(self.date)])
-
-
-class Createur(models.Model):
-    nom = models.CharField(max_length=60)
-    texte = models.TextField()
-    image = models.CharField(max_length=128, default='/static/img/...')
-
-    def __str__(self):
-        return ' | '.join([self.nom, self.texte[0:10] + "..."])
-
-    def __unicode__(self):
-        return ' | '.join([self.nom, self.texte[0:10] + "..."])
-
-
-class Exposition(models.Model):
-    titre = models.CharField(max_length=60)
-    artiste = models.CharField(max_length=60)
-    photo_artiste = models.CharField(max_length=128,default='/static/img/...')
-
-    en_cours = models.BooleanField(default=True)
-
-    texte = models.TextField()
-    didascalie = models.CharField(max_length=512, blank=True)
-
-    def __str__(self):
-        return ' | '.join([self.titre, self.artiste])
-
-    def __unicode__(self):
-        return ' | '.join([self.titre, self.artiste])
-
-
-class ExpositionPhoto(models.Model):
-    exposition = models.ForeignKey(Exposition, related_name='photos')
-    photo = models.CharField(max_length=128,default='/static/img/...')
-    legende = models.CharField(max_length=128)
-
-    def __str__(self):
-        return ' '.join(["Photo de ", self.exposition.titre, self.legende])
-
-    def __unicode__(self):
-        return ' '.join(["Photo de ", self.exposition.titre, self.legende])
 
 
 @receiver(pre_delete, sender=Panier)

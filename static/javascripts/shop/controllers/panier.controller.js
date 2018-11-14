@@ -433,8 +433,9 @@
                                                      $scope.data.code_de_reduction.id,
                                                      $scope.data.selected_mode_livraison.id,
                                                      $scope.data.addComment,
-                                                     function(success, message){})
-                           })
+                                                     function(success, message){});
+
+                           });
                            Shop.deletePanierInCache(panier.uuid);
                        }
                    }
