@@ -33,10 +33,6 @@ from messaging.views import AccountCreationEmailView, \
                             AccountDeletionToStaffEmailView, \
                             CommandConfirmationToCustomerEmailView, \
                             CommandConfirmationToStaffEmailView, \
-                            YogaCancellationToCustomerEmailView, \
-                            YogaCancellationToStaffEmailView,\
-                            RestaurantReservationToStaffEmailView, \
-                            RestaurantReservationToCustomerEmailView, \
                             ContactEmailView,\
                             PasswordRecoveryEmailView
 
