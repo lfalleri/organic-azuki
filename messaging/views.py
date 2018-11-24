@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 from .models import SendgridApiKey, StaffEmail
 from authentication.models import Account
+from shop.models import Commande, Article, Panier
 from django.utils.dateparse import parse_datetime
 import sendgrid
 from sendgrid.helpers.mail import Email, Content, Mail, Attachment
@@ -180,82 +181,62 @@ class CommandConfirmationToCustomerEmailView(views.APIView):
 
     def post(self, request, format=None):
         data = json.loads(request.body)
-        json_lesson = data['lesson']
+
+        json_commande = data['commande']
         json_account = data['account']
-        nb_persons = data['nb_persons']
-        reservation_id = data['reservation_id']
 
-        lesson_type = json_lesson['type']['nom']
-        lesson_intensity = json_lesson['intensity']['nom']
-        lesson_duration = json_lesson['duration']
-        lesson_animator = json_lesson['animator']['prenom'] + " " + json_lesson['animator']['nom']
-        lesson_date = str(parse_datetime(json_lesson['date']).strftime("%A %d %b %Y à %Hh%M"))
-        cancellation_date = parse_datetime(json_lesson['date']) - datetime.timedelta(days=1)
-
+        commande = Commande.objects.get(id=json_commande['id'])
         account = Account.objects.get(id=json_account['id'])
 
         staff_email = getEmails()
 
-        subject = "Confirmation de commande"
-        message_content = """
+        articles = Panier.objects.get_articles(commande.panier.uuid)
+        articles_detail = ""
+        for article in articles:
+            articles_detail += article.reference.nom + u" - Quantité : " + str(article.quantite) \
+                               + u" (" + str(article.taille) + u") - Prix : " + str(article.reference.prix * article.quantite) + u" €"
+            articles_detail += u"<br>"
+
+        subject = u"Confirmation de commande"
+        message_content = u"""
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
             <html>
             <head>
             <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-            <title>Confirmation de réservation</title>
+            <title>Confirmation de commande</title>
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
             <style>
                * {font-family: Montserrat, sans-serif;}
             </style>
             </head>
             <div style="font-family : Montserrat;font-size:120%%;color:#3f3f3f;">
-                Votre commande CYYYYDDMM-XX a bien été prise en compte, merci pour votre confiance !
+                <h3> Confirmation de commande </h3>
+                Votre commande %s a bien été prise en compte, merci pour votre confiance !<br>
+                Vous trouverez ci-dessous un récapitulatif de vos achats.<br>
+                Si toutefois vous changez d’avis, vous avez 1h pour annuler votre commande. <br>
+                Pour cela, il suffit de vous rendre sur votre espace Mon Compte sur le site.<br><br>
+                Vous serez tenu(e) au courant de l’expédition de votre commande.<br>
 
-Vous trouverez ci-dessous un récapitulatif de vos achats.
+                <h3>Rappel de votre commande</h3>
 
-Si toutefois vous changez d’avis, vous avez 1h pour annuler votre commande. Pour cela, il suffit de vous rendre sur votre espace Mon Compte sur le site.
+                %s<br>
 
-Vous serez tenu(e) au courant de l’expédition de votre commande.
+                Cout total de la commande (frais de port inclus): %s €<br><br>
 
-
-               Bonjour %s,<br>
-
-               Nous avons le plaisir de vous confirmer votre inscription pour %s personne%s au cours suivant :<br>
-               Réservation n°: %s<br>
-               %s %s<br>
-               %s<br>
-               %s <br>
-               %s min<br><br>
+                Adresse de livraison : %s<br><br>
+                Adresse de facturation : %s<br><br><br>
 
 
-               Votre nouveau solde de cours est de : %s cours. <br>
-
-               Les tapis sont fournis et des vestiaires sont à votre disposition.
-               Nous vous invitons à vous présenter environ 15 minutes avant le début du cours,
-               munis d’une tenue confortable.<br><br>
-
-               Si ce cours ne vous convenait plus, vous avez la possibilité de l’annuler jusqu’au %s. <br><br>
-
-               Vous pouvez annuler cette réservation en allant sur <a style="font-family : Montserrat;font-size:120%%;color:#3f3f3f;" href="https://cafe-yoga.alwaysdata.net/yoga/annulation/%s">http://cafe-yoga.alwaysdata.net/yoga/annulation/%s</a><br><br>
-
-               Cordialement, <br><br>
-               L'équipe CafeAum   <br>
+               A très bientot, <br>
+               <strong>Organic Azuki</strong>   <br>
                <br>
             </div>
             </html>
-        """%(account.get_first_name(),
-             str(nb_persons),
-             str("s" if nb_persons > 1 else ""),
-             reservation_id,
-             lesson_type,
-             lesson_intensity,
-             lesson_animator,
-             lesson_date,
-             lesson_duration,
-             account.get_str_credits(),
-             cancellation_date.strftime("%A %d %b %Y à %Hh%M"),
-             reservation_id,
-             reservation_id)
+        """%(str(commande.unique_id),
+             articles_detail,
+             str(commande.transaction.montant),
+             commande.adresse_livraison,
+             commande.adresse_facturation)
 
         return send_email(staff_email.noreply(),
                           account.get_email(),
@@ -266,322 +247,47 @@ Vous serez tenu(e) au courant de l’expédition de votre commande.
 class CommandConfirmationToStaffEmailView(views.APIView):
     def post(self, request, format=None):
         data = json.loads(request.body)
-        json_lesson = data['lesson']
+
         json_account = data['account']
-        nb_persons = data['nb_persons']
+        json_commande = data['commande']
 
         account = Account.objects.get(id=json_account['id'])
+        commande = Commande.objects.get(id=json_commande['id'])
 
         staff_email = getEmails()
 
-        subject = "Yoga - Nouvelle réservation de cours n°%s" % reservation_id
-        message_content = """
+        subject = u"Nouvelle commande n°%s"%commande.unique_id
+        message_content = u"""
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
             <html>
             <head>
             <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-            <title>Confirmation de réservation</title>
+            <title>Nouvelle commande</title>
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
             <style>
                * {font-family: Montserrat, sans-serif;}
             </style>
             </head>
             <div style="font-family : Montserrat;font-size:120%%;color:#3f3f3f;">
-               Une nouvelle réservation de cours a été effectuée en ligne : <br> <br>
-
-               Réservation n° : %s <br>
-               %s %s <br>
-               %s personne%s <br>
-               %s %s <br>
-               %s <br>
-               %s <br>
-               %s min<br>
+                <h3>Nouvelle commande</h3>
+                   Une nouvelle commande (n° %s) a été effectuée par %s %s
                <br>
             </div>
             </html>
-        """%(reservation_id,
+        """%(commande.unique_id,
              account.get_first_name(),
-             account.get_last_name(),
-             str(nb_persons),
-             str("s" if nb_persons > 1 else ""),
-             lesson_type,
-             lesson_intensity,
-             lesson_animator,
-             lesson_date,
-             lesson_duration)
+             account.get_last_name(),)
 
         return send_email(staff_email.noreply(),
                           staff_email.noreply(),
                           message_content,
                           subject)
-
-
-class YogaCancellationToCustomerEmailView(views.APIView):
-
-    def post(self, request, format=None):
-        data = json.loads(request.body)
-        json_lesson = data['lesson']
-        json_account = data['account']
-        nb_persons = data['nb_persons']
-        reservation_id = data['reservation_id']
-
-        lesson_type = json_lesson['type']['nom']
-        lesson_intensity = json_lesson['intensity']['nom']
-        lesson_animator = json_lesson['animator']['prenom'] + " " + json_lesson['animator']['nom']
-        lesson_date = str(parse_datetime(json_lesson['date']).strftime("%A %d %b %Y à %Hh%M"))
-        lesson_duration = json_lesson['duration']
-
-        account = Account.objects.get(id=json_account['id'])
-
-        staff_email = getEmails()
-
-        subject = "Yoga - Annulation de votre réservation n°%s" % reservation_id
-        message_content = """
-            <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-            <html>
-            <head>
-            <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-            <title>Confirmation de réservation</title>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-            <style>
-               * {font-family: Montserrat, sans-serif;}
-            </style>
-            </head>
-            <div style="font-family : Montserrat;font-size:120%%;color:#3f3f3f;">
-            Bonjour %s,<br>
-
-            Votre inscription pour %s personne%s au cours suivant a bien été annulée :<br>
-            Numéro de réservation : %s<br>
-            %s %s <br>
-            %s <br>
-            %s <br>
-            %s min<br><br>
-
-            Votre nouveau solde de cours : %s cours.<br><br>
-
-            Cordialement,<br><br>
-
-            L’équipe de Café Yoga<br><br>
-
-            <br>
-            </div>
-            </html>
-        """%(account.get_first_name(),
-             str(nb_persons),
-             str("s" if nb_persons > 1 else ""),
-             reservation_id,
-             lesson_type,
-             lesson_intensity,
-             lesson_animator,
-             lesson_date,
-             lesson_duration,
-             account.get_str_credits())
-
-        return send_email(staff_email.noreply(),
-                          account.get_email(),
-                          message_content,
-                          subject)
-
-
-class YogaCancellationToStaffEmailView(views.APIView):
-
-    def post(self, request, format=None):
-        data = json.loads(request.body)
-        json_lesson = data['lesson']
-        json_account = data['account']
-
-        lesson_type = json_lesson['type']['nom']
-        lesson_intensity = json_lesson['intensity']['nom']
-        lesson_animator = json_lesson['animator']['prenom'] + " " + json_lesson['animator']['nom']
-        lesson_date = str(parse_datetime(json_lesson['date']).strftime("%A %d %b %Y à %Hh%M"))
-        lesson_duration = json_lesson['duration']
-
-        nb_persons = data['nb_persons']
-        account = Account.objects.get(id=json_account['id'])
-
-        reservation_id = data['reservation_id']
-
-        staff_email = getEmails()
-
-        subject = "Yoga - annulation de la réservation n°%s" % reservation_id
-        message_content = """
-            <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-            <html>
-            <head>
-            <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-            <title>Confirmation de réservation</title>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-            <style>
-               * {font-family: Montserrat, sans-serif;}
-            </style>
-            </head>
-            <div style="font-family : Montserrat;font-size:120%%;color:#3f3f3f;">
-            La réservation suivante vient d’être annulée :<br><br>
-
-            Numéro de réservation : %s<br>
-            %s %s<br>
-            %s personne%s<br>
-            %s %s<br>
-            %s<br>
-            %s<br>
-            %s min<br>
-            <br>
-            </div>
-            </html>
-        """%(str(reservation_id),
-             account.get_first_name(),
-             account.get_last_name(),
-             str(nb_persons),
-             str("s" if nb_persons > 1 else ""),
-             lesson_type,
-             lesson_intensity,
-             lesson_animator,
-             lesson_date,
-             lesson_duration)
-
-        return send_email(staff_email.noreply(),
-                          staff_email.noreply(),
-                          message_content,
-                          subject)
-
-
-class RestaurantReservationToStaffEmailView(views.APIView):
-
-    def post(self, request, format=None):
-        data = json.loads(request.body)
-
-        personal_information = data['personal_information']
-        reservation_information = data['reservation_information']
-
-        staff_email = getEmails()
-
-        subject = "Restaurant - Nouvelle demande de réservation [%s]" % reservation_information["human_date"]
-        message_content = """
-            <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-            <html>
-            <head>
-            <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-            <title>Demande de contact 2</title>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-            </head>
-            <p style="font-family : Montserrat;font-size:130%%;">
-               CafeAum,<br><br>
-               Une nouvelle demande de réservation vient d’être effectuée :<br>
-               Numéro de réservation : %s<br>
-               Nom: %s<br>
-               Email : %s %s <br>
-               Date : %s à %s<br>
-               Pour: %s personne%s<br>
-               %s
-               <br><br>
-            </p>
-            </html>
-        """%(reservation_information["reservation_id"],
-             personal_information["name"],
-             personal_information["email"],
-             " / tel : %s" % personal_information["tel"] if personal_information["tel"] != "" else "",
-             reservation_information["human_date"],
-             reservation_information["hour"],
-             reservation_information["nb_persons"],
-             "s" if int(reservation_information["nb_persons"]) > 1 else "",
-             "Son commentaire : <br> \"%s\""%('<br>'.join(personal_information["comment"].splitlines())) if personal_information["comment"] != "" else "",
-             )
-
-        sg = sendgrid.SendGridAPIClient(apikey=getApiKey())
-
-        from_email = Email(staff_email.noreply())
-        to_email = Email(staff_email.contact())
-        content = Content("text/html", message_content)
-        mail = Mail(from_email, subject, to_email, content)
-
-        response = sg.client.mail.send.post(request_body=mail.get())
-
-        if (response.status_code >= 200) and (response.status_code < 300):
-            return Response({
-                'status': 'OK',
-                'message': 'Email sent'
-            }, status=status.HTTP_200_OK)
-        else:
-            return Response({
-                'status': 'KO',
-                'message': 'Error'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-class RestaurantReservationToCustomerEmailView(views.APIView):
-
-    def post(self, request, format=None):
-        data = json.loads(request.body)
-
-        personal_information = data['personal_information']
-        reservation_information = data['reservation_information']
-
-        staff_email = getEmails()
-
-        subject = "Restaurant - Votre demande de réservation"
-        message_content = """
-            <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-            <html>
-            <head>
-            <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-            <title>Demande de contact 2</title>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-            </head>
-            <p style="font-family : Montserrat;font-size:130%%;">
-
-               Cher client,<br><br>
-
-               Votre demande de réservation au restaurant de Café Aum a bien été prise en compte :<br>
-                   Numéro de réservation : %s<br>
-                   Le %s <br>
-                   à %s <br>
-                   pour %s personne%s <br>
-                   %s
-               <br><br>
-
-               Nous vous enverrons, au plus vite, par email, notre réponse à cette demande.
-               Pour un retour encore plus rapide, n’hésitez pas à nous contacter par téléphone.<br><br>
-
-              Cordialement,<br><br>
-
-              L’équipe de Café Aum<br>
-               <br>
-            </p>
-            </html>
-        """%(reservation_information["reservation_id"],
-             reservation_information["human_date"],
-             reservation_information["hour"],
-             reservation_information["nb_persons"],
-             "s" if int(reservation_information["nb_persons"]) > 1 else "",
-             '<br>'.join(personal_information["comment"].splitlines()) if personal_information["comment"] != "" else "",
-             )
-
-        sg = sendgrid.SendGridAPIClient(apikey=getApiKey())
-
-        from_email = Email(staff_email.noreply())
-        to_email = Email(personal_information["email"])
-        content = Content("text/html", message_content)
-        mail = Mail(from_email, subject, to_email, content)
-
-        response = sg.client.mail.send.post(request_body=mail.get())
-
-        if (response.status_code >= 200) and (response.status_code < 300):
-            return Response({
-                'status': 'OK',
-                'message': 'Email sent'
-            }, status=status.HTTP_200_OK)
-        else:
-            return Response({
-                'status': 'KO',
-                'message': 'Error'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ContactEmailView(views.APIView):
 
     def post(self, request, format=None):
         data = json.loads(request.body)
-        print("ContactMessage : %s"%data)
         question = data['question']
         prenom = data['prenom']
         nom = data['nom']
@@ -589,8 +295,6 @@ class ContactEmailView(views.APIView):
         tel = data['tel']
         sujet = data['sujet']
         message = data['message']
-
-        print("ContactMessage")
 
         staff_email = getEmails()
         subject = "Demande de contact : %s"%sujet
@@ -641,7 +345,6 @@ class ContactEmailView(views.APIView):
 
 class PasswordRecoveryEmailView(views.APIView):
     def post(self, request, format=None):
-        print("PasswordRecoveryEmailView")
         data = json.loads(request.body)
 
         email = data['email']
@@ -666,8 +369,7 @@ class PasswordRecoveryEmailView(views.APIView):
                Attention ce lien n'est valide que pour 24h, aussi nous vous recommandons de modifier votre mot de passe dès que possible.<br><br>
 
 
-               L'équipe CafeAum
-               <br>
+               <strong>Organic Azuki</strong><br>
             </p>
             </html>
         """%(token,token)
@@ -692,114 +394,3 @@ class PasswordRecoveryEmailView(views.APIView):
                 'message': 'Error'
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-def send_lesson_cancellation_email(account,
-                                   reservation_id,
-                                   type,
-                                   intensity,
-                                   animator,
-                                   date,
-                                   prix,
-                                   duration,
-                                   nb_personnes):
-    staff_email = getEmails()
-    subject = "Yoga - Annulation de votre réservation n°%s" % reservation_id
-    message_content = """
-         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-         <html>
-         <head>
-         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-         <title>Confirmation de réservation</title>
-         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-         <style>
-            * {font-family: Montserrat, sans-serif;}
-         </style>
-         </head>
-         <div style="font-family : Montserrat;font-size:120%%;color:#3f3f3f;">
-         Bonjour %s,<br>
-
-         Votre inscription pour %s personne%s au cours suivant a bien été annulée :<br>
-         Numéro de réservation : %s<br>
-         %s %s <br>
-         %s <br>
-         %s <br>
-         %s min<br><br>
-
-         Votre nouveau solde de cours : %s cours.<br><br>
-
-         Cordialement,<br><br>
-
-         L’équipe de Café Yoga<br><br>
-
-         <br>
-         </div>
-         </html>
-     """ % (account.get_first_name(),
-            str(nb_personnes),
-            str("s" if nb_personnes > 1 else ""),
-            reservation_id,
-            type,
-            intensity,
-            animator,
-            date,
-            duration,
-            account.get_str_credits())
-
-    return send_email(staff_email.noreply(),
-                      account.get_email(),
-                      message_content,
-                      subject)
-
-
-def send_lesson_modification_email(account,
-                                   reservation_id,
-                                   type,
-                                   intensity,
-                                   animator,
-                                   date,
-                                   old_type,
-                                   old_intensity,
-                                   old_date,
-                                   duration):
-    staff_email = getEmails()
-    subject = "Yoga - Modification de votre cours - Réservation n°" % str(reservation_id)
-    message_content = """
-     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-     <html>
-    <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <title>Modification de cours</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-    </head>
-    <p style="font-family : Montserrat;font-size:130%%;">
-       Bonjour %s,<br><br>
-       Nous vous informons que votre cours du %s (%s %s) vient d'être modifié. <br><br>
-       Nouveau cours : <br><br>
-       %s %s
-       %s
-       %s
-       %s min
-
-       <br><br>
-
-       Vous pouvez, si vous le souhaitez, annuler votre réservation en vous rendant sur <a href='http://cafeaum.fr'>Cafe Aum</a><br>
-
-       <br><br>
-       L'équipe CafeAum.
-       <br>
-    </p>
-    </html>
-    """ % (account.get_first_name(),
-           old_date,
-           old_type,
-           old_intensity,
-           type,
-           intensity,
-           animator,
-           date,
-           duration)
-
-    return send_email(staff_email.noreply(),
-                      account.get_email(),
-                      message_content,
-                      subject)

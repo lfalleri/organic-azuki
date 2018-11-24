@@ -82,7 +82,6 @@
         $scope.data.adresse_de_facturation = undefined;
         $scope.data.adresses = []
         $scope.account.adresses.forEach(function(adresse){
-            console.log("updateAdressesLivraisonFacturation -> adresse : ", adresse);
             if($scope.account.adresses.length == 1){
                 adresse.livraison = true;
                 adresse.facturation = true;
@@ -104,8 +103,6 @@
 
     function prepare_commandes(commandes){
         commandes.forEach(function(commande){
-            console.log("Commande : ", commande);
-            console.log("Panier de la commande : ", commande.panier);
 
             // Time difference between commande date and now (in hours)
             var date = new Date(commande.date);
@@ -135,9 +132,6 @@
             if(!$scope.admin.commande_status.includes(commande.etat)){
                 $scope.admin.commande_status.push(commande.etat);
             }
-
-            console.log("Commande : ", commande);
-            console.log("Panier de la commande : ", commande.panier);
 
             // Format Date
             var date = new Date(commande.date);
@@ -171,8 +165,6 @@
     }
 
     $scope.changeCommandStatus = function(commande){
-        console.log("Commande : ", commande);
-        //commande.etat =
     }
 
     activate();
@@ -275,7 +267,6 @@
     }
 
     $scope.selectAdminPanel = function(){
-       console.log("selectAdminPanel");
        $scope.success = "";
        $scope.error = "";
        $scope.state.showUpdateProfile = false;
@@ -285,7 +276,6 @@
        $scope.state.showAdminPanel = true;
 
        Shop.getAllCommandes($scope.account.id, function(success, commandes){
-            console.log("All commandes : ", commandes);
             prepare_commandes_for_admin(commandes);
        });
     }
@@ -441,7 +431,6 @@
         //$scope.error = "";
         //$scope.success = "";
         $scope.data.adresses.forEach(function(adresse){
-            console.log("Sauvegarde de l'adresse : ", adresse);
             if(adresse.newAdresse){
                 Authentication.createAddress($scope.account.id, adresse, function(success, data){
                    if(!success){
@@ -457,7 +446,6 @@
                    }
                    Authentication.requestFullAccount($scope.account.email, function(success, data){
                         $scope.account = data;
-                        console.log("clickSaveAdresse -> New account : ", $scope.account);
                         updateAdressesLivraisonFacturation();
                    });
 
@@ -553,7 +541,6 @@
 
         $http.get(url).then(
          function(data, status, headers, config){
-            console.log(data.status, typeof(data.status));
            if(data.status=="200"){
                var cities = data.data.cities;
                cities.forEach(function(_city){

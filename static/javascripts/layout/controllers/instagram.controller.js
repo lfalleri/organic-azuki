@@ -26,7 +26,6 @@
 
        $http.get('https://api.instagram.com/v1/users/self/media/recent/?access_token='+access_token).then(
          function(data, status, headers, config){
-           console.log(data.data);
            var json = data.data;
 
            for(var i=0;i<5;i++){

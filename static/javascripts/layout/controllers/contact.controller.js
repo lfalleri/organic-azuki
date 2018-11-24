@@ -45,7 +45,6 @@
        if($scope.contact_tel === undefined){
           $scope.contact_tel = '';
        }
-       console.log("Try to send mail from contact page");
        MessagingService.sendEmailFromContactPage(
           $scope.selectedQuestion,
           $scope.contact_prenom,

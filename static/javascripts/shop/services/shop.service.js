@@ -63,12 +63,10 @@
        return $http.get('api/v1/shop/collection/')
            .then(
                function(data, status, headers, config){
-                   console.log("OK : ",data.data);
                    callback(true, data.data);
                },
                function(data, status, headers, config){
-                   console.log("KO :", data.data);
-                  callback(false, undefined);
+                   callback(false, undefined);
                }
            );
     }
@@ -77,12 +75,10 @@
         return $http.get('api/v1/shop/allReferences/')
            .then(
                function(data, status, headers, config){
-                   console.log("OK : ",data.data);
                    callback(true, data.data);
                },
                function(data, status, headers, config){
-                   console.log("KO :", data.data);
-                  callback(false, undefined);
+                   callback(false, undefined);
                }
            );
     }
@@ -104,12 +100,10 @@
         return $http.get('api/v1/shop/modeDeLivraison/')
            .then(
                function(data, status, headers, config){
-                   console.log("OK : ",data.data);
                    callback(true, data.data);
                },
                function(data, status, headers, config){
-                   console.log("KO :", data.data);
-                  callback(false, undefined);
+                   callback(false, undefined);
                }
            );
     }
@@ -119,12 +113,10 @@
           params: {code: code}})
            .then(
                function(data, status, headers, config){
-                   console.log("OK : ",data.data);
                    callback(true, data.data);
                },
                function(data, status, headers, config){
-                  console.log("KO :", data.data);
-                  callback(false, undefined);
+                   callback(false, undefined);
                }
            );
     }
@@ -138,11 +130,10 @@
           params: {command:"panier", uuid:uuid}})
            .then(
                function(data, status, headers, config){
-                   //Shop.panier = data.data;
                    callback(true, data.data);
                },
                function(data, status, headers, config){
-                  callback(false, undefined);
+                   callback(false, undefined);
                }
            );
     }
@@ -154,8 +145,6 @@
           if(!angular.equals(account,{})){
               account_id = account.id;
           }
-
-          console.log("createOrGetPanier ==> account_id : ", account_id);
 
           // Create Panier
           return $http.post('/api/v1/shop/panier/', {
@@ -177,7 +166,6 @@
        }else{
           // Get from DB
           var uuid = JSON.parse(storageUuid);
-          console.log("createOrGetPanier ==> Panier exists : ", uuid);
           Shop.getPanierFromDB(uuid, function(success, panier){
               if(success){
                   $cookies.panier = JSON.stringify(panier.uuid);
@@ -320,9 +308,6 @@
     }
 
     function addArticleToPanierFromController(reference, quantite, taille, callback){
-        console.log("addArticleToPanierFromController ==> reference=",reference,
-                                                          "quantite=",quantite,
-                                                          "taille=", taille);
         var account;
         Authentication.getFullAccount(function(value){
            account = value;
@@ -349,7 +334,6 @@
     }
 
     function removeArticleFromPanierFromController(article, callback){
-        console.log("removeArticleToPanierFromController ==> article=",article);
         var account;
         Authentication.getFullAccount(function(value){
            account = value;
@@ -377,7 +361,6 @@
      *        Transaction & Commandes API              *
      *-------------------------------------------------*/
     function proceedTransaction(account_id, panier_uuid,  montant, token, callback){
-        console.log("proceedTransaction : total=", account_id, montant, token);
         return $http.post('api/v1/shop/transaction/', {
             command:"charge",
             account_id: account_id,

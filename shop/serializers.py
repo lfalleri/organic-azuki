@@ -40,12 +40,13 @@ class ReferencePhotoSerializer(serializers.ModelSerializer):
 
 
 class ReferenceSerializer(serializers.ModelSerializer):
-    #mot_cles = MotCleSerializer(many=True, read_only=True)
+    mot_cles = MotCleSerializer(many=True, read_only=True)
     images = ReferencePhotoSerializer(many=True)
 
     class Meta:
         model = Reference
         fields = ('id',
+                  'type_de_reference',
                   'nom',
                   'description',
                   'short_description',
@@ -59,8 +60,16 @@ class ReferenceSerializer(serializers.ModelSerializer):
                   'xl_restants',
                   'xxl_restants',
                   'images',
-                  #'mot_cles',
+                  'mot_cles',
+                  'un_an_restants',
+                  'deux_ans_restants',
+                  'trois_ans_restants',
+                  'quatre_ans_restants',
+                  'cinq_6ans_restants',
+                  'sept_8ans_restants',
+                  'restants',
                   )
+
 
 class ArticleSerializer(serializers.ModelSerializer):
     reference = ReferenceSerializer()

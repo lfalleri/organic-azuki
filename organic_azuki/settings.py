@@ -114,7 +114,7 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 

@@ -44,69 +44,21 @@ class MotCle(models.Model):
 
 
 class Reference(models.Model):
+    REFERENCE_ADULTE = 'ADULTE'
+    REFERENCE_ENFANT = 'ENFANT'
+    REFERENCE_TAILLE_UNIQUE = 'TAILLE_UNIQUE'
+    TYPE_DE_REFERENCE = (
+        (REFERENCE_ADULTE, 'ADULTE'),
+        (REFERENCE_ENFANT, 'ENFANT'),
+        (REFERENCE_TAILLE_UNIQUE,'TAILLE_UNIQUE'),
+    )
+
+    type_de_reference = models.CharField(max_length=16, choices=TYPE_DE_REFERENCE, default=REFERENCE_ADULTE)
     nom = models.CharField(max_length=40)
     description = models.TextField(default="")
     short_description = models.CharField(max_length=128)
     prix = models.FloatField()
     color = models.CharField(max_length=32)
-
-    categorie = models.ForeignKey(Categorie, related_name="references")
-    mot_cles = models.ManyToManyField(MotCle)
-
-    def __str__(self):
-        return ' | '.join([self.nom,
-                           str(self.prix) + "€",
-                           ])
-
-    def __unicode__(self):
-        return ' | '.join([self.nom,
-                           str(self.prix) + "€",
-                           ])
-
-
-#class Reference(models.Model):
-    # nom = models.CharField(max_length=40)
-    # description = models.TextField(default="")
-    # short_description = models.CharField(max_length=128)
-    # prix = models.FloatField()
-    # color = models.CharField(max_length=32)
-    # xxs_restants = models.IntegerField(default=0)
-    # xs_restants = models.IntegerField(default=0)
-    # s_restants = models.IntegerField(default=0)
-    # m_restants = models.IntegerField(default=0)
-    # l_restants = models.IntegerField(default=0)
-    # xl_restants = models.IntegerField(default=0)
-    # xxl_restants = models.IntegerField(default=0)
-    #
-    # categorie = models.ForeignKey(Categorie, related_name="references")
-    # mot_cles = models.ManyToManyField(MotCle)
-    #
-    # def __str__(self):
-    #     return ' | '.join([self.nom,
-    #                        str(self.prix) + "€",
-    #                        str(self.xxs_restants) + "XXS",
-    #                        str(self.xs_restants) + "XS",
-    #                        str(self.s_restants) + "S",
-    #                        str(self.m_restants) + "M",
-    #                        str(self.l_restants) + "L",
-    #                        str(self.xl_restants) + "XL",
-    #                        str(self.xxl_restants) + "XXL",
-    #                        ])
-    #
-    # def __unicode__(self):
-    #     return ' | '.join([self.nom,
-    #                        str(self.prix) + "€",
-    #                        str(self.xxs_restants) + "XXS",
-    #                        str(self.xs_restants) + "XS",
-    #                        str(self.s_restants) + "S",
-    #                        str(self.m_restants) + "M",
-    #                        str(self.l_restants) + "L",
-    #                        str(self.xl_restants) + "XL",
-    #                        str(self.xxl_restants) + "XXL",
-    #                        ])
-
-
-class ReferenceAdulte(Reference):
 
     xxs_restants = models.IntegerField(default=0)
     xs_restants = models.IntegerField(default=0)
@@ -116,77 +68,73 @@ class ReferenceAdulte(Reference):
     xl_restants = models.IntegerField(default=0)
     xxl_restants = models.IntegerField(default=0)
 
-    def __str__(self):
-        return ' | '.join([self.nom,
-                           str(self.prix) + "€",
-                           str(self.xxs_restants) + "XXS",
-                           str(self.xs_restants) + "XS",
-                           str(self.s_restants) + "S",
-                           str(self.m_restants) + "M",
-                           str(self.l_restants) + "L",
-                           str(self.xl_restants) + "XL",
-                           str(self.xxl_restants) + "XXL",
-                           ])
-
-    def __unicode__(self):
-        return ' | '.join([self.nom,
-                           str(self.prix) + "€",
-                           str(self.xxs_restants) + "XXS",
-                           str(self.xs_restants) + "XS",
-                           str(self.s_restants) + "S",
-                           str(self.m_restants) + "M",
-                           str(self.l_restants) + "L",
-                           str(self.xl_restants) + "XL",
-                           str(self.xxl_restants) + "XXL",
-                           ])
-
-class ReferenceEnfant(Reference):
-    _1an_restants = models.IntegerField(default=0)
-    _2ans_restants = models.IntegerField(default=0)
-    _3ans_restants = models.IntegerField(default=0)
-    _4ans_restants = models.IntegerField(default=0)
-    _5_6ans_restants = models.IntegerField(default=0)
-    _7_8ans_restants = models.IntegerField(default=0)
-
-    def __str__(self):
-        return ' | '.join([self.nom,
-                           str(self.prix) + "€",
-                           str(self._12mois_restants) + " 12 mois",
-                           str(self._12mois_restants) + " 24 mois",
-                           str(self._12mois_restants) + " 3 ans",
-                           str(self._12mois_restants) + " 4 ans",
-                           str(self._12mois_restants) + " 5-6 ans",
-                           str(self._12mois_restants) + " 7-8 ans",
-                           ])
-
-    def __unicode__(self):
-        return ' | '.join([self.nom,
-                           str(self.prix) + "€",
-                           str(self._12mois_restants) + " 12 mois",
-                           str(self._12mois_restants) + " 24 mois",
-                           str(self._12mois_restants) + " 3 ans",
-                           str(self._12mois_restants) + " 4 ans",
-                           str(self._12mois_restants) + " 5 ans",
-                           str(self._12mois_restants) + " 6 ans",
-                           ])
-
-
-class ReferenceTailleUnique(Reference):
+    un_an_restants = models.IntegerField(default=0)
+    deux_ans_restants = models.IntegerField(default=0)
+    trois_ans_restants = models.IntegerField(default=0)
+    quatre_ans_restants = models.IntegerField(default=0)
+    cinq_6ans_restants = models.IntegerField(default=0)
+    sept_8ans_restants = models.IntegerField(default=0)
 
     restants = models.IntegerField(default=0)
+
+    categorie = models.ForeignKey(Categorie, related_name="references")
+    mot_cles = models.ManyToManyField(MotCle)
+
     def __str__(self):
-        return ' | '.join([self.nom,
-                           str(self.prix) + "€",
-                           str(self.restants) + " pièces",
-                           ])
+        if self.type_de_reference == Reference.REFERENCE_ADULTE:
+            return ' | '.join([self.nom,
+                               str(self.prix) + "€",
+                               str(self.xxs_restants) + "XXS",
+                               str(self.xs_restants) + "XS",
+                               str(self.s_restants) + "S",
+                               str(self.m_restants) + "M",
+                               str(self.l_restants) + "L",
+                               str(self.xl_restants) + "XL",
+                               str(self.xxl_restants) + "XXL",
+                               ])
+        elif self.type_de_reference == Reference.REFERENCE_ENFANT:
+            return ' | '.join([self.nom,
+                               str(self.prix) + "€",
+                               str(self.un_an_restants) + " 12 mois",
+                               str(self.deux_ans_restants) + " 24 mois",
+                               str(self.trois_ans_restants) + " 3 ans",
+                               str(self.quatre_ans_restants) + " 4 ans",
+                               str(self.cinq_6ans_restants) + " 5-6 ans",
+                               str(self.sept_8ans_restants) + " 7-8 ans",
+                               ])
+        else:
+            return ' | '.join([self.nom,
+                               str(self.prix) + "€",
+                               str(self.restants) + " pièces",
+                               ])
 
     def __unicode__(self):
-        return ' | '.join([self.nom,
-                           str(self.prix) + "€",
-                           str(self.restants) + " pièces",
-                           ])
-
-
+        if self.type_de_reference == Reference.REFERENCE_ADULTE:
+            return ' | '.join([self.nom,
+                               str(self.prix) + "€",
+                               str(self.xxs_restants) + "XXS",
+                               str(self.xs_restants) + "XS",
+                               str(self.s_restants) + "S",
+                               str(self.m_restants) + "M",
+                               str(self.l_restants) + "L",
+                               str(self.xl_restants) + "XL",
+                               str(self.xxl_restants) + "XXL",
+                               ])
+        elif self.type_de_reference == Reference.REFERENCE_ENFANT:
+            return ' | '.join([self.nom,
+                               str(self.prix) + "€",
+                               str(self.un_an_restants) + " 12 mois",
+                               str(self.deux_ans_restants) + " 24 mois",
+                               str(self.trois_ans_restants) + " 3 ans",
+                               str(self.quatre_ans_restants) + " 4 ans",
+                               str(self.cinq_6ans_restants) + " 5-6 ans",
+                               str(self.sept_8ans_restants) + " 7-8 ans",
+                               ])
+        else:
+            return ' | '.join([self.nom,
+                               str(self.prix) + "€",
+                               str(self.restants) + " pièces",
+                               ])
 
 
 class TypeDePhoto(models.Model):
@@ -230,20 +178,37 @@ class PanierManager(models.Manager):
 
         panier.articles.create(reference=reference, taille=taille, quantite=quantite)
 
-        if taille == 'XXS':
-            reference.xxs_restants -= quantite
-        if taille == 'XS':
-            reference.xs_restants -= quantite
-        if taille == 'S':
-            reference.s_restants -= quantite
-        if taille == 'M':
-            reference.m_restants -= quantite
-        if taille == 'L':
-            reference.l_restants -= quantite
-        if taille == 'XL':
-            reference.xl_restants -= quantite
-        if taille == 'XXL':
-            reference.xxl_restants -= quantite
+        if reference.type_de_reference == Reference.REFERENCE_ADULTE:
+            if taille == Article.TAILLE_XXS:
+                reference.xxs_restants -= quantite
+            elif taille == Article.TAILLE_XS:
+                reference.xs_restants -= quantite
+            elif taille == Article.TAILLE_S:
+                reference.s_restants -= quantite
+            elif taille == Article.TAILLE_M:
+                reference.m_restants -= quantite
+            elif taille == Article.TAILLE_L:
+                reference.l_restants -= quantite
+            elif taille == Article.TAILLE_XL:
+                reference.xl_restants -= quantite
+            elif taille == Article.TAILLE_XXL:
+                reference.xxl_restants -= quantite
+        elif reference.type_de_reference == Reference.REFERENCE_ENFANT:
+            if taille == Article.TAILLE_1AN:
+                reference.un_an_restants -= quantite
+            elif taille == Article.TAILLE_2ANS:
+                reference.deux_ans_restants -= quantite
+            elif taille == Article.TAILLE_3ANS:
+                reference.trois_ans_restants -= quantite
+            elif taille == Article.TAILLE_4ANS:
+                reference.quatre_ans_restants -= quantite
+            elif taille == Article.TAILLE_5_6ANS:
+                reference.cinq_6ans_restants -= quantite
+            elif taille == Article.TAILLE_7_8ANS:
+                reference.sept_8ans_restants -= quantite
+        elif reference.type_de_reference == Reference.REFERENCE_TAILLE_UNIQUE:
+            reference.restants -= quantite
+
         reference.save()
 
         return reference
@@ -260,20 +225,36 @@ class PanierManager(models.Manager):
 
         panier = panier[0]
 
-        if taille == 'XXS':
-            reference.xxs_restants += quantite
-        if taille == 'XS':
-            reference.xs_restants += quantite
-        if taille == 'S':
-            reference.s_restants += quantite
-        if taille == 'M':
-            reference.m_restants += quantite
-        if taille == 'L':
-            reference.l_restants += quantite
-        if taille == 'XL':
-            reference.xl_restants += quantite
-        if taille == 'XXL':
-            reference.xxl_restants += quantite
+        if reference.type_de_reference == Reference.REFERENCE_ADULTE:
+            if taille == Article.TAILLE_XXS:
+                reference.xxs_restants += quantite
+            elif taille == Article.TAILLE_XS:
+                reference.xs_restants += quantite
+            elif taille == Article.TAILLE_S:
+                reference.s_restants += quantite
+            elif taille == Article.TAILLE_M:
+                reference.m_restants += quantite
+            elif taille == Article.TAILLE_L:
+                reference.l_restants += quantite
+            elif taille == Article.TAILLE_XL:
+                reference.xl_restants += quantite
+            elif taille == Article.TAILLE_XXL:
+                reference.xxl_restants += quantite
+        elif reference.type_de_reference == Reference.REFERENCE_ENFANT:
+            if taille == Article.TAILLE_1AN:
+                reference.un_an_restants += quantite
+            elif taille == Article.TAILLE_2ANS:
+                reference.deux_ans_restants += quantite
+            elif taille == Article.TAILLE_3ANS:
+                reference.trois_ans_restants += quantite
+            elif taille == Article.TAILLE_4ANS:
+                reference.quatre_ans_restants += quantite
+            elif taille == Article.TAILLE_5_6ANS:
+                reference.cinq_6ans_restants += quantite
+            elif taille == Article.TAILLE_7_8ANS:
+                reference.sept_8ans_restants += quantite
+        elif reference.type_de_reference == Reference.REFERENCE_ENFANT:
+            reference.restants += quantite
         reference.save()
         article.delete()
 
@@ -325,6 +306,17 @@ class Panier(models.Model):
 
 
 class Article(models.Model):
+
+    class Meta:
+        ordering = ('panier',)
+
+    TAILLE_1AN = '1 an'
+    TAILLE_2ANS = '2 ans'
+    TAILLE_3ANS = '3 ans'
+    TAILLE_4ANS = '4 ans'
+    TAILLE_5_6ANS = '5-6 ans'
+    TAILLE_7_8ANS = '7-8 ans'
+
     TAILLE_XXS = 'XXS'
     TAILLE_XS = 'XS'
     TAILLE_S = 'S'
@@ -332,6 +324,8 @@ class Article(models.Model):
     TAILLE_L = 'L'
     TAILLE_XL = 'XL'
     TAILLE_XXL = 'XXL'
+
+    TAILLE_UNIQUE = 'Taille unique'
     TAILLE = (
         (TAILLE_XXS, 'XXS'),
         (TAILLE_XS, 'XS'),
@@ -340,6 +334,14 @@ class Article(models.Model):
         (TAILLE_L, 'L'),
         (TAILLE_XL, 'XL'),
         (TAILLE_XXL, 'XXL'),
+
+        (TAILLE_1AN, '1 an'),
+        (TAILLE_2ANS, '2 ans'),
+        (TAILLE_3ANS, '3 ans'),
+        (TAILLE_4ANS, '4 ans'),
+        (TAILLE_5_6ANS, '5-6 ans'),
+        (TAILLE_7_8ANS, '7-8 ans' ),
+        (TAILLE_UNIQUE, 'Taille unique'),
     )
     reference = models.ForeignKey(Reference, related_name="reference")
     panier = models.ForeignKey(Panier, related_name="articles")
@@ -347,10 +349,10 @@ class Article(models.Model):
     quantite = models.IntegerField(default=1)
 
     def __str__(self):
-        return ' | '.join([unicode(self.reference), str(self.taille), str(self.quantite)])
+        return ' | '.join([unicode(self.reference), str(self.taille), str(self.quantite), str(self.panier)])
 
     def __unicode__(self):
-        return ' | '.join([unicode(self.reference), str(self.taille), str(self.quantite)])
+        return ' | '.join([unicode(self.reference), str(self.taille), str(self.quantite), str(self.panier)])
 
 
 class ModeDeLivraison(models.Model):
@@ -478,6 +480,9 @@ class Commande(models.Model):
 
     def __str__(self):
         return ' '.join([str(self.account), str(self.panier), str(self.date)])
+
+    def get_articles(self, uuid):
+        return self.panier.objects.get_articles(uuid)
 
 
 @receiver(pre_delete, sender=Panier)

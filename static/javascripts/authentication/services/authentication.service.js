@@ -92,12 +92,8 @@
         Authentication.login(email, password, false, function(success, message){
            if(success){
               MessagingService.sendAccountCreationEmail(email, function(){});
-              console.log("APres Send Mail");
               if(Authentication.backTo !== undefined){
-                  console.log("BackTo : ", Authentication.backTo);
                   var to = Authentication.backTo;
-                  //Authentication.backTo = undefined;
-                  console.log("Authentication.backTo : ",to);
                   $location.url(to);
               }else{
                   $rootScope.back();
@@ -141,7 +137,6 @@
             Authentication.fullAccount = fullAccount;
         });
         if(Authentication.backTo !== undefined){
-           console.log("BackTo : ", Authentication.backTo);
            var to = Authentication.backTo;
            //Authentication.backTo = undefined;
            $location.url(to);
@@ -178,7 +173,6 @@
          Authentication.unauthenticate();
          Authentication.fullAccount = {};
          window.localStorage.removeItem('fullAccount');
-         //window.location = '/';
          if(back){
             $rootScope.back();
          }
@@ -197,7 +191,6 @@
     }
 
     function checkPassword(account_id, password, callback){
-       console.log("checkPassword : ",password);
        return $http.post('/api/v1/auth/check-password/', {
           account_id: account_id,
           password:password,
@@ -354,7 +347,6 @@
        return $http.post('/api/v1/auth/fullaccount/', {
           email: email
        }).then(function(data, status, headers, config){
-          console.log("requestFullAccount SUCCESS : ", data.data)
           Authentication.fullAccount = data.data;
           window.localStorage.setItem('fullAccount', JSON.stringify(Authentication.fullAccount));
           $cookies.authenticatedAccount = JSON.stringify(Authentication.fullAccount);
@@ -362,7 +354,6 @@
           return Authentication.fullAccount;
        }, function(data, status, headers, config) {
           callback(false, data.data);
-          console.log("requestFullAccount FAILURE : ", data.data);
        });
     }
 
@@ -435,13 +426,11 @@
     function getRegistrationInfo(){return Authentication.registerInfo;}
 
     function gotoLoginAndBackTo(back){
-        console.log("gotoLoginAndBackTo : ", back);
         Authentication.backTo = back;
         $location.url('/monespace');
     }
 
     function setBackToAfterLogin(back){
-     console.log("setBackToAfterLogin : ", back);
         Authentication.backTo = back;
     }
 

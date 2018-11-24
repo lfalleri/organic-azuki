@@ -254,7 +254,6 @@ class CheckPasswordView(views.APIView):
         account = Account.objects.get(id=account_id)
 
         password = data['password']
-        print("CheckPasswordView : password  %s" % password)
         if not account.check_password(password):
             return Response({
                 'status': 'Unauthorized',
@@ -342,43 +341,26 @@ class UpdateNewPasswordView(views.APIView):
 class AddressesView(views.APIView):
 
     def new_address(self, account, data):
-        print("new_address %s"%data)
-
-        print("Account : %s"%account)
-
         data_adresse = data['adresse']
-        print("new_address(data_adresse : %s)\n"%data_adresse)
-        try:
-            adresse = Adresse.objects.create_adresse(account,
-                                                     data_adresse['description'],
-                                                     data_adresse['prenom'],
-                                                     data_adresse['nom'],
-                                                     data_adresse['adresse'],
-                                                     data_adresse['complement_adresse'],
-                                                     data_adresse['code_postal'],
-                                                     data_adresse['ville'],
-                                                     data_adresse['pays'],
-                                                     data_adresse['livraison'],
-                                                     data_adresse['facturation'])
-        except Exception as e:
-            print(e)
 
-        print("Nouvelle adresse creee : %s"%adresse)
-        print("Account update : %s"%account)
-        #try:
-        #    account.save()
-        #except Exception as e:
-        #    print(e)
-        #print("Account saved : %s"%account)
+        adresse = Adresse.objects.create_adresse(account,
+                                                 data_adresse['description'],
+                                                 data_adresse['prenom'],
+                                                 data_adresse['nom'],
+                                                 data_adresse['adresse'],
+                                                 data_adresse['complement_adresse'],
+                                                 data_adresse['code_postal'],
+                                                 data_adresse['ville'],
+                                                 data_adresse['pays'],
+                                                 data_adresse['livraison'],
+                                                 data_adresse['facturation'])
+
+
         return Response({}, status=status.HTTP_200_OK)
 
 
     def update_address(self, account, data):
-        print("update_address %s"%data)
-
         data_adresse = data['adresse']
-        print("data_adresse : %s"%data_adresse)
-
         adresse_id = data_adresse['id']
         adresse = Adresse.objects.get(id=adresse_id)
         if not adresse:
@@ -399,9 +381,6 @@ class AddressesView(views.APIView):
         adresse.facturation = data_adresse['facturation']
 
         adresse.save()
-
-        print("Adresse updatee sauvee : %s"%adresse)
-        print("Pour account : %s"%account)
         return Response({}, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
@@ -409,7 +388,6 @@ class AddressesView(views.APIView):
 
         account_id = data['account_id']
 
-        print("account_id : %s"%str(account_id))
         account = Account.objects.get(id=account_id)
         if not account:
             return Response({
@@ -424,17 +402,10 @@ class AddressesView(views.APIView):
             return self.update_address(account, data)
 
     def delete(self, request, format=None):
-
-        try:
-            adresse_id = request.query_params['adresse_id']
-            adresse = Adresse.objects.get(id=adresse_id)
-            adresse.delete()
-        except Exception as e:
-            print(e)
-
+        adresse_id = request.query_params['adresse_id']
+        adresse = Adresse.objects.get(id=adresse_id)
+        adresse.delete()
         return Response(status=status.HTTP_200_OK)
-
-
 
 
 class SettingsView(views.APIView):

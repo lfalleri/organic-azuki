@@ -1,8 +1,6 @@
 from django.contrib import admin
 from .models \
-    import ReferenceAdulte, \
-           ReferenceEnfant, \
-           ReferenceTailleUnique, \
+    import Reference,\
            ReferencePhoto, \
            Collection, \
            Categorie, \
@@ -16,9 +14,7 @@ from .models \
            Transaction,\
            Commande
 
-admin.site.register(ReferenceAdulte)
-admin.site.register(ReferenceEnfant)
-admin.site.register(ReferenceTailleUnique)
+admin.site.register(Reference)
 admin.site.register(Article)
 admin.site.register(ReferencePhoto)
 admin.site.register(Collection)

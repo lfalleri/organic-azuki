@@ -95,7 +95,6 @@
            $scope.data.references.push(reference);
        });
        $scope.state.loading = false;
-       console.log("Categorie : ", categorie);
     }
 
     $scope.selectAllCategories = function(){
@@ -154,9 +153,6 @@
               });
               $scope.state.loading = false;
            }
-           console.log("Collection : ", collection);
-           console.log("Categories : ", $scope.data.categories);
-           console.log("References : ", $scope.data.references);
         });
     }
 
@@ -170,14 +166,7 @@
         );
     }
 
-    $scope.clickSeeReferenceDetail = function(reference){
-        $scope.data.detailed_reference = reference;
-        console.log("Details : ",$scope.data.detailed_reference);
-        detailed_img = document.createElement('img');
-
-        detailed_img.src = reference.primary_photo.main_image;
-        detailed_img.onload = drawCanvasOnLoad;
-        $scope.data.tailles = [];
+    function buildTaillesAdultes(reference) {
         if(reference.xxs_restants > 0){
             $scope.data.tailles.push('XXS');
         }
@@ -199,8 +188,52 @@
         if(reference.xxl_restants > 0){
             $scope.data.tailles.push('XXL');
         }
+    }
 
-        console.log("Tailles : ", $scope.data.tailles);
+    function buildTaillesEnfants(reference) {
+        if(reference.un_an_restants > 0){
+            $scope.data.tailles.push('1 an');
+        }
+        if(reference.deux_ans_restants > 0){
+            $scope.data.tailles.push('2 ans');
+        }
+        if(reference.trois_ans_restants > 0){
+            $scope.data.tailles.push('3 ans');
+        }
+        if(reference.quatre_ans_restants > 0){
+            $scope.data.tailles.push('4 ans');
+        }
+        if(reference.cinq_6ans_restants > 0){
+            $scope.data.tailles.push('5-6 ans');
+        }
+        if(reference.sept_8ans_restants > 0){
+            $scope.data.tailles.push('7-8 ans');
+        }
+    }
+
+    $scope.clickSeeReferenceDetail = function(reference) {
+        $scope.data.detailed_reference = reference;
+        detailed_img = document.createElement('img');
+
+        detailed_img.src = reference.primary_photo.main_image;
+        detailed_img.onload = drawCanvasOnLoad;
+        $scope.data.selected_taille = undefined;
+        $scope.data.tailles = [];
+
+        if(reference.type_de_reference === 'ADULTE'){
+            buildTaillesAdultes(reference);
+        }
+        else if(reference.type_de_reference === 'ENFANT'){
+            buildTaillesEnfants(reference);
+        }else if(reference.type_de_reference === 'TAILLE_UNIQUE'){
+
+            var min = Math.min($scope.data.detailed_reference.restants, 10);
+            $scope.data.quantites = [];
+            for(var i=1;i<=min;i++){
+                $scope.data.quantites.push(i);
+            }
+            $scope.data.selected_quantite = 1;
+        }
     }
 
     $scope.selectedTailleChanged = function(){
@@ -219,6 +252,18 @@
             min = $scope.data.detailed_reference.xl_restants;
         }else if($scope.data.selected_taille === 'XXL'){
             min = $scope.data.detailed_reference.xxl_restants;
+        }else if($scope.data.selected_taille === '1 an'){
+            min = $scope.data.detailed_reference.un_an_restants;
+        }else if($scope.data.selected_taille === '2 ans'){
+            min = $scope.data.detailed_reference.deux_ans_restants;
+        }else if($scope.data.selected_taille === '3 ans'){
+            min = $scope.data.detailed_reference.trois_ans_restants;
+        }else if($scope.data.selected_taille === '4 ans'){
+            min = $scope.data.detailed_reference.quatre_ans_restants;
+        }else if($scope.data.selected_taille === '5-6 ans'){
+            min = $scope.data.detailed_reference.cinq_6ans_restants;
+        }else if($scope.data.selected_taille === '7-8 ans'){
+            min = $scope.data.detailed_reference.sept_8ans_restants;
         }
 
         min = Math.min(min, 10);
@@ -241,7 +286,9 @@
     }
 
     $scope.clickAddToPanier = function(){
-        if(!$scope.data.selected_taille){
+        if( $scope.data.detailed_reference.type_de_reference === "TAILLE_UNIQUE" ){
+            $scope.data.selected_taille = 'Taille unique';
+        }else if( !$scope.data.selected_taille){
            $scope.error = "Veuillez sélectionner une taille";
            return;
         }
@@ -253,8 +300,6 @@
 
                 if(success){
                     reference = prepare_reference(reference);
-                    console.log("Nouvelle référence : ", reference);
-                    console.log("Index of reference : ", $scope.data.references.indexOf($scope.data.detailed_reference));
                     var index = $scope.data.references.indexOf($scope.data.detailed_reference);
                     $scope.data.references[index] = reference;
                     $scope.clickSeeReferenceDetail(reference);
@@ -270,7 +315,6 @@
                             $scope.data.cout_total += article.quantite * article.reference.prix;
                             $scope.data.articles.push(prepare_article(article));
                         });
-                        console.log("Nombre total d'articles dans le panier : ", $scope.data.articles);
                         $mdSidenav('right').open();
                     });
                 }else{
@@ -284,27 +328,16 @@
 
     $scope.clickRemoveFromPanier = function(article){
         var old_reference = prepare_reference(article.reference);
-        console.log("References avant : ", $scope.data.references);
-        console.log("clickRemoveFromPanier(", article,")");
         Shop.removeArticleFromPanierFromController(
             article,
             function(success, reference){
-                console.log("Référence recue : ", reference);
                 if(success){
                     reference = prepare_reference(reference);
                     var index = $scope.data.references.map(function(e) { return e.id; }).indexOf(old_reference.id);
                     //var index = $scope.data.references.indexOf(old_reference);
                     if(index > -1){
-                        console.log("References apres : ", $scope.data.references);
                         $scope.data.references[index] = reference;
-                    }else{
-                        console.log("References non trouvées : ", $scope.data.references);
-                        console.log("VS : ", old_reference);
                     }
-
-                    console.log("Article supprimé du panier");
-                    console.log("Nouvelle référence : ", reference);
-
 
                     index = $scope.data.articles.indexOf(article);
                     if (index > -1) {

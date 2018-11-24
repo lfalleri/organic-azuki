@@ -1,13 +1,12 @@
 <div class="oa-container" style="min-height:100%;" layout="column">
     <div ng-include="'/static/templates/general/banner.html'"></div>
-
     <div class="main-content">
-        <div ng-if="state.loading">
-            <md-progress-circular
-                    md-mode="indeterminate"
-                    style="position: absolute; z-index:2; margin:50%;">
-            </md-progress-circular>
-        </div>
+        <md-progress-circular
+                ng-if="state.loading"
+                md-mode="indeterminate"
+                style="margin:50%;">
+        </md-progress-circular>
+
 
         <div  ng-if="!state.loading" layout>
             <div layout="column" flex="20">
@@ -44,7 +43,7 @@
                         <md-button class="button-type-submit md-raised md-primary"
                                    style="margin: auto;"
                                    ng-click="clickSeeReferenceDetail(reference)">
-                            Ajouter au panier
+                            Voir le détail
                         </md-button>
                     </div>
                 </div>
@@ -83,7 +82,7 @@
                     <div style="color:red;margin:auto;"  class="alert alert-danger" ng-show="error" ng-bind="error"/>
 
                     <div layout layout-align="space-between center" style="width:70%;margin: 0 auto;">
-                        <md-input-container>
+                        <md-input-container ng-if="!(data.tailles | isEmptyArray)">
                             <div ng-messages="data.selected_taille.$error" ng-show="data.selected_taille.$invalid"/>
                             <md-select ng-required="1"
                                        style="font-size:20px;"
@@ -98,6 +97,10 @@
                                 <md-option ng-value="taille" ng-repeat="taille in data.tailles">{{ taille }}</md-option>
                             </md-select>
                         </md-input-container>
+
+                        <div ng-if="(data.tailles | isEmptyArray)">
+                            <h4> Taille unique </h4>
+                        </div>
 
                         <div layout layout-align="end center">
                             <md-input-container>

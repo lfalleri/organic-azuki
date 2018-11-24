@@ -9,12 +9,12 @@
     .module('organic_azuki.shop.controllers')
     .controller('PanierController', PanierController);
 
-  PanierController.$inject = ['$scope', '$location', '$http', '$mdMedia', '$routeParams', '$interval', 'Authentication', 'Shop'];
+  PanierController.$inject = ['$scope', '$location', '$http', '$mdMedia', '$routeParams', '$interval', 'Authentication', 'Shop', 'MessagingService'];
 
   /**
   * @namespace ShopController
   */
-  function PanierController($scope, $location, $http, $mdMedia, $routeParams, $interval, Authentication, Shop) {
+  function PanierController($scope, $location, $http, $mdMedia, $routeParams, $interval, Authentication, Shop, MessagingService) {
     var vm = this;
 
     $scope.data = {
@@ -415,7 +415,7 @@
                            $scope.state.stepPaiementSuccess = false;
                        }else{
 
-                           $scope.success = "Votre commande a bien été reçue, un mail de confirmation vous a été envoyé";
+                           $scope.success = "Votre commande a bien été reçue, un email de confirmation vous a été envoyé";
                            $scope.error = undefined;
                            $scope.state.stepPaiementError = false;
                            $scope.state.stepPaiementSuccess = true;
@@ -427,14 +427,19 @@
                                   if(_adresse.livraison) adresse_livraison_id=_adresse.id;
                                   if(_adresse.facturation) adresse_facturation_id=_adresse.id;
                               });
-                              Shop.addInfoToCommande(commande.id,
-                                                     adresse_livraison_id,
-                                                     adresse_facturation_id,
-                                                     $scope.data.code_de_reduction.id,
-                                                     $scope.data.selected_mode_livraison.id,
-                                                     $scope.data.addComment,
-                                                     function(success, message){});
-
+                              Shop.addInfoToCommande(
+                                  commande.id,
+                                  adresse_livraison_id,
+                                  adresse_facturation_id,
+                                  $scope.data.code_de_reduction.id,
+                                  $scope.data.selected_mode_livraison.id,
+                                  $scope.data.addComment,
+                                  function(success, commande){
+                                      if(success){
+                                          MessagingService.sendCommandConfirmationToCustomerEmail($scope.account, commande, function(success, message){});
+                                          MessagingService.sendCommandConfirmationToStaffEmail($scope.account, commande, function(success, message){});
+                                      }
+                                  });
                            });
                            Shop.deletePanierInCache(panier.uuid);
                        }
@@ -463,10 +468,8 @@
        $scope.data.citiesSuggestion = {};
        if($scope.data.adresse.code_postal.length <= 1) return;
        var url = 'https://vicopo.selfbuild.fr/cherche/' + $scope.data.adresse.code_postal;
-
-        $http.get(url).then(
+       $http.get(url).then(
          function(data, status, headers, config){
-            console.log(data.status, typeof(data.status));
            if(data.status=="200"){
                var cities = data.data.cities;
                cities.forEach(function(_city){
@@ -484,7 +487,6 @@
 
         $http.get(url).then(
          function(data, status, headers, config){
-            console.log(data.status, typeof(data.status));
            if(data.status=="200"){
                var cities = data.data.cities;
                cities.forEach(function(_city){

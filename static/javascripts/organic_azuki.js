@@ -10,10 +10,6 @@
       'organic_azuki.routes',
       'organic_azuki.authentication',
       'organic_azuki.shop',
-      /*'organic_azuki.yoga',
-      'organic_azuki.restaurant',
-      'organic_azuki.boutique',
-      'organic_azuki.evenements',*/
       'organic_azuki.layout',
       'organic_azuki.utils',
     ]);

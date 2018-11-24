@@ -33,7 +33,6 @@
               $scope.data.articles = articles;
               $scope.state.loading = false;
            }
-           console.log("Articles : ", $scope.data.articles);
         });
     }
   }
