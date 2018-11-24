@@ -145,6 +145,8 @@
         $scope.state.stepModeLivraison = false;
         $scope.state.stepPaiement = true;
         $scope.state.stepPaiementInformation = true;
+        $scope.data.frais_de_livraison = $scope.data.selected_mode_livraison.prix;
+        $scope.data.total =  $scope.data.sous_total -  $scope.data.reduction + $scope.data.frais_de_livraison;
     }
 
     $scope.clickBackToModeLivraison = function(){

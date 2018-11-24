@@ -217,7 +217,7 @@
 
         detailed_img.src = reference.primary_photo.main_image;
         detailed_img.onload = drawCanvasOnLoad;
-        $scope.data.selected_taille = undefined;
+
         $scope.data.tailles = [];
 
         if(reference.type_de_reference === 'ADULTE'){
@@ -226,7 +226,7 @@
         else if(reference.type_de_reference === 'ENFANT'){
             buildTaillesEnfants(reference);
         }else if(reference.type_de_reference === 'TAILLE_UNIQUE'){
-
+            $scope.data.selected_taille = undefined;
             var min = Math.min($scope.data.detailed_reference.restants, 10);
             $scope.data.quantites = [];
             for(var i=1;i<=min;i++){

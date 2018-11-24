@@ -578,6 +578,8 @@
             <div ng-if="!state.loading && state.stepPaiementInformation"
                  layout="column" flex="100" layout-align="space-between center"
                  style="width:100%;">
+                <h5 style="margin:2% auto 5% auto;">Montant total de la transaction : {{data.total}} € </h5>
+
                 <h4 style="margin:0 auto;">Veuillez remplir vos informations bancaires </h4>
                 <!-- Test ==> Card Number : 4242-4242-4242-4242   / Expiry : 12/18 / CVC : 999 -->
                 <form layout="column"
