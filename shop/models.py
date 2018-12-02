@@ -253,7 +253,7 @@ class PanierManager(models.Manager):
                 reference.cinq_6ans_restants += quantite
             elif taille == Article.TAILLE_7_8ANS:
                 reference.sept_8ans_restants += quantite
-        elif reference.type_de_reference == Reference.REFERENCE_ENFANT:
+        elif reference.type_de_reference == Reference.REFERENCE_TAILLE_UNIQUE:
             reference.restants += quantite
         reference.save()
         article.delete()
