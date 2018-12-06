@@ -52,7 +52,7 @@
 
        Config.getConfig(function(config){
           if(config['local_dev']==='False'){
-             $scope.model.key = '6LeY53kUAAAAAOZ-LtezMs8ba342xb7lelg3DoGr';
+             $scope.model.key = '6Le2SX8UAAAAANI8rv3pOomfunjHuGKqF76IZGVX';
           }else{
              $scope.model.key = '6LcqC1MUAAAAANRMW5g0oN7tufDBTLUI2Lg9lCQ-';
           }
