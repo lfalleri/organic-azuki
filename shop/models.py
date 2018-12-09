@@ -428,10 +428,10 @@ class Transaction(models.Model):
     objects = TransactionManager()
 
     def __unicode__(self):
-        return ' '.join([str(self.account), str(self.montant) + " €", self.token])
+        return ' '.join([unicode(self.account), str(self.montant) + " €", self.token])
 
     def __str__(self):
-        return ' '.join([str(self.account), str(self.montant) + " €", self.token])
+        return ' '.join([unicode(self.account), str(self.montant) + " €", self.token])
 
 
 class CommandeManager(models.Manager):
@@ -476,10 +476,10 @@ class Commande(models.Model):
     objects = CommandeManager()
 
     def __unicode__(self):
-        return ' '.join([str(self.account), str(self.panier), str(self.date)])
+        return ' '.join([unicode(self.account), unicode(self.panier), unicode(self.date)])
 
     def __str__(self):
-        return ' '.join([str(self.account), str(self.panier), str(self.date)])
+        return ' '.join([unicode(self.account), unicode(self.panier), unicode(self.date)])
 
     def get_articles(self, uuid):
         return self.panier.objects.get_articles(uuid)
