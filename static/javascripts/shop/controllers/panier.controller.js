@@ -323,7 +323,7 @@
     activate();
 
     function activate() {
-        window.Stripe.setPublishableKey('pk_test_MgLjBLy0Z9k53NghgBtaZPQb');
+        window.Stripe.setPublishableKey('pk_live_ywfC2xKM8MptBsuzPMzwlzRS');
         Shop.getArticlesInPanierFromController(
             function(success, articles){
                 articles.forEach(function(article){
