@@ -539,6 +539,7 @@
         <div layout="column" layout-align="space-between start">
           <h4 style="margin-bottom:5%;"> Référence de commande : {{commande.panier.uuid | limitTo:8}}</h4>
           <p> Client : {{commande.account.first_name}} {{commande.account.last_name}}</p>
+             <p> Email : {{commande.account.email}}</p>
           <p> Montant : {{commande.transaction.montant}} €</p>
           <p> Passée le : {{commande.date_fr}}</p>
         </div>
