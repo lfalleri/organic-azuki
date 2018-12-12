@@ -561,6 +561,8 @@
     </div>
     <div ng-if="admin.detailed_commande" layout="column" flex  style="width:100%;">
       <h4 class="text-centered">Référence de commande : {{admin.detailed_commande.panier.uuid | limitTo:8}}</h4>
+      <p class="text-centered">Client : {{admin.detailed_commande.adresse_livraison.prenom}} {{admin.detailed_commande.adresse_livraison.nom}}</p>
+      <p class="text-centered">Email : {{admin.detailed_commande.account.email}}</p>
       <p class="text-centered">Montant total : {{admin.detailed_commande.transaction.montant}} €</p>
       <p class="text-centered">Passée le : {{admin.detailed_commande.date_fr}}</p>
       <p class="text-centered">Mode de livraison: {{admin.detailed_commande.mode_de_livraison.nom}} | {{admin.detailed_commande.mode_de_livraison.prix}} €</p>
@@ -572,7 +574,6 @@
         <div layout="column" layout-align="space-between start">
           <h4 class="text-centered">Adresse de livraison</h4>
           <p class="text-centered">{{admin.detailed_commande.adresse_livraison.prenom}} {{admin.detailed_commande.adresse_livraison.nom}}</p>
-          <p class="text-centered">{{admin.detailed_commande.accounr.email}}</p>
           <p class="text-centered">{{admin.detailed_commande.adresse_livraison.adresse}}</p>
           <p class="text-centered" ng-if="admin.detailed_commande.adresse_livraison.complement_adresse">{{admin.detailed_commande.adresse_livraison.complement_adresse}}</p>
           <p class="text-centered">{{admin.detailed_commande.adresse_livraison.code_postal}} {{admin.detailed_commande.adresse_livraison.ville}}</p>
