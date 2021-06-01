@@ -21,6 +21,6 @@ six==1.8.0
 sqlparse==0.2.4
 static3==0.5.1
 stripe==1.79.1
-urllib3==1.22
+urllib3==1.26.5
 uWSGI==2.0.15
 whitenoise==2.0.6
